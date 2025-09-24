@@ -1,9 +1,72 @@
 #include <stdio.h>
-#include <SDL3/SDL.h>
-#include <SDL3_image/SDL_image.h>
-#include <SDL3_ttf/SDL_ttf.h>
+
+#include "main.h"
 
 int main(){
-    printf("%d", SDL_GetVersion());
+
+    SDLWindow_Config config;
+
+    config.title = "Physical Competing";
+    config.w = 1280;
+    config.h = 720;
+    config.flags = SDL_WINDOW_HIGH_PIXEL_DENSITY;
+    
+    if(!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO)){
+        printf("%s", SDL_GetError());
+        return SDL_INIT_SYSTEM_FAILED;
+    }
+    
+    window = SDL_CreateWindow(config.title, config.w, config.h, config.flags);
+    if(window == NULL){
+        printf("%s", SDL_GetError());
+        return SDL_CREATE_WINDOW_FAILED;
+    }
+
+    renderer = SDL_CreateRenderer(window, NULL);
+    if(renderer == NULL){
+        printf("%s", SDL_GetError());
+        return SDL_CREATE_RENDERER_FAILED;
+    }
+    
+    SDL_Event event;
+
+    main_start();
+
+    do{
+        SDL_PollEvent(&event);
+
+        main_loop();
+
+        SDL_SetRenderDrawColor(renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
+        SDL_RenderClear(renderer);
+
+        main_render();
+
+        SDL_RenderPresent(renderer);
+    }
+    while(event.type != SDL_EVENT_QUIT);
+
+    main_destroy();
+
+    SDL_DestroyRenderer(renderer);
+    SDL_DestroyWindow(window);
+    SDL_Quit();
+
     return 0;
+}
+
+void main_start(){
+
+}
+
+void main_loop(){
+
+}
+
+void main_render(){
+
+}
+
+void main_destroy(){
+
 }
