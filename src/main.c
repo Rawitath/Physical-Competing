@@ -1,6 +1,7 @@
 #include <stdio.h>
 
 #include "main.h"
+#include "loopbody.h"
 
 int main(){
 
@@ -30,43 +31,27 @@ int main(){
     
     SDL_Event event;
 
-    main_start();
+    start();
 
     do{
-        SDL_PollEvent(&event);
+        poll(&event);
 
-        main_loop();
+        loop();
 
         SDL_SetRenderDrawColor(renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
         SDL_RenderClear(renderer);
 
-        main_render();
+        render();
 
         SDL_RenderPresent(renderer);
     }
     while(event.type != SDL_EVENT_QUIT);
 
-    main_destroy();
+    destroy();
 
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     SDL_Quit();
 
     return 0;
-}
-
-void main_start(){
-
-}
-
-void main_loop(){
-
-}
-
-void main_render(){
-
-}
-
-void main_destroy(){
-
 }

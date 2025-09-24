@@ -13,8 +13,3 @@ typedef struct SDLWindow_Config{
     int h;
     SDL_WindowFlags flags;
 } SDLWindow_Config;
-
-void main_start();
-void main_loop();
-void main_render();
-void main_destroy();
