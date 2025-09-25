@@ -16,7 +16,7 @@ add_subdirectory(lib/SDL_image EXCLUDE_FROM_ALL)
 set(SDLTTF_VENDORED ON) # THIS ONE(1) IS VERY IMPORTANT
 add_subdirectory(lib/SDL_ttf EXCLUDE_FROM_ALL)
 
-file(GLOB phycompet_src CONFIGURE_DEPENDS "src/*.h" "src/*.c")
+file(GLOB_RECURSE phycompet_src CONFIGURE_DEPENDS "src/*.h" "src/*.c")
 
 #create runtime
 add_executable(phycompet ${phycompet_src})
