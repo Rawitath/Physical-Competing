@@ -1,7 +1,32 @@
 #include "entity.h"
 #include <SDL3/SDL.h>
+#include <SDL3_image/SDL_image.h>
 
-int render_sprite(Sprite* sprite, SDL_Renderer* renderer){
+Entity *create_entity(void (*start)(), void (*poll)(SDL_Event *event), void (*loop)(), void (*render)(SDL_Renderer *renderer), void (*destroy)())
+{
+    Entity* entity = (Entity*) malloc(sizeof(Entity*));
+    entity->x = 0.0;
+    entity->y = 0.0;
+    entity->w = 0.0;
+    entity->h = 0.0;
+    entity->start = start;
+    entity->poll = poll;
+    entity->loop = loop;
+    entity->render = render;
+    entity->destroy = destroy;
+    return entity;
+}
+
+Sprite *create_sprite(const char *imgPath, Entity entity)
+{
+    Sprite* sprite = (Sprite*) malloc(sizeof(Sprite*));
+    sprite->entity = entity;
+    sprite->surface = IMG_Load(imgPath);
+    return sprite;
+}
+
+int render_sprite(Sprite *sprite, SDL_Renderer *renderer)
+{
     if(sprite->surface == NULL){
         return RENDER_SURFACE_NULL;
     }
@@ -20,4 +45,8 @@ int render_sprite(Sprite* sprite, SDL_Renderer* renderer){
 void destroy_sprite(Sprite *sprite){
     SDL_DestroySurface(sprite->surface);
     free(sprite);
+}
+
+void destroy_entity(Entity* entity){
+    free(entity);
 }

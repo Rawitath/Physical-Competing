@@ -31,7 +31,7 @@ int main(){
     
     SDL_Event event;
 
-    start();
+    init();
 
     do{
         poll(&event);
@@ -41,7 +41,7 @@ int main(){
         SDL_SetRenderDrawColor(renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
         SDL_RenderClear(renderer);
 
-        render();
+        render(renderer);
 
         SDL_RenderPresent(renderer);
     }

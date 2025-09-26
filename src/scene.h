@@ -15,16 +15,19 @@ typedef struct Scene{
     unsigned int entityCount;
 } Scene;
 
-void init_scene(Scene* scene, unsigned int id);
+Scene* create_scene();
 int add_entity(Scene* scene, Entity* entity);
 int remove_entity(Scene* scene, Entity* entity);
 Entity* get_entity_by_index(Scene* scene, int index);
+void destroy_scene(Scene* scene);
 
 typedef struct SceneManager{
     Scene** scenes;
+    Scene* activeScene;
     unsigned int sceneCount;
 } SceneManager;
 
-void init_scene_manager(SceneManager* sm);
+SceneManager* create_scene_manager();
 int add_scene(SceneManager* sm, Scene* scene);
 int remove_scene(SceneManager* sm, Scene* scene);
+void destroy_scene_manager(SceneManager* sm);

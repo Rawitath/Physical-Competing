@@ -2,11 +2,12 @@
 #include "scene.h"
 #include "entity.h"
 
-void init_scene(Scene* scene, unsigned int id){
-    //set id, init every value to 0, malloc space
-    scene->id = id;
+Scene* create_scene(){
+    //init every value to 0, malloc space
+    Scene* scene = (Scene*)malloc(sizeof(Scene));
     scene->entityCount = 0;
     scene->entities = (Entity**)malloc(sizeof(Entity*));
+    return scene;
 }
 
 int add_entity(Scene *scene, Entity *entity){
@@ -53,10 +54,17 @@ Entity* get_entity_by_index(Scene* scene, int index){
     
 }
 
-void init_scene_manager(SceneManager* sm){
-    //init every value to 0, malloc space
+void destroy_scene(Scene *scene)
+{
+    free(scene->entities);
+    free(scene);
+}
+
+SceneManager* create_scene_manager(){
+    SceneManager* sm = (SceneManager*)malloc(sizeof(SceneManager));
     sm->sceneCount = 0;
     sm->scenes = (Scene**)malloc(sizeof(Scene*));
+    return sm;
 }
 
 int add_scene(SceneManager* sm, Scene* scene){
@@ -95,4 +103,10 @@ int remove_scene(SceneManager* sm, Scene* scene){
         }
     }
     return REMOVE_SCENE_NOT_EXIST;
+}
+
+void destroy_scene_manager(SceneManager *sm)
+{
+    free(sm->scenes);
+    free(sm);
 }

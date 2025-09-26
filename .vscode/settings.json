@@ -2,6 +2,7 @@
     "files.associations": {
         "sdl.h": "c",
         "entity.h": "c",
-        "myentity.h": "c"
+        "myentity.h": "c",
+        "scene.h": "c"
     }
 }
