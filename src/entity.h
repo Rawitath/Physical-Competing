@@ -1,5 +1,6 @@
 typedef union SDL_Event SDL_Event;
 typedef struct SDL_Renderer SDL_Renderer;
+typedef struct SDL_Surface SDL_Surface;
 
 typedef struct Entity{
     int id;
@@ -15,7 +16,13 @@ typedef struct Entity{
     void (*destroy)();
 } Entity;
 
+#define RENDER_SUCCESS 0
+#define RENDER_SURFACE_NULL 1
+
 typedef struct Sprite{
     Entity entity;
-    const char* imgPath;
+    SDL_Surface* surface;
 } Sprite;
+
+int render_sprite(Sprite* sprite, SDL_Renderer* renderer);
+void destroy_sprite(Sprite* sprite);
