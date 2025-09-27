@@ -7,18 +7,29 @@
 #define ADD_ENTITY_ALREADY_EXIST 1
 #define ADD_SCENE_ALREADY_EXIST 1
 
+#define GET_ENTITY_OUT_OF_BOUND NULL
+#define GET_ENTITY_NOT_FOUND NULL
+#define GET_SCENE_OUT_OF_BOUND NULL
+#define GET_SCENE_NOT_FOUND NULL
+
 typedef struct Entity Entity;
 
 typedef struct Scene{
     unsigned int id;
+    const char* name;
     Entity **entities;
     unsigned int entityCount;
+    float viewportX;
+    float viewportY;
+    float viewportZoom;
 } Scene;
 
 Scene* create_scene();
 int add_entity(Scene* scene, Entity* entity);
 int remove_entity(Scene* scene, Entity* entity);
 Entity* get_entity_by_index(Scene* scene, int index);
+Entity* get_entity_by_id(Scene* scene, int id);
+Entity* get_entity_by_name(Scene* scene, const char* name);
 void destroy_scene(Scene* scene);
 
 typedef struct SceneManager{
@@ -30,4 +41,8 @@ typedef struct SceneManager{
 SceneManager* create_scene_manager();
 int add_scene(SceneManager* sm, Scene* scene);
 int remove_scene(SceneManager* sm, Scene* scene);
+Scene* get_scene_by_index(SceneManager* sm, int index);
+Scene* get_scene_by_id(SceneManager* sm, int id);
+Scene* get_scene_by_name(SceneManager* sm, const char* name);
+void destroy_scene(Scene* scene);
 void destroy_scene_manager(SceneManager* sm);

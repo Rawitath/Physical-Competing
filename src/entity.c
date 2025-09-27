@@ -14,6 +14,9 @@ Entity *create_entity(void (*start)(), void (*poll)(SDL_Event *event), void (*lo
     entity->loop = loop;
     entity->render = render;
     entity->destroy = destroy;
+
+    entity->scene = NULL;
+
     return entity;
 }
 
@@ -46,7 +49,6 @@ void destroy_sprite(Sprite *sprite){
     SDL_DestroySurface(sprite->surface);
     free(sprite);
 }
-
 void destroy_entity(Entity* entity){
     free(entity);
 }

@@ -3,6 +3,19 @@
         "sdl.h": "c",
         "entity.h": "c",
         "myentity.h": "c",
-        "scene.h": "c"
+        "scene.h": "c",
+        "atomic": "c",
+        "deque": "c",
+        "format": "c",
+        "list": "c",
+        "memory": "c",
+        "vector": "c",
+        "xlocale": "c",
+        "xlocinfo": "c",
+        "xlocmon": "c",
+        "xlocnum": "c",
+        "xloctime": "c",
+        "xmemory": "c",
+        "xtree": "c"
     }
 }

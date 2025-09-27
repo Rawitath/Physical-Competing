@@ -1,9 +1,11 @@
 typedef union SDL_Event SDL_Event;
 typedef struct SDL_Renderer SDL_Renderer;
 typedef struct SDL_Surface SDL_Surface;
+typedef struct Scene Scene;
 
 typedef struct Entity{
     int id;
+    const char* name;
     float x;
     float y;
     float w;
@@ -14,6 +16,8 @@ typedef struct Entity{
     void (*loop)();
     void (*render)(SDL_Renderer* renderer);
     void (*destroy)();
+
+    Scene* scene;
 } Entity;
 
 Entity* create_entity(
