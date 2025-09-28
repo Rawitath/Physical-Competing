@@ -13,7 +13,9 @@ static SceneManager* sm;
 void init(){
     sm = create_scene_manager();
 
-    add_scene(sm, &myscene);
+    
+
+    add_scene(sm, myscene);
 }
 void poll(SDL_Event* event){
     SDL_PollEvent(event);
@@ -40,4 +42,7 @@ void destroy(){
         Entity e = *(*(sm->activeScene->entities + i));
         e.destroy();
     }
+
+
+    destroy_scene_manager(sm);
 }

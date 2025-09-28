@@ -16,11 +16,14 @@ typedef struct Entity{
     void (*loop)();
     void (*render)(SDL_Renderer* renderer);
     void (*destroy)();
+    //Image Render
+    SDL_Surface* surface;
 
     Scene* scene;
 } Entity;
 
 Entity* create_entity(
+    const char* imgPath,
     void (*start)(), 
     void (*poll)(SDL_Event* event), 
     void (*loop)(),
@@ -33,12 +36,4 @@ void destroy_entity(Entity* entity);
 #define RENDER_SUCCESS 0
 #define RENDER_SURFACE_NULL 1
 
-typedef struct Sprite{
-    Entity entity;
-    SDL_Surface* surface;
-} Sprite;
-
-Sprite* create_sprite(const char* imgPath, Entity entity);
-
-int render_sprite(Sprite* sprite, SDL_Renderer* renderer);
-void destroy_sprite(Sprite* sprite);
+int render_entity(Entity* entity, SDL_Renderer* renderer);

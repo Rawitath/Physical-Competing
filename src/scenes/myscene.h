@@ -1,3 +1,5 @@
 typedef struct Scene Scene;
 
-Scene myscene;
+Scene* myscene;
+
+void myscene_init();

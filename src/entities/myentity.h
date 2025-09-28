@@ -1,4 +1,4 @@
-typedef struct Sprite Sprite;
+typedef struct Entity Entity;
 
-Sprite* mysprite;
-void mysprite_init(Sprite* mysprite);
+Entity* myentity;
+void myentity_init(Entity* myentity);

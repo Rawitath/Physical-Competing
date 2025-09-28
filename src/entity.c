@@ -1,8 +1,9 @@
 #include "entity.h"
 #include <SDL3/SDL.h>
 #include <SDL3_image/SDL_image.h>
+#include <string.h>
 
-Entity *create_entity(void (*start)(), void (*poll)(SDL_Event *event), void (*loop)(), void (*render)(SDL_Renderer *renderer), void (*destroy)())
+Entity *create_entity(const char* imgPath, void (*start)(), void (*poll)(SDL_Event *event), void (*loop)(), void (*render)(SDL_Renderer *renderer), void (*destroy)())
 {
     Entity* entity = (Entity*) malloc(sizeof(Entity*));
     entity->x = 0.0;
@@ -17,38 +18,31 @@ Entity *create_entity(void (*start)(), void (*poll)(SDL_Event *event), void (*lo
 
     entity->scene = NULL;
 
+    if(imgPath != NULL){
+        entity->surface = IMG_Load(imgPath);
+    }
+
     return entity;
 }
 
-Sprite *create_sprite(const char *imgPath, Entity entity)
+int render_entity(Entity *entity, SDL_Renderer *renderer)
 {
-    Sprite* sprite = (Sprite*) malloc(sizeof(Sprite*));
-    sprite->entity = entity;
-    sprite->surface = IMG_Load(imgPath);
-    return sprite;
-}
-
-int render_sprite(Sprite *sprite, SDL_Renderer *renderer)
-{
-    if(sprite->surface == NULL){
+    if(entity->surface == NULL){
         return RENDER_SURFACE_NULL;
     }
-    SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, sprite->surface);
+    SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, entity->surface);
 
     SDL_FRect fRect;
-    fRect.x = sprite->entity.x;
-    fRect.y = sprite->entity.y;
-    fRect.w = sprite->entity.w;
-    fRect.h = sprite->entity.h;
+    fRect.x = entity->x;
+    fRect.y = entity->y;
+    fRect.w = entity->w;
+    fRect.h = entity->h;
     SDL_RenderTexture(renderer, texture, NULL, &fRect);
     SDL_DestroyTexture(texture);
     return RENDER_SUCCESS;
 }
 
-void destroy_sprite(Sprite *sprite){
-    SDL_DestroySurface(sprite->surface);
-    free(sprite);
-}
 void destroy_entity(Entity* entity){
+    SDL_DestroySurface(entity->surface);
     free(entity);
 }

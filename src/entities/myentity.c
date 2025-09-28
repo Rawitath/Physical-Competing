@@ -9,18 +9,15 @@ void myentity_loop();
 void myentity_render(SDL_Renderer* renderer);
 void myentity_destroy();
 
-void mysprite_init(Sprite* mysprite){
-    
-    mysprite->entity.x = 0.0;
-    mysprite->entity.y = 0.0;
-    mysprite->entity.w = 0.0;
-    mysprite->entity.h = 0.0;
-
-    mysprite->entity.start = &myentity_start;
-    mysprite->entity.poll = &myentity_poll;
-    mysprite->entity.loop = &myentity_loop;
-    mysprite->entity.render = &myentity_render;
-    mysprite->entity.destroy = &myentity_destroy;
+void myentity_init(Entity* myentity){    
+    myentity = create_entity(
+            NULL,
+            &myentity_start,
+            &myentity_poll,
+            &myentity_loop,
+            &myentity_render,
+            &myentity_destroy
+        );
 }
 
 void myentity_start(){
@@ -33,8 +30,8 @@ void myentity_loop(){
 
 }
 void myentity_render(SDL_Renderer* renderer){
-    render_sprite(mysprite, renderer);
+    render_entity(myentity, renderer);
 }
 void myentity_destroy(){
-    destroy_sprite(mysprite);
+    destroy_entity(myentity);
 }
