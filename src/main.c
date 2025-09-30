@@ -3,6 +3,7 @@
 #include "main.h"
 #include "loopbody.h"
 #include <SDL3/SDL_main.h>
+#include "ts_process.h"
 
 int main(int argc, char** argv){
 
@@ -31,10 +32,14 @@ int main(int argc, char** argv){
     }
     
     SDL_Event event;
+
+    ts_init();
     
     init();
 
     do{
+        ts_renderdeltatime();
+
         poll(&event);
 
         loop();
@@ -45,6 +50,8 @@ int main(int argc, char** argv){
         render(renderer);
 
         SDL_RenderPresent(renderer);
+
+        ts_setdeltatime();
     }
     while(event.type != SDL_EVENT_QUIT);
 

@@ -18,6 +18,7 @@
         "xmemory": "c",
         "xtree": "c",
         "myscene.h": "c",
-        "main.h": "c"
+        "main.h": "c",
+        "timesystem.h": "c"
     }
 }

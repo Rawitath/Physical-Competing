@@ -1,5 +1,6 @@
 #include "../entity.h"
 #include "myentity.h"
+#include "../timesystem.h"
 
 #include <SDL3/SDL.h>
 
