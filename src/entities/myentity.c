@@ -24,10 +24,10 @@ void myentity_start(){
     
 }
 void myentity_poll(SDL_Event* event){
-    printf("Hi");
+    
 }
 void myentity_loop(){
-
+    
 }
 void myentity_render(SDL_Renderer* renderer){
     render_entity(myentity, renderer);

@@ -9,8 +9,8 @@ Entity *create_entity(const char* imgPath, void (*start)(), void (*poll)(SDL_Eve
     Entity* entity = (Entity*) malloc(sizeof(Entity));
     entity->x = 0.0;
     entity->y = 0.0;
-    entity->w = 0.0;
-    entity->h = 0.0;
+    entity->w = 1.0;
+    entity->h = 1.0;
     entity->start = start;
     entity->poll = poll;
     entity->loop = loop;
