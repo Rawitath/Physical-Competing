@@ -13,36 +13,53 @@ static SceneManager* sm;
 void init(){
     sm = create_scene_manager();
 
-    
+     myscene_init();
 
-    add_scene(sm, myscene);
+     add_scene(sm, myscene);
+     load_scene(sm, myscene);
 }
 void poll(SDL_Event* event){
     SDL_PollEvent(event);
 
-    for(int i = 0; i < sm->activeScene->entityCount; i++){
-        Entity e = *(*(sm->activeScene->entities + i));
-        e.poll(event);
+    if(sm->activeScene != NULL){
+        for(int i = 0; i < sm->activeScene->entityCount; i++){
+            Entity* e = get_entity_by_index(sm->activeScene, i);
+            if(e && e->poll){
+                e->poll(event);
+            }
+        }
     }
+    
 }
 void loop(){
-    for(int i = 0; i < sm->activeScene->entityCount; i++){
-        Entity e = *(*(sm->activeScene->entities + i));
-        e.loop();
+    if(sm->activeScene != NULL){
+        for(int i = 0; i < sm->activeScene->entityCount; i++){
+            Entity* e = get_entity_by_index(sm->activeScene, i);
+            if(e && e->loop){
+                e->loop();
+            }
+        }
     }
 }
 void render(SDL_Renderer* renderer){
-    for(int i = 0; i < sm->activeScene->entityCount; i++){
-        Entity e = *(*(sm->activeScene->entities + i));
-        e.render(renderer);
+    if(sm->activeScene != NULL){
+        for(int i = 0; i < sm->activeScene->entityCount; i++){
+            Entity* e = get_entity_by_index(sm->activeScene, i);
+            if(e && e->render){
+                e->render(renderer);
+            }
+        }
     }
 }
 void destroy(){
-    for(int i = 0; i < sm->activeScene->entityCount; i++){
-        Entity e = *(*(sm->activeScene->entities + i));
-        e.destroy();
+    if(sm->activeScene != NULL){
+        for(int i = 0; i < sm->activeScene->entityCount; i++){
+            Entity* e = get_entity_by_index(sm->activeScene, i);
+            if(e && e->destroy){
+                e->destroy();
+            }
+        }
     }
-
 
     destroy_scene_manager(sm);
 }

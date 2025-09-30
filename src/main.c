@@ -2,8 +2,9 @@
 
 #include "main.h"
 #include "loopbody.h"
+#include <SDL3/SDL_main.h>
 
-int main(){
+int main(int argc, char** argv){
 
     SDLWindow_Config config;
 
@@ -30,7 +31,7 @@ int main(){
     }
     
     SDL_Event event;
-
+    
     init();
 
     do{

@@ -7,6 +7,6 @@ void myscene_init()
 {
     myscene = create_scene();
     
-    myentity_init(myentity);
+    myentity_init();
     add_entity(myscene, myentity);
 }

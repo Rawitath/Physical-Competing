@@ -17,6 +17,7 @@
         "xloctime": "c",
         "xmemory": "c",
         "xtree": "c",
-        "myscene.h": "c"
+        "myscene.h": "c",
+        "main.h": "c"
     }
 }

@@ -23,3 +23,7 @@ add_executable(phycompet ${phycompet_src})
 
 #link libraries
 target_link_libraries(phycompet PRIVATE SDL3::SDL3 SDL3_image::SDL3_image SDL3_ttf::SDL3_ttf)
+
+# FILE(REMOVE_RECURSE "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/res")
+# FILE(COPY "${CMAKE_SOURCE_DIR}/res" DESTINATION "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
+

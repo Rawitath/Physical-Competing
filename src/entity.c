@@ -2,10 +2,11 @@
 #include <SDL3/SDL.h>
 #include <SDL3_image/SDL_image.h>
 #include <string.h>
+#include <stdio.h>
 
 Entity *create_entity(const char* imgPath, void (*start)(), void (*poll)(SDL_Event *event), void (*loop)(), void (*render)(SDL_Renderer *renderer), void (*destroy)())
 {
-    Entity* entity = (Entity*) malloc(sizeof(Entity*));
+    Entity* entity = (Entity*) malloc(sizeof(Entity));
     entity->x = 0.0;
     entity->y = 0.0;
     entity->w = 0.0;
@@ -21,7 +22,6 @@ Entity *create_entity(const char* imgPath, void (*start)(), void (*poll)(SDL_Eve
     if(imgPath != NULL){
         entity->surface = IMG_Load(imgPath);
     }
-
     return entity;
 }
 
@@ -35,8 +35,8 @@ int render_entity(Entity *entity, SDL_Renderer *renderer)
     SDL_FRect fRect;
     fRect.x = entity->x;
     fRect.y = entity->y;
-    fRect.w = entity->w;
-    fRect.h = entity->h;
+    fRect.w = entity->surface->w * entity->w;
+    fRect.h = entity->surface->h * entity->h;
     SDL_RenderTexture(renderer, texture, NULL, &fRect);
     SDL_DestroyTexture(texture);
     return RENDER_SUCCESS;

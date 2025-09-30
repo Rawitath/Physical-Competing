@@ -9,9 +9,9 @@ void myentity_loop();
 void myentity_render(SDL_Renderer* renderer);
 void myentity_destroy();
 
-void myentity_init(Entity* myentity){    
+void myentity_init(){    
     myentity = create_entity(
-            NULL,
+            "res/lucystar.png",
             &myentity_start,
             &myentity_poll,
             &myentity_loop,
@@ -24,7 +24,7 @@ void myentity_start(){
     
 }
 void myentity_poll(SDL_Event* event){
-
+    printf("Hi");
 }
 void myentity_loop(){
 

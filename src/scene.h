@@ -3,9 +3,13 @@
 #define REMOVE_ENTITY_SUCCESS 0
 #define REMOVE_SCENE_SUCCESS 0
 #define REMOVE_ENTITY_NOT_EXIST 1
+#define REMOVE_ENTITY_ALLOCATION_FAILED 2
 #define REMOVE_SCENE_NOT_EXIST 1
+#define REMOVE_SCENE_ALLOCATION_FAILED 2
 #define ADD_ENTITY_ALREADY_EXIST 1
+#define ADD_ENTITY_ALLOCATION_FAILED 2
 #define ADD_SCENE_ALREADY_EXIST 1
+#define ADD_SCENE_ALLOCATION_FAILED 2
 
 #define GET_ENTITY_OUT_OF_BOUND NULL
 #define GET_ENTITY_NOT_FOUND NULL
@@ -46,3 +50,4 @@ Scene* get_scene_by_id(SceneManager* sm, int id);
 Scene* get_scene_by_name(SceneManager* sm, const char* name);
 void destroy_scene(Scene* scene);
 void destroy_scene_manager(SceneManager* sm);
+int load_scene(SceneManager* sm, Scene* scene);

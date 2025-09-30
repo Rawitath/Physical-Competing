@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
 #include "scene.h"
 #include "entity.h"
 
@@ -22,10 +23,12 @@ int add_entity(Scene *scene, Entity *entity){
             return ADD_ENTITY_ALREADY_EXIST;
         }
     }
-
     //resize the Entity**
     if(scene->entityCount > 0){
-        Entity** temp = (Entity**)realloc(scene->entities, scene->entityCount + 1 * sizeof(Entity*));
+        Entity** temp = (Entity**)realloc(scene->entities, (scene->entityCount + 1) * sizeof(Entity*));
+        if(temp == NULL){
+            return ADD_ENTITY_ALLOCATION_FAILED;
+        }
         scene->entities = temp;
     }
 
@@ -50,7 +53,10 @@ int remove_entity(Scene *scene, Entity *entity){
                 }
             }
 
-            Entity** temp = (Entity**)realloc(scene->entities, scene->entityCount - 1 * sizeof(Entity*));
+            Entity** temp = (Entity**)realloc(scene->entities, (scene->entityCount - 1) * sizeof(Entity*));
+            if(temp == NULL){
+                return REMOVE_ENTITY_ALLOCATION_FAILED;
+            }
             scene->entities = temp;
             scene->entityCount--;
 
@@ -61,7 +67,7 @@ int remove_entity(Scene *scene, Entity *entity){
 }
 
 Entity* get_entity_by_index(Scene* scene, int index){
-    if(index < 0 || index > scene->entityCount){
+    if(index < 0 || index >= scene->entityCount){
         return GET_ENTITY_OUT_OF_BOUND;
     }
     return *(scene->entities + index);
@@ -99,6 +105,7 @@ SceneManager* create_scene_manager(){
     SceneManager* sm = (SceneManager*)malloc(sizeof(SceneManager));
     sm->sceneCount = 0;
     sm->scenes = (Scene**)malloc(sizeof(Scene*));
+    sm->activeScene = NULL;
     return sm;
 }
 
@@ -112,7 +119,10 @@ int add_scene(SceneManager* sm, Scene* scene){
 
     //resize the Scene**
     if(sm->sceneCount > 0){
-        Scene** temp = (Scene**)realloc(sm->scenes, sm->sceneCount + 1 * sizeof(Scene*));
+        Scene** temp = (Scene**)realloc(sm->scenes, (sm->sceneCount + 1) * sizeof(Scene*));
+        if(temp == NULL){
+            return ADD_SCENE_ALLOCATION_FAILED;
+        }
         sm->scenes = temp;
     }
 
@@ -130,7 +140,10 @@ int remove_scene(SceneManager* sm, Scene* scene){
                 }
             }
 
-            Scene** temp = (Scene**)realloc(sm->scenes, sm->sceneCount - 1 * sizeof(Scene*));
+            Scene** temp = (Scene**)realloc(sm->scenes, (sm->sceneCount - 1) * sizeof(Scene*));
+            if(temp == NULL){
+                return REMOVE_SCENE_ALLOCATION_FAILED;
+            }
             sm->scenes = temp;
             sm->sceneCount--;
 
@@ -142,7 +155,7 @@ int remove_scene(SceneManager* sm, Scene* scene){
 
 Scene *get_scene_by_index(SceneManager *sm, int index)
 {
-    if(index < 0 || index > sm->sceneCount){
+    if(index < 0 || index >= sm->sceneCount){
         return GET_SCENE_OUT_OF_BOUND;
     }
     return *(sm->scenes + index);
@@ -174,4 +187,10 @@ void destroy_scene_manager(SceneManager *sm)
 {
     free(sm->scenes);
     free(sm);
+}
+
+int load_scene(SceneManager *sm, Scene *scene)
+{
+    sm->activeScene = scene;
+    return 0;
 }
