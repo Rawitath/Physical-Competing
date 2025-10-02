@@ -10,6 +10,12 @@ typedef struct Entity{
     float y;
     float w;
     float h;
+    float anchorX;
+    float anchorY;
+
+    float pixelRatio;
+    int imgSizeX;
+    int imgSizeY;
 
     void (*start)();
     void (*poll)(SDL_Event* event);
