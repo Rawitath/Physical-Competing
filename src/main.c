@@ -3,6 +3,7 @@
 #include "main.h"
 #include "loopbody.h"
 #include <SDL3/SDL_main.h>
+#include <SDL3_ttf/SDL_ttf.h>
 #include "ts_process.h"
 
 int main(int argc, char** argv){
@@ -32,6 +33,11 @@ int main(int argc, char** argv){
     }
     
     SDL_Event event;
+
+    if(!TTF_Init()){
+        printf("%s", SDL_GetError());
+        return SDL_INIT_TTF_FAILED;
+    }
 
     ts_init();
     

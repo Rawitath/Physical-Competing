@@ -19,6 +19,9 @@
         "xtree": "c",
         "myscene.h": "c",
         "main.h": "c",
-        "timesystem.h": "c"
+        "timesystem.h": "c",
+        "ts_process.h": "c",
+        "sdl_ttf.h": "c",
+        "sdl_main.h": "c"
     }
 }
