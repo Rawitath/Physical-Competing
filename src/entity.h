@@ -12,6 +12,7 @@ typedef struct Scene Scene;
 #define ENTITY_INVALID_TYPE -1
 
 #define SET_SUCCESS 0
+#define SET_FAILED 1
 
 typedef struct ImageContainer{
     SDL_Surface* surface;
@@ -27,7 +28,6 @@ typedef struct TextContainer{
     int b;
     int a;
     const char* text;
-    float size;
     int horizontalAlign;
     int verticalAlign;
 } TextContainer;
@@ -84,5 +84,8 @@ void destroy_entity(Entity* entity);
 
 int set_image(Entity* entity, const char* imgPath);
 int set_text(Entity* entity, const char* text);
-int set_font(Entity* entity, const char* fontPath);
+const char* get_text(Entity* entity);
+int set_font(Entity* entity, const char* fontPath, float fontSize);
+int set_font_size(Entity* entity, float fontSize);
+float get_font_size(Entity* entity);
 int render_entity(Entity* entity, SDL_Renderer* renderer);

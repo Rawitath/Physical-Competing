@@ -24,10 +24,13 @@ void img_allocon(Entity *entity, const char* imgPath){
 void txt_allocon(Entity *entity, const char* fontPath, float size){
     entity->txt = (TextContainer*) malloc(sizeof(TextContainer));
     entity->txt->font = TTF_OpenFont(fontPath, size);
-    entity->txt->size = size;
     entity->txt->horizontalAlign = 0;
     entity->txt->verticalAlign = 0;
     entity->txt->text = "Lorem Ipsum";
+    entity->txt->r = 0;
+    entity->txt->g = 0;
+    entity->txt->b = 0;
+    entity->txt->a = SDL_ALPHA_OPAQUE;
 }
 
 Entity *create_entity(const char* imgPath, void (*start)(), void (*poll)(SDL_Event *event), void (*loop)(), void (*render)(SDL_Renderer *renderer), void (*destroy)())
@@ -110,11 +113,49 @@ int render_image(Entity* entity, SDL_Renderer* renderer){
 }
 
 int render_text(Entity* entity, SDL_Renderer* renderer){
-    return 0;
+    if(entity->txt->font == NULL){
+        return RENDER_FONT_NULL;
+    }
+    SDL_Color color;
+    color.r = entity->txt->r;
+    color.g = entity->txt->g;
+    color.b = entity->txt->b;
+    color.a = entity->txt->a;
+    SDL_Surface* surface = TTF_RenderText_Blended(entity->txt->font, entity->txt->text, 0, color);
+    SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
+    SDL_DestroySurface(surface);
+
+    SDL_FRect fRect;
+
+    int offsetX;
+    int offsetY;
+
+    SDL_GetCurrentRenderOutputSize(renderer, &offsetX, &offsetY);
+
+    offsetX = offsetX / 2 - entity->scene->viewportX * entity->scene->viewportZoom;
+    offsetY = offsetY / 2 - entity->scene->viewportY * entity->scene->viewportZoom;
+
+    float sizeW;
+    float sizeH;
+
+    SDL_GetTextureSize(texture, &sizeW, &sizeH);
+
+    sizeW = sizeW * entity->w * entity->scene->viewportZoom;
+    sizeH = sizeH * entity->h * entity->scene->viewportZoom;
+
+    fRect.x = (entity->x + entity->anchorX) * entity->scene->viewportZoom + offsetX - sizeW / 2;
+    fRect.y = (-entity->y + entity->anchorY) * entity->scene->viewportZoom + offsetY - sizeH / 2;
+    fRect.w = sizeW;
+    fRect.h = sizeH;
+
+    SDL_RenderTexture(renderer, texture, NULL, &fRect);
+
+    SDL_DestroyTexture(texture);
+    return RENDER_SUCCESS;
 }
 
 int ui_render_image(Entity* entity, SDL_Renderer* renderer){
-    return 0;
+    return RENDER_SUCCESS;
 }
 
 
@@ -131,15 +172,15 @@ int ui_render_text(Entity* entity, SDL_Renderer* renderer){
     SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
     SDL_DestroySurface(surface);
 
-    SDL_FRect rect;
-    SDL_GetTextureSize(texture, &rect.w, &rect.h);
-    rect.x = entity->x;
-    rect.y = entity->y;
+    SDL_FRect fRect;
+    SDL_GetTextureSize(texture, &fRect.w, &fRect.h);
+    fRect.x = entity->x;
+    fRect.y = entity->y;
 
-    SDL_RenderTexture(renderer, texture, NULL, &rect);
+    SDL_RenderTexture(renderer, texture, NULL, &fRect);
 
     SDL_DestroyTexture(texture);
-    return 0;
+    return RENDER_SUCCESS;
 }
 
 int render_entity(Entity *entity, SDL_Renderer *renderer)
@@ -194,11 +235,38 @@ int set_text(Entity* entity, const char* text){
     strcpy(entity->txt->text, text);
     return SET_SUCCESS;
 }
-int set_font(Entity* entity, const char* fontPath){
+const char *get_text(Entity *entity)
+{
+    if(entity->type != ENTITY_TYPE_TEXT && entity->type != ENTITY_TYPE_UITEXT){
+        return NULL;
+    }
+    return entity->txt->text;
+}
+int set_font(Entity *entity, const char *fontPath, float fontSize)
+{
     if(entity->type != ENTITY_TYPE_TEXT && entity->type != ENTITY_TYPE_UITEXT){
         return ENTITY_INVALID_TYPE;
     }
     TTF_CloseFont(entity->txt->font);
-    entity->txt->font = TTF_OpenFont(fontPath, entity->txt->size);
+    entity->txt->font = TTF_OpenFont(fontPath, fontSize);
     return SET_SUCCESS;
+}
+
+int set_font_size(Entity *entity, float fontSize)
+{
+    if(entity->type != ENTITY_TYPE_TEXT && entity->type != ENTITY_TYPE_UITEXT){
+        return ENTITY_INVALID_TYPE;
+    }
+    if(!TTF_SetFontSize(entity->txt->font, fontSize)){
+        return SET_FAILED;
+    }
+    return SET_SUCCESS;
+}
+
+float get_font_size(Entity *entity)
+{
+    if(entity->type != ENTITY_TYPE_TEXT && entity->type != ENTITY_TYPE_UITEXT){
+        return ENTITY_INVALID_TYPE;
+    }
+    return TTF_GetFontSize(entity->txt->font);
 }

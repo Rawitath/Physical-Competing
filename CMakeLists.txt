@@ -3,6 +3,7 @@ project(phycompet LANGUAGES C VERSION 0.1.0)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/$<CONFIGURATION>") #set runtime location
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/$<CONFIGURATION>") #put dll in runtime location
+set(RESOURCE_DIR ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/res)
 
 add_subdirectory(lib/SDL EXCLUDE_FROM_ALL)
 
@@ -24,6 +25,9 @@ add_executable(phycompet ${phycompet_src})
 #link libraries
 target_link_libraries(phycompet PRIVATE SDL3::SDL3 SDL3_image::SDL3_image SDL3_ttf::SDL3_ttf)
 
-# FILE(REMOVE_RECURSE "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/res")
-# FILE(COPY "${CMAKE_SOURCE_DIR}/res" DESTINATION "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
+add_custom_target(copy_resources ALL
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+        ${CMAKE_SOURCE_DIR}/res
+        ${RESOURCE_DIR}
+)
 
