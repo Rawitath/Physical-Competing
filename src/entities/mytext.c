@@ -21,7 +21,9 @@ void mytext_init(){
             &mytext_render,
             &mytext_destroy
         );
-    set_text(mytext, "Hello World");
+    mytext->x = 50;
+    mytext->y = 100;
+    set_text(mytext, "EEEEE");
 }
 
 void mytext_start(){

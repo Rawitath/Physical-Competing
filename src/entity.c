@@ -99,8 +99,8 @@ int render_image(Entity* entity, SDL_Renderer* renderer){
     offsetX = offsetX / 2 - entity->scene->viewportX * entity->scene->viewportZoom;
     offsetY = offsetY / 2 - entity->scene->viewportY * entity->scene->viewportZoom;
 
-    float sizeW = entity->img->imgSizeX * entity->w * entity->scene->viewportZoom;
-    float sizeH = entity->img->imgSizeY * entity->h * entity->scene->viewportZoom;
+    float sizeW = entity->img->imgSizeX * entity->w * entity->scene->viewportZoom * entity->img->pixelRatio;
+    float sizeH = entity->img->imgSizeY * entity->h * entity->scene->viewportZoom * entity->img->pixelRatio;
 
     fRect.x = (entity->x + entity->anchorX) * entity->scene->viewportZoom + offsetX - sizeW / 2;
     fRect.y = (-entity->y + entity->anchorY) * entity->scene->viewportZoom + offsetY - sizeH / 2;
@@ -155,6 +155,31 @@ int render_text(Entity* entity, SDL_Renderer* renderer){
 }
 
 int ui_render_image(Entity* entity, SDL_Renderer* renderer){
+    if(entity->img->surface == NULL){
+        return RENDER_SURFACE_NULL;
+    }
+    SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, entity->img->surface);
+
+    SDL_FRect fRect;
+
+    int offsetX;
+    int offsetY;
+
+    SDL_GetCurrentRenderOutputSize(renderer, &offsetX, &offsetY);
+
+    float fOffsetX = (float)offsetX / UI_REFERENCE_X;
+    float fOffsetY = (float)offsetY / UI_REFERENCE_Y;
+
+    float sizeW = entity->img->imgSizeX * entity->img->pixelRatio * entity->w;
+    float sizeH = entity->img->imgSizeY * entity->img->pixelRatio * entity->h;
+
+    fRect.x = (entity->x + entity->anchorX) * fOffsetX - sizeW / 2;
+    fRect.y = (entity->y + entity->anchorY) * fOffsetY - sizeH / 2;
+    fRect.w = sizeW * fOffsetX;
+    fRect.h = sizeH * fOffsetY;
+
+    SDL_RenderTexture(renderer, texture, NULL, &fRect);
+    SDL_DestroyTexture(texture);
     return RENDER_SUCCESS;
 }
 
@@ -173,9 +198,27 @@ int ui_render_text(Entity* entity, SDL_Renderer* renderer){
     SDL_DestroySurface(surface);
 
     SDL_FRect fRect;
-    SDL_GetTextureSize(texture, &fRect.w, &fRect.h);
-    fRect.x = entity->x;
-    fRect.y = entity->y;
+
+    int offsetX;
+    int offsetY;
+
+    SDL_GetCurrentRenderOutputSize(renderer, &offsetX, &offsetY);
+
+    float fOffsetX = (float)offsetX / UI_REFERENCE_X;
+    float fOffsetY = (float)offsetY / UI_REFERENCE_Y;
+
+    float sizeW ;
+    float sizeH;
+
+    SDL_GetTextureSize(texture, &sizeW, &sizeH);
+
+    sizeW = sizeW * entity->w;
+    sizeH = sizeH * entity->h;
+
+    fRect.x = (entity->x + entity->anchorX) * fOffsetX - sizeW / 2;
+    fRect.y = (entity->y + entity->anchorY) * fOffsetY - sizeH / 2;
+    fRect.w = sizeW;
+    fRect.h = sizeH;
 
     SDL_RenderTexture(renderer, texture, NULL, &fRect);
 

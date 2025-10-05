@@ -16,6 +16,9 @@
 #define GET_SCENE_OUT_OF_BOUND NULL
 #define GET_SCENE_NOT_FOUND NULL
 
+#define UI_REFERENCE_X 100
+#define UI_REFERENCE_Y 100
+
 typedef struct Entity Entity;
 
 typedef struct Scene{

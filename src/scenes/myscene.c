@@ -13,4 +13,5 @@ void myscene_init()
     
     add_entity(myscene, myentity);
     add_entity(myscene, mytext);
+    myscene->viewportZoom = 70;
 }

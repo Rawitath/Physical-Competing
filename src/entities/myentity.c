@@ -29,7 +29,7 @@ void myentity_poll(SDL_Event* event){
     
 }
 void myentity_loop(){
-    myentity->scene->viewportZoom += 0.2 * get_delta();
+    myentity->scene->viewportZoom += 1 * get_delta();
 }
 void myentity_render(SDL_Renderer* renderer){
     render_entity(myentity, renderer);
