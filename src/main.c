@@ -5,8 +5,11 @@
 #include <SDL3/SDL_main.h>
 #include <SDL3_ttf/SDL_ttf.h>
 #include "ts_process.h"
+#include <SDL3/SDL_hints.h>
 
 int main(int argc, char** argv){
+    
+    //System Initialization
 
     SDLWindow_Config config;
 
@@ -31,6 +34,7 @@ int main(int argc, char** argv){
         printf("%s", SDL_GetError());
         return SDL_CREATE_RENDERER_FAILED;
     }
+    SDL_SetDefaultTextureScaleMode(renderer, SDL_SCALEMODE_NEAREST);
     
     SDL_Event event;
 
@@ -40,7 +44,8 @@ int main(int argc, char** argv){
     }
 
     ts_init();
-    
+
+    //User's Initialization
     init();
 
     do{
