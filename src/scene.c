@@ -191,6 +191,9 @@ void destroy_scene_manager(SceneManager *sm)
 
 int load_scene(SceneManager *sm, Scene *scene)
 {
+    if(sm->activeScene != NULL){
+        
+    }
     sm->activeScene = scene;
     return 0;
 }

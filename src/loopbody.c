@@ -18,13 +18,18 @@ void init(){
      add_scene(sm, myscene);
      load_scene(sm, myscene);
 }
+
+void start(){
+
+}
+
 void poll(SDL_Event* event){
     SDL_PollEvent(event);
 
     if(sm->activeScene != NULL){
         for(int i = 0; i < sm->activeScene->entityCount; i++){
             Entity* e = get_entity_by_index(sm->activeScene, i);
-            if(e && e->poll){
+            if(e && e->poll && e->active == ACTIVE_TRUE){
                 e->poll(event);
             }
         }
@@ -35,7 +40,7 @@ void loop(){
     if(sm->activeScene != NULL){
         for(int i = 0; i < sm->activeScene->entityCount; i++){
             Entity* e = get_entity_by_index(sm->activeScene, i);
-            if(e && e->loop){
+            if(e && e->loop && e->active == ACTIVE_TRUE){
                 e->loop();
             }
         }
@@ -45,7 +50,7 @@ void render(SDL_Renderer* renderer){
     if(sm->activeScene != NULL){
         for(int i = 0; i < sm->activeScene->entityCount; i++){
             Entity* e = get_entity_by_index(sm->activeScene, i);
-            if(e && e->render){
+            if(e && e->render && e->active == ACTIVE_TRUE){
                 e->render(renderer);
             }
         }

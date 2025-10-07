@@ -44,6 +44,7 @@ Entity *create_entity(const char* imgPath, void (*start)(), void (*poll)(SDL_Eve
     entity->h = 1.0;
     entity->anchorX = 0.0;
     entity->anchorY = 0.0;
+    entity->active = ACTIVE_TRUE;
 
     entity->start = start;
     entity->poll = poll;
@@ -69,6 +70,7 @@ Entity *ui_create_text(const char* fontPath, float size, void (*start)(), void (
     entity->h = 1.0;
     entity->anchorX = 0.0;
     entity->anchorY = 0.0;
+    entity->active = ACTIVE_TRUE;
 
     entity->start = start;
     entity->poll = poll;

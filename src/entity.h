@@ -14,6 +14,9 @@ typedef struct Scene Scene;
 #define SET_SUCCESS 0
 #define SET_FAILED 1
 
+#define ACTIVE_FALSE 0
+#define ACTIVE_TRUE 1
+
 typedef struct ImageContainer{
     SDL_Surface* surface;
     float pixelRatio;
@@ -42,6 +45,7 @@ typedef struct Entity{
     float h;
     float anchorX;
     float anchorY;
+    int active;
 
     void (*start)();
     void (*poll)(SDL_Event* event);
@@ -80,7 +84,7 @@ void destroy_entity(Entity* entity);
 #define RENDER_SUCCESS 0
 #define RENDER_SURFACE_NULL 1
 #define RENDER_FONT_NULL 1
-#define RENDER_UNKNOWN_TYPE 2
+#define RENDER_UNKNOWN_TYPE -1
 
 int set_image(Entity* entity, const char* imgPath);
 int set_text(Entity* entity, const char* text);
