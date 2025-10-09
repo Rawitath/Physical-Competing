@@ -29,9 +29,12 @@ typedef struct Scene{
     float viewportX;
     float viewportY;
     float viewportZoom;
+
+    void (*load)();
+    void (*unload)();
 } Scene;
 
-Scene* create_scene();
+Scene* create_scene(void (*load)(), void (*unload)());
 int add_entity(Scene* scene, Entity* entity);
 int remove_entity(Scene* scene, Entity* entity);
 Entity* get_entity_by_index(Scene* scene, int index);

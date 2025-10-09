@@ -57,14 +57,15 @@ void render(SDL_Renderer* renderer){
     }
 }
 void destroy(){
-    if(sm->activeScene != NULL){
-        for(int i = 0; i < sm->activeScene->entityCount; i++){
-            Entity* e = get_entity_by_index(sm->activeScene, i);
-            if(e && e->destroy){
-                e->destroy();
-            }
-        }
-    }
+    // if(sm->activeScene != NULL){
+    //     for(int i = 0; i < sm->activeScene->entityCount; i++){
+    //         Entity* e = get_entity_by_index(sm->activeScene, i);
+    //         if(e && e->destroy){
+    //             e->destroy();
+    //         }
+    //     }
+    // }
+    sm->activeScene->unload();
 
     destroy_scene_manager(sm);
 }

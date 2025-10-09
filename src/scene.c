@@ -4,7 +4,7 @@
 #include "scene.h"
 #include "entity.h"
 
-Scene* create_scene(){
+Scene* create_scene(void (*load)(), void (*unload)()){
     //init every value to 0, malloc space
     Scene* scene = (Scene*)malloc(sizeof(Scene));
     scene->entityCount = 0;
@@ -12,6 +12,10 @@ Scene* create_scene(){
     scene->viewportX = 0.0;
     scene->viewportY = 0.0;
     scene->viewportZoom = 1.0;
+
+    scene->load = load;
+    scene->unload = unload;
+
     return scene;
 }
 
@@ -192,8 +196,10 @@ void destroy_scene_manager(SceneManager *sm)
 int load_scene(SceneManager *sm, Scene *scene)
 {
     if(sm->activeScene != NULL){
-        
+        sm->activeScene->unload();
+        sm->activeScene = NULL;
     }
+    scene->load();
     sm->activeScene = scene;
     return 0;
 }
