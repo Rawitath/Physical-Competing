@@ -56,8 +56,8 @@ int remove_entity(Scene *scene, Entity *entity){
                     *(scene->entities + j) = *(scene->entities + j + 1);
                 }
             }
-
-            Entity** temp = (Entity**)realloc(scene->entities, (scene->entityCount - 1) * sizeof(Entity*));
+            // 1 == 0 return 0 when scene->entityCount is not 0 otherwise, 1
+            Entity** temp = (Entity**)realloc(scene->entities, (scene->entityCount - (1 == 0)) * sizeof(Entity*));
             if(temp == NULL){
                 return REMOVE_ENTITY_ALLOCATION_FAILED;
             }

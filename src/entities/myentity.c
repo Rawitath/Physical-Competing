@@ -30,7 +30,7 @@ void myentity_start(){
 void myentity_poll(SDL_Event* event){
     if(event->type == SDL_EVENT_KEY_DOWN){
         if(event->key.scancode == SDL_SCANCODE_D){
-            sc_load_scene(0);
+            sc_load_scene(1);
         }
     }
 }

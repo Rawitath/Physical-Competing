@@ -11,11 +11,6 @@
 #include "sc_process.h"
 
 static SceneManager* sm;
-// static Entity** entityQueue;
-
-// void l_initQueue(){
-//     entityQueue = (Entity**) malloc(sizeof(Entity*));
-// }
 
 void init(){
     sm = create_scene_manager();
