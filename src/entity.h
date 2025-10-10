@@ -46,6 +46,8 @@ typedef struct Entity{
     float anchorX;
     float anchorY;
     int active;
+    
+    short needStart;
 
     void (*start)();
     void (*poll)(SDL_Event* event);

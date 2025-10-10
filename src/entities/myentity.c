@@ -25,7 +25,7 @@ void myentity_init(){
 }
 
 void myentity_start(){
-    
+    printf("this will run once");
 }
 void myentity_poll(SDL_Event* event){
     if(event->type == SDL_EVENT_KEY_DOWN){

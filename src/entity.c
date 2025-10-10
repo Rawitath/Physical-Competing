@@ -46,6 +46,8 @@ Entity *create_entity(const char* imgPath, void (*start)(), void (*poll)(SDL_Eve
     entity->anchorY = 0.0;
     entity->active = ACTIVE_TRUE;
 
+    entity->needStart = 1;
+
     entity->start = start;
     entity->poll = poll;
     entity->loop = loop;

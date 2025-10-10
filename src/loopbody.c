@@ -16,16 +16,24 @@ void init(){
     sm = create_scene_manager();
     sc_init(sm);
 
-     myscene_init();
-     anotherscene_init();
+    myscene_init();
+    anotherscene_init();
 
-     add_scene(sm, myscene);
-     add_scene(sm, anotherscene);
-     load_scene(sm, 0);
+    add_scene(sm, myscene);
+    add_scene(sm, anotherscene);
+    load_scene(sm, 0);
 }
 
 void start(){
-
+    if(sm->activeScene != NULL){
+        for(int i = 0; i < sm->activeScene->entityCount; i++){
+            Entity* e = get_entity_by_index(sm->activeScene, i);
+            if(e && e->needStart  && e->active == ACTIVE_TRUE && e->start){
+                e->start();
+                e->needStart = 0;
+            }
+        }
+    }
 }
 
 void poll(SDL_Event* event){
