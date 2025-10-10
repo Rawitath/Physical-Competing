@@ -2,6 +2,8 @@
 #include "myentity.h"
 #include "../timesystem.h"
 #include "../scene.h"
+#include "../scenecontroller.h"
+#include <stdio.h>
 
 #include <SDL3/SDL.h>
 
@@ -11,7 +13,7 @@ void myentity_loop();
 void myentity_render(SDL_Renderer* renderer);
 void myentity_destroy();
 
-void myentity_init(){    
+void myentity_init(){
     myentity = create_entity(
             "res/lucystar.png",
             &myentity_start,
@@ -26,7 +28,11 @@ void myentity_start(){
     
 }
 void myentity_poll(SDL_Event* event){
-    
+    if(event->type == SDL_EVENT_KEY_DOWN){
+        if(event->key.scancode == SDL_SCANCODE_D){
+            sc_load_scene(0);
+        }
+    }
 }
 void myentity_loop(){
     myentity->scene->viewportZoom += 1 * get_delta();

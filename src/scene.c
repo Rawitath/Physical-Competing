@@ -193,13 +193,17 @@ void destroy_scene_manager(SceneManager *sm)
     free(sm);
 }
 
-int load_scene(SceneManager *sm, Scene *scene)
+int load_scene(SceneManager *sm, int index)
 {
+    Scene* scene = get_scene_by_index(sm, index);
+    if(scene == NULL){
+        return LOAD_SCENE_OUT_OF_BOUND;
+    }
     if(sm->activeScene != NULL){
         sm->activeScene->unload();
         sm->activeScene = NULL;
     }
     scene->load();
     sm->activeScene = scene;
-    return 0;
+    return LOAD_SCENE_SUCCESS;
 }

@@ -7,16 +7,26 @@
 #include "scene.h"
 
 #include "scenes/myscene.h"
+#include "scenes/anotherscene.h"
+#include "sc_process.h"
 
 static SceneManager* sm;
+// static Entity** entityQueue;
+
+// void l_initQueue(){
+//     entityQueue = (Entity**) malloc(sizeof(Entity*));
+// }
 
 void init(){
     sm = create_scene_manager();
+    sc_init(sm);
 
      myscene_init();
+     anotherscene_init();
 
      add_scene(sm, myscene);
-     load_scene(sm, myscene);
+     add_scene(sm, anotherscene);
+     load_scene(sm, 0);
 }
 
 void start(){

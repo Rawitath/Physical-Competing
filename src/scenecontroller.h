@@ -1,0 +1,1 @@
+void sc_load_scene(int index);
