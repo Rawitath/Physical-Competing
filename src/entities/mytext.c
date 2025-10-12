@@ -36,7 +36,7 @@ void mytext_loop(){
     set_font_size(mytext, get_font_size(mytext) + 5 * get_delta());
 }
 void mytext_render(SDL_Renderer* renderer){
-    render_entity(mytext, renderer);
+    render_entity(mytext, renderer, NULL);
 }
 void mytext_destroy(){
     destroy_entity(mytext);

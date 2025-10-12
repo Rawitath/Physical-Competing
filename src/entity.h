@@ -1,6 +1,7 @@
 typedef union SDL_Event SDL_Event;
 typedef struct SDL_Renderer SDL_Renderer;
 typedef struct SDL_Surface SDL_Surface;
+typedef struct SDL_FRect SDL_FRect;
 typedef struct TTF_Font TTF_Font;
 typedef struct Scene Scene;
 
@@ -89,9 +90,10 @@ void destroy_entity(Entity* entity);
 #define RENDER_UNKNOWN_TYPE -1
 
 int set_image(Entity* entity, const char* imgPath);
+int set_image_surface(Entity* entity, SDL_Surface* surface);
 int set_text(Entity* entity, const char* text);
 const char* get_text(Entity* entity);
 int set_font(Entity* entity, const char* fontPath, float fontSize);
 int set_font_size(Entity* entity, float fontSize);
 float get_font_size(Entity* entity);
-int render_entity(Entity* entity, SDL_Renderer* renderer);
+int render_entity(Entity* entity, SDL_Renderer* renderer, SDL_FRect* sRect);

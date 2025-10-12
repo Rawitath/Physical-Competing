@@ -38,7 +38,7 @@ void myentity_loop(){
     myentity->scene->viewportZoom += 1 * get_delta();
 }
 void myentity_render(SDL_Renderer* renderer){
-    render_entity(myentity, renderer);
+    render_entity(myentity, renderer, NULL);
 }
 void myentity_destroy(){
     destroy_entity(myentity);

@@ -87,7 +87,7 @@ Entity *ui_create_text(const char* fontPath, float size, void (*start)(), void (
     return entity;
 }
 
-int render_image(Entity* entity, SDL_Renderer* renderer){
+int render_image(Entity* entity, SDL_Renderer* renderer, SDL_FRect* sRect){
     if(entity->img->surface == NULL){
         return RENDER_SURFACE_NULL;
     }
@@ -111,12 +111,12 @@ int render_image(Entity* entity, SDL_Renderer* renderer){
     fRect.w = sizeW;
     fRect.h = sizeH;
 
-    SDL_RenderTexture(renderer, texture, NULL, &fRect);
+    SDL_RenderTexture(renderer, texture, sRect, &fRect);
     SDL_DestroyTexture(texture);
     return RENDER_SUCCESS;
 }
 
-int render_text(Entity* entity, SDL_Renderer* renderer){
+int render_text(Entity* entity, SDL_Renderer* renderer, SDL_FRect* sRect){
     if(entity->txt->font == NULL){
         return RENDER_FONT_NULL;
     }
@@ -152,13 +152,13 @@ int render_text(Entity* entity, SDL_Renderer* renderer){
     fRect.w = sizeW;
     fRect.h = sizeH;
 
-    SDL_RenderTexture(renderer, texture, NULL, &fRect);
+    SDL_RenderTexture(renderer, texture, sRect, &fRect);
 
     SDL_DestroyTexture(texture);
     return RENDER_SUCCESS;
 }
 
-int ui_render_image(Entity* entity, SDL_Renderer* renderer){
+int ui_render_image(Entity* entity, SDL_Renderer* renderer, SDL_FRect* sRect){
     if(entity->img->surface == NULL){
         return RENDER_SURFACE_NULL;
     }
@@ -182,13 +182,13 @@ int ui_render_image(Entity* entity, SDL_Renderer* renderer){
     fRect.w = sizeW * fOffsetX;
     fRect.h = sizeH * fOffsetY;
 
-    SDL_RenderTexture(renderer, texture, NULL, &fRect);
+    SDL_RenderTexture(renderer, texture, sRect, &fRect);
     SDL_DestroyTexture(texture);
     return RENDER_SUCCESS;
 }
 
 
-int ui_render_text(Entity* entity, SDL_Renderer* renderer){
+int ui_render_text(Entity* entity, SDL_Renderer* renderer, SDL_FRect* sRect){
     if(entity->txt->font == NULL){
         return RENDER_FONT_NULL;
     }
@@ -224,23 +224,23 @@ int ui_render_text(Entity* entity, SDL_Renderer* renderer){
     fRect.w = sizeW;
     fRect.h = sizeH;
 
-    SDL_RenderTexture(renderer, texture, NULL, &fRect);
+    SDL_RenderTexture(renderer, texture, sRect, &fRect);
 
     SDL_DestroyTexture(texture);
     return RENDER_SUCCESS;
 }
 
-int render_entity(Entity *entity, SDL_Renderer *renderer)
+int render_entity(Entity *entity, SDL_Renderer *renderer, SDL_FRect* sRect)
 {
     switch (entity->type){
         case ENTITY_TYPE_SPRITE:
-            return render_image(entity, renderer);
+            return render_image(entity, renderer, sRect);
         case ENTITY_TYPE_TEXT:
-            return render_text(entity, renderer);
+            return render_text(entity, renderer, sRect);
         case ENTITY_TYPE_UIIMAGE:
-            return ui_render_image(entity, renderer);
+            return ui_render_image(entity, renderer, sRect);
         case ENTITY_TYPE_UITEXT:
-            return ui_render_text(entity, renderer);
+            return ui_render_text(entity, renderer, sRect);
     }
     return RENDER_UNKNOWN_TYPE;
 }
@@ -275,7 +275,16 @@ int set_image(Entity* entity, const char* imgPath){
     entity->img->surface = IMG_Load(imgPath);
     return SET_SUCCESS;
 }
-int set_text(Entity* entity, const char* text){
+int set_image_surface(Entity *entity, SDL_Surface *surface)
+{
+    if(entity->type != ENTITY_TYPE_SPRITE && entity->type != ENTITY_TYPE_UIIMAGE){
+        return ENTITY_INVALID_TYPE;
+    }
+    entity->img->surface = surface;
+    return SET_SUCCESS;
+}
+int set_text(Entity *entity, const char *text)
+{
     if(entity->type != ENTITY_TYPE_TEXT && entity->type != ENTITY_TYPE_UITEXT){
         return ENTITY_INVALID_TYPE;
     }
