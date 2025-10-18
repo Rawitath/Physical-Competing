@@ -1,17 +1,5 @@
 typedef struct SDL_Surface SDL_Surface;
 
-typedef struct CharQueueNode CharQueueNode;
-
-typedef struct CharQueueNode{
-    CharQueueNode* next;
-    char* data;
-} CharQueueNode;
-
-typedef struct CharQueue{
-    unsigned int queueSize;
-    CharQueueNode* front;
-} CharQueue;
-
 typedef struct AnimOffset{
     unsigned int index;
     int x;
@@ -19,11 +7,11 @@ typedef struct AnimOffset{
 } AnimOffset;
 
 typedef struct Animation{
-    const char* name;
     SDL_Surface* surface;
-    unsigned int fps;
+    unsigned int imageCount;
+    float fps;
     AnimOffset* offsets;
 } Animation;
 
-int init_animation(const char* ansqPath);
-int destroy_animation(const char* name);
+Animation* create_animation(const char* animDir, float fps);
+int destroy_animation(Animation* anim);

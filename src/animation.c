@@ -2,77 +2,37 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <SDL3/SDL_filesystem.h>
+#include <SDL3/SDL.h>
+#include <SDL3_image/SDL_image.h>
 
-void init_queue(CharQueue* q){
-    q->queueSize = 0;
-    q->front = NULL;
-}
+Animation* create_animation(const char* animDir, float fps){
+    Animation* anim = malloc(sizeof(Animation));
+    anim->fps = fps;
 
-void enqueue(CharQueue* q, char* text){
-
-    CharQueueNode* c = (CharQueueNode*)malloc(sizeof(CharQueueNode));
-    c->next = NULL;
-    c->data = malloc(sizeof(text));
-    strcpy(c->data, text);
-
-    if(q->queueSize <= 0){
-        q->front = c;
-    }
-    else{
-        CharQueueNode* p = q->front;
-        while(p->next != NULL){
-            p = p->next;
-        }
-        p->next = c;
-    }
-    q->queueSize++;
-}
-
-char* dequeue(CharQueue* q){
-    if(q->queueSize == 0){
-        return NULL;
-    }
-    CharQueueNode* c = q->front;
-    q->front = c->next;
-    char* text = malloc(sizeof(c->data));
-    strcpy(text, c->data);
-    free(c);
-    q->queueSize--;
-    return text;
-}
-
-char* peek(CharQueue* q){
-    if(q->queueSize == 0){
-        return NULL;
-    }
-    return q->front->data;
-}
-
-int init_animation(const char* ansqPath){
-    CharQueue key;
-    CharQueue value;
-    init_queue(&key);
-    init_queue(&value);
-
-    FILE* ansq = fopen(ansqPath, "r");
-    while(!feof(ansq)){
-        char text[1024];
-        fscanf(ansq, " %[^:]", text);
-        enqueue(&key, text);
-        fscanf(ansq, " %[^;]", text);
-        enqueue(&value, text);
-    }
-    // while(key.queueSize != 0){
-    //     printf("%s", dequeue(&key));
-    // }
-    while(value.queueSize != 0){
-        printf("%s", dequeue(&value));
-        printf("\n");
-    }
+    int count;
+    char** imagePaths = SDL_GlobDirectory(animDir, "*.png", NULL, &count);
     
-    fclose(ansq);
-    return 0;
+    SDL_Surface* mainSurface = IMG_Load(strcat(strcat(animDir, "/"), *(imagePaths)));
+
+    int sizeX = mainSurface->w;
+    int sizeY = mainSurface->h;
+    
+    for(int i = 1; i < count; i++){
+        SDL_Surface* secondSurface = IMG_Load(strcat(strcat(animDir, "/"), *(imagePaths + i)));
+        SDL_Rect dRect;
+        dRect.x = sizeX * i + sizeX / 2;
+        dRect.y = sizeY / 2;
+        dRect.w = sizeX;
+        dRect.h = sizeY;
+        SDL_BlitSurface(secondSurface, NULL, mainSurface, &dRect);
+    }
+
+    anim->surface = mainSurface;
+
+    return anim;
 }
-int destroy_animation(const char* name){
+int destroy_animation(Animation* anim){
+    free(anim);
     return 0;
 }

@@ -4,6 +4,7 @@
 #include "../scene.h"
 #include "../scenecontroller.h"
 #include <stdio.h>
+#include "../animation.h"
 
 #include <SDL3/SDL.h>
 
@@ -24,8 +25,11 @@ void myentity_init(){
         );
 }
 
+Animation* idleLeft;
+
 void myentity_start(){
-    printf("this will run once");
+    // printf("this will run once");
+    idleLeft = create_animation("res/fighters/bas/idle_left", 15);
 }
 void myentity_poll(SDL_Event* event){
     if(event->type == SDL_EVENT_KEY_DOWN){

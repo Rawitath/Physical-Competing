@@ -273,6 +273,10 @@ int set_image(Entity* entity, const char* imgPath){
     }
     SDL_DestroySurface(entity->img->surface);
     entity->img->surface = IMG_Load(imgPath);
+    if(entity->img->surface != NULL){
+        entity->img->imgSizeX = entity->img->surface->w;
+        entity->img->imgSizeY = entity->img->surface->h;
+    }
     return SET_SUCCESS;
 }
 int set_image_surface(Entity *entity, SDL_Surface *surface)
@@ -281,6 +285,10 @@ int set_image_surface(Entity *entity, SDL_Surface *surface)
         return ENTITY_INVALID_TYPE;
     }
     entity->img->surface = surface;
+    if(entity->img->surface != NULL){
+        entity->img->imgSizeX = entity->img->surface->w;
+        entity->img->imgSizeY = entity->img->surface->h;
+    }
     return SET_SUCCESS;
 }
 int set_text(Entity *entity, const char *text)
