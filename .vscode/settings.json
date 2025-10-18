@@ -23,6 +23,9 @@
         "ts_process.h": "c",
         "sdl_ttf.h": "c",
         "sdl_main.h": "c",
-        "stdbool.h": "c"
+        "stdbool.h": "c",
+        "array": "c",
+        "xstring": "c",
+        "xutility": "c"
     }
 }
