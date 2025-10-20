@@ -25,7 +25,7 @@ void myentity_init(){
         );
 }
 
-Animation* idleLeft;
+Animation* idleLeft = NULL;
 
 void myentity_start(){
     // printf("this will run once");
@@ -45,5 +45,6 @@ void myentity_render(SDL_Renderer* renderer){
     render_entity(myentity, renderer, NULL);
 }
 void myentity_destroy(){
+    destroy_animation(idleLeft);
     destroy_entity(myentity);
 }

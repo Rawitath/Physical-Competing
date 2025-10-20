@@ -7,7 +7,7 @@ typedef struct AnimOffset{
 } AnimOffset;
 
 typedef struct Animation{
-    SDL_Surface* surface;
+    const char** paths;
     unsigned int imageCount;
     float fps;
     AnimOffset* offsets;
