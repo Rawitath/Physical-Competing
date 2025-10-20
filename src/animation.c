@@ -9,6 +9,7 @@
 Animation* create_animation(const char* animDir, float fps){
     Animation* anim = malloc(sizeof(Animation));
     anim->fps = fps;
+    anim->currentFrame = 0;
 
     int count;
     char** imagePaths = SDL_GlobDirectory(animDir, "*.png", NULL, &count);
@@ -45,7 +46,7 @@ Animation* create_animation(const char* animDir, float fps){
             anim->paths[i] = NULL; 
         }
     }
-    
+
     return anim;
 }
 int destroy_animation(Animation* anim){

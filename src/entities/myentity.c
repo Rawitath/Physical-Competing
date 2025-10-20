@@ -30,6 +30,7 @@ Animation* idleLeft = NULL;
 void myentity_start(){
     // printf("this will run once");
     idleLeft = create_animation("res/fighters/bas/idle_left", 15);
+    set_image(myentity, idleLeft->paths[idleLeft->currentFrame]);
 }
 void myentity_poll(SDL_Event* event){
     if(event->type == SDL_EVENT_KEY_DOWN){
@@ -38,8 +39,22 @@ void myentity_poll(SDL_Event* event){
         }
     }
 }
+float x = 0;
 void myentity_loop(){
     myentity->scene->viewportZoom += 1 * get_delta();
+    if(x < 1 / idleLeft->fps){
+        x += get_delta();
+    }
+    else{
+        if(idleLeft->currentFrame < idleLeft->imageCount - 1){
+            idleLeft->currentFrame++;
+        }
+        else{
+            idleLeft->currentFrame = 0;
+        }
+        set_image(myentity, idleLeft->paths[idleLeft->currentFrame]);
+        x = 0;
+    }
 }
 void myentity_render(SDL_Renderer* renderer){
     render_entity(myentity, renderer, NULL);

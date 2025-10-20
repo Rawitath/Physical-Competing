@@ -25,6 +25,10 @@ add_executable(phycompet ${phycompet_src})
 #link libraries
 target_link_libraries(phycompet PRIVATE SDL3::SDL3 SDL3_image::SDL3_image SDL3_ttf::SDL3_ttf)
 
+add_custom_target(delete_resources
+    COMMAND ${CMAKE_COMMAND} -E remove_directory ${RESOURCE_DIR}
+)
+
 add_custom_target(copy_resources ALL
     COMMAND ${CMAKE_COMMAND} -E copy_directory
         ${CMAKE_SOURCE_DIR}/res

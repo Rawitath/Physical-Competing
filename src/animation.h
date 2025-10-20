@@ -9,6 +9,7 @@ typedef struct AnimOffset{
 typedef struct Animation{
     const char** paths;
     unsigned int imageCount;
+    unsigned int currentFrame;
     float fps;
     AnimOffset* offsets;
 } Animation;
