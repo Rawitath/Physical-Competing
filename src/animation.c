@@ -18,21 +18,12 @@ Animation* create_animation(const char* animDir, float fps){
     anim->paths = (const char**)malloc(count * sizeof(const char*));
     anim->offsets = (AnimOffset*) malloc(count * sizeof(AnimOffset));
 
-    // for(int i = 0; i < count; i++){
-    //     char* fileName = imagePaths[i];
-    //     char* path = strdup(animDir);
-    //     realloc(path)
-    //     strcat(path, "/");
-    //     strcat(path, fileName);
-    //     anim->paths[i] = strdup(path);
-    // }
-
     // --- FIX IS HERE ---
     for(int i = 0; i < count; i++){
         char* fileName = imagePaths[i];
         
         // Calculate the exact length needed: "dir" + "/" + "file.png" + "\0"
-        size_t len = strlen(animDir) + 1 + strlen(fileName) + 1;
+        unsigned long long len = strlen(animDir) + 1 + strlen(fileName) + 1;
         
         // Allocate memory for the final, full path
         char* fullPath = malloc(len);
