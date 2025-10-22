@@ -26,6 +26,7 @@
         "stdbool.h": "c",
         "array": "c",
         "xstring": "c",
-        "xutility": "c"
+        "xutility": "c",
+        "menuscene.h": "c"
     }
 }

@@ -6,6 +6,7 @@
 #include "entity.h"
 #include "scene.h"
 
+#include "scenes/menuscene.h"
 #include "scenes/myscene.h"
 #include "scenes/anotherscene.h"
 #include "sc_process.h"
@@ -16,9 +17,11 @@ void init(){
     sm = create_scene_manager();
     sc_init(sm);
 
+    menuscene_init();
     myscene_init();
     anotherscene_init();
 
+    add_scene(sm, menuscene);
     add_scene(sm, myscene);
     add_scene(sm, anotherscene);
     load_scene(sm, 0);
