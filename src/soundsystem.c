@@ -5,6 +5,9 @@
 
 Audio* create_audio(const char* path){
     Audio* audio = (Audio*)malloc(sizeof(Audio));
+    audio->wav_data = (void**)malloc(sizeof(void*));
+    audio->wav_data_len = (int*)malloc(sizeof(int));
+
     SDL_AudioSpec spec;
     if(!SDL_LoadWAV(path, &spec, audio->wav_data, audio->wav_data_len)){
         return CREATE_AUDIO_LOAD_FAILED;
@@ -26,7 +29,7 @@ int set_loop(Audio *audio, int loop)
 
 int play_audio(Audio *audio)
 {
-    return 0;
+    return add_audio(audio);
 }
 
 int pause_audio(Audio *audio)
@@ -36,7 +39,7 @@ int pause_audio(Audio *audio)
 
 int stop_audio(Audio *audio)
 {
-    return 0;
+    return remove_audio(audio);
 }
 
 void destroy_audio(Audio* audio){
