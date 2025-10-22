@@ -1,0 +1,31 @@
+{
+    "files.associations": {
+        "sdl.h": "c",
+        "entity.h": "c",
+        "myentity.h": "c",
+        "scene.h": "c",
+        "atomic": "c",
+        "deque": "c",
+        "format": "c",
+        "list": "c",
+        "memory": "c",
+        "vector": "c",
+        "xlocale": "c",
+        "xlocinfo": "c",
+        "xlocmon": "c",
+        "xlocnum": "c",
+        "xloctime": "c",
+        "xmemory": "c",
+        "xtree": "c",
+        "myscene.h": "c",
+        "main.h": "c",
+        "timesystem.h": "c",
+        "ts_process.h": "c",
+        "sdl_ttf.h": "c",
+        "sdl_main.h": "c",
+        "stdbool.h": "c",
+        "array": "c",
+        "xstring": "c",
+        "xutility": "c"
+    }
+}
