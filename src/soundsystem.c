@@ -1,6 +1,7 @@
 #include <SDL3/SDL.h>
 #include "soundsystem.h"
 #include "ss_process.h"
+#include <stdlib.h>
 
 Audio* create_audio(const char* path){
     Audio* audio = (Audio*)malloc(sizeof(Audio));
@@ -15,7 +16,7 @@ Audio* create_audio(const char* path){
     } else if (!SDL_BindAudioStream(*(SDL_AudioDeviceID*)get_device(), audio->stream)) { 
         return CREATE_AUDIO_BIND_FAILED;
     }
-    return CREATE_AUDIO_SUCCESS;
+    return audio;
 }
 
 int set_loop(Audio *audio, int loop)

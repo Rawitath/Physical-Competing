@@ -1,5 +1,6 @@
 #include "entity.h"
 #include "scene.h"
+#include <stdlib.h>
 
 #include <string.h>
 #include <stdio.h>
