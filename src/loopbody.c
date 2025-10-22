@@ -8,6 +8,7 @@
 
 #include "scenes/myscene.h"
 #include "scenes/anotherscene.h"
+#include "scenes/ithallscene.h"
 #include "sc_process.h"
 
 static SceneManager* sm;
@@ -18,10 +19,12 @@ void init(){
 
     myscene_init();
     anotherscene_init();
+    ithallscene_init();
 
     add_scene(sm, myscene);
     add_scene(sm, anotherscene);
-    load_scene(sm, 0);
+    add_scene(sm, ithallscene);
+    load_scene(sm, 2);
 }
 
 void start(){
