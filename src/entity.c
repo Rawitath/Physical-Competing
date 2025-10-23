@@ -27,7 +27,7 @@ void txt_allocon(Entity *entity, const char* fontPath, float size){
     entity->txt->font = TTF_OpenFont(fontPath, size);
     entity->txt->horizontalAlign = 0;
     entity->txt->verticalAlign = 0;
-    entity->txt->text = "Lorem Ipsum";
+    entity->txt->text = strdup("Lorem Ipsum");
     entity->txt->r = 0;
     entity->txt->g = 0;
     entity->txt->b = 0;
@@ -39,7 +39,7 @@ Entity *create_entity(const char* imgPath, void (*start)(), void (*poll)(SDL_Eve
     Entity* entity = (Entity*) malloc(sizeof(Entity));
 
     entity->type = ENTITY_TYPE_SPRITE;
-    entity->name = "My Entity";
+    entity->name = strdup("My Entity");
     entity->x = 0.0;
     entity->y = 0.0;
     entity->w = 1.0;
@@ -71,7 +71,7 @@ Entity *create_text_entity(const char *fontPath, float size, void (*start)(), vo
     Entity* entity = (Entity*) malloc(sizeof(Entity));
 
     entity->type = ENTITY_TYPE_TEXT;
-    entity->name = "My Text";
+    entity->name = strdup("My Text");
     entity->x = 0.0;
     entity->y = 0.0;
     entity->w = 1.0;
@@ -101,7 +101,7 @@ Entity *ui_create_image(const char *imgPath, void (*start)(), void (*poll)(SDL_E
     Entity* entity = (Entity*) malloc(sizeof(Entity));
 
     entity->type = ENTITY_TYPE_UIIMAGE;
-    entity->name = "My UI Image";
+    entity->name = strdup("My UI Image");
     entity->x = 0.0;
     entity->y = 0.0;
     entity->w = 1.0;
@@ -133,7 +133,7 @@ Entity *ui_create_text(const char* fontPath, float size, void (*start)(), void (
     Entity* entity = (Entity*) malloc(sizeof(Entity));
 
     entity->type = ENTITY_TYPE_UITEXT;
-    entity->name = "My UI Text";
+    entity->name = strdup("My UI Text");
     entity->x = 0.0;
     entity->y = 0.0;
     entity->w = 1.0;
