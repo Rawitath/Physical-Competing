@@ -26,6 +26,8 @@
         "stdbool.h": "c",
         "array": "c",
         "xstring": "c",
-        "xutility": "c"
+        "xutility": "c",
+        "stdlib.h": "c",
+        "audiostruct.h": "c"
     }
 }
