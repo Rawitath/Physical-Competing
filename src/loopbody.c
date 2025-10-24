@@ -60,7 +60,6 @@ void loop(){
             }
         }
     }
-    audio_run_frame(); //Run all audio in queue
 }
 void render(SDL_Renderer* renderer){
     if(sm->activeScene != NULL){

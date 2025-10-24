@@ -15,7 +15,12 @@ void img_allocon(Entity *entity, const char* imgPath){
     entity->img->imgSizeX = 1;
     entity->img->imgSizeY = 1;
 
-    entity->img->surface = IMG_Load(imgPath);
+    if(imgPath != NULL){
+        entity->img->surface = IMG_Load(imgPath);
+    }
+    else{
+        entity->img->surface = NULL;
+    }
     if(entity->img->surface != NULL){
         entity->img->imgSizeX = entity->img->surface->w;
         entity->img->imgSizeY = entity->img->surface->h;

@@ -29,17 +29,17 @@ int set_loop(Audio *audio, int loop)
 
 int play_audio(Audio *audio)
 {
-    return add_audio(audio);
+    return ss_play_audio(audio);
 }
 
 int pause_audio(Audio *audio)
 {
-    return 0;
+    return ss_pause_audio(audio);
 }
 
 int stop_audio(Audio *audio)
 {
-    return remove_audio(audio);
+    return ss_stop_audio(audio);
 }
 
 void destroy_audio(Audio* audio){
