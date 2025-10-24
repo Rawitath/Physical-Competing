@@ -60,6 +60,7 @@ void loop(){
             }
         }
     }
+    ss_loop();
 }
 void render(SDL_Renderer* renderer){
     if(sm->activeScene != NULL){

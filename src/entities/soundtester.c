@@ -30,11 +30,12 @@ Audio* music;
 
 void soundtester_start(){
     music = create_audio("res/music/muteonerising.wav");
+    music->loop = SET_LOOP_ONCE;
 }
 void soundtester_poll(SDL_Event* event){
     if(event->type == SDL_EVENT_KEY_DOWN){
         if(event->key.scancode == SDL_SCANCODE_0){
-            play_audio(music);
+            play_audio(music, RESET_TRUE);
         }
         if(event->key.scancode == SDL_SCANCODE_9){
             pause_audio(music);

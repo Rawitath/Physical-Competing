@@ -11,6 +11,8 @@ int ss_init();
 void* get_device();
 void ss_destroy();
 
-int ss_play_audio(Audio* audio);
+int ss_audio_available(Audio* audio);
+int ss_add_audio(Audio* audio);
 int ss_pause_audio(Audio* audio);
-int ss_stop_audio(Audio* audio);
+int ss_remove_audio(Audio* audio);
+void ss_loop();
