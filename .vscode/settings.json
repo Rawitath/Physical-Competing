@@ -27,6 +27,8 @@
         "array": "c",
         "xstring": "c",
         "xutility": "c",
+        "stdlib.h": "c",
+        "audiostruct.h": "c",
         "menuscene.h": "c"
     }
 }

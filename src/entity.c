@@ -15,7 +15,12 @@ void img_allocon(Entity *entity, const char* imgPath){
     entity->img->imgSizeX = 1;
     entity->img->imgSizeY = 1;
 
-    entity->img->surface = IMG_Load(imgPath);
+    if(imgPath != NULL){
+        entity->img->surface = IMG_Load(imgPath);
+    }
+    else{
+        entity->img->surface = NULL;
+    }
     if(entity->img->surface != NULL){
         entity->img->imgSizeX = entity->img->surface->w;
         entity->img->imgSizeY = entity->img->surface->h;
@@ -27,7 +32,7 @@ void txt_allocon(Entity *entity, const char* fontPath, float size){
     entity->txt->font = TTF_OpenFont(fontPath, size);
     entity->txt->horizontalAlign = 0;
     entity->txt->verticalAlign = 0;
-    entity->txt->text = "Lorem Ipsum";
+    entity->txt->text = strdup("Lorem Ipsum");
     entity->txt->r = 0;
     entity->txt->g = 0;
     entity->txt->b = 0;
@@ -39,6 +44,7 @@ Entity *create_entity(const char* imgPath, void (*start)(), void (*poll)(SDL_Eve
     Entity* entity = (Entity*) malloc(sizeof(Entity));
 
     entity->type = ENTITY_TYPE_SPRITE;
+    entity->name = strdup("My Entity");
     entity->x = 0.0;
     entity->y = 0.0;
     entity->w = 1.0;
@@ -57,16 +63,20 @@ Entity *create_entity(const char* imgPath, void (*start)(), void (*poll)(SDL_Eve
 
     entity->scene = NULL;
 
+    entity->img = NULL;
+    entity->txt = NULL;
+
     img_allocon(entity, imgPath);
 
     return entity;
 }
 
-Entity *ui_create_text(const char* fontPath, float size, void (*start)(), void (*poll)(SDL_Event *event), void (*loop)(), void (*render)(SDL_Renderer *renderer), void (*destroy)())
+Entity *create_text_entity(const char *fontPath, float size, void (*start)(), void (*poll)(SDL_Event *event), void (*loop)(), void (*render)(SDL_Renderer *renderer), void (*destroy)())
 {
     Entity* entity = (Entity*) malloc(sizeof(Entity));
 
-    entity->type = ENTITY_TYPE_UITEXT;
+    entity->type = ENTITY_TYPE_TEXT;
+    entity->name = strdup("My Text");
     entity->x = 0.0;
     entity->y = 0.0;
     entity->w = 1.0;
@@ -82,6 +92,71 @@ Entity *ui_create_text(const char* fontPath, float size, void (*start)(), void (
     entity->destroy = destroy;
 
     entity->scene = NULL;
+
+    entity->img = NULL;
+    entity->txt = NULL;
+
+    txt_allocon(entity, fontPath, size);
+
+    return entity;
+}
+
+Entity *ui_create_image(const char *imgPath, void (*start)(), void (*poll)(SDL_Event *event), void (*loop)(), void (*render)(SDL_Renderer *renderer), void (*destroy)())
+{
+    Entity* entity = (Entity*) malloc(sizeof(Entity));
+
+    entity->type = ENTITY_TYPE_UIIMAGE;
+    entity->name = strdup("My UI Image");
+    entity->x = 0.0;
+    entity->y = 0.0;
+    entity->w = 1.0;
+    entity->h = 1.0;
+    entity->anchorX = 0.0;
+    entity->anchorY = 0.0;
+    entity->active = ACTIVE_TRUE;
+
+    entity->needStart = 1;
+
+    entity->start = start;
+    entity->poll = poll;
+    entity->loop = loop;
+    entity->render = render;
+    entity->destroy = destroy;
+
+    entity->scene = NULL;
+
+    entity->img = NULL;
+    entity->txt = NULL;
+
+    img_allocon(entity, imgPath);
+
+    return entity;
+}
+
+Entity *ui_create_text(const char* fontPath, float size, void (*start)(), void (*poll)(SDL_Event *event), void (*loop)(), void (*render)(SDL_Renderer *renderer), void (*destroy)())
+{
+    Entity* entity = (Entity*) malloc(sizeof(Entity));
+
+    entity->type = ENTITY_TYPE_UITEXT;
+    entity->name = strdup("My UI Text");
+    entity->x = 0.0;
+    entity->y = 0.0;
+    entity->w = 1.0;
+    entity->h = 1.0;
+    entity->anchorX = 0.0;
+    entity->anchorY = 0.0;
+    entity->active = ACTIVE_TRUE;
+
+    entity->start = start;
+    entity->poll = poll;
+    entity->loop = loop;
+    entity->render = render;
+    entity->destroy = destroy;
+
+    entity->scene = NULL;
+
+    entity->img = NULL;
+    entity->txt = NULL;
 
     txt_allocon(entity, fontPath, size);
 
@@ -266,8 +341,6 @@ void destroy_entity(Entity* entity){
     }
 }
 
-
-
 int set_image(Entity* entity, const char* imgPath){
     if(entity->type != ENTITY_TYPE_SPRITE && entity->type != ENTITY_TYPE_UIIMAGE){
         return ENTITY_INVALID_TYPE;
@@ -306,6 +379,10 @@ const char *get_text(Entity *entity)
         return NULL;
     }
     return entity->txt->text;
+}
+int set_name(Entity* entity, const char* name){
+    entity->name = strdup(name);
+    return SET_SUCCESS;
 }
 int set_font(Entity *entity, const char *fontPath, float fontSize)
 {
