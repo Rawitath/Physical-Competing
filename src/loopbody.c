@@ -10,12 +10,14 @@
 #include "scenes/anotherscene.h"
 #include "scenes/ithallscene.h"
 #include "sc_process.h"
+#include "ss_process.h"
 
 static SceneManager* sm;
 
 void init(){
     sm = create_scene_manager();
     sc_init(sm);
+    ss_init();
 
     myscene_init();
     anotherscene_init();
@@ -61,6 +63,7 @@ void loop(){
             }
         }
     }
+    ss_loop();
 }
 void render(SDL_Renderer* renderer){
     if(sm->activeScene != NULL){
@@ -84,4 +87,5 @@ void destroy(){
     sm->activeScene->unload();
 
     destroy_scene_manager(sm);
+    ss_destroy();
 }

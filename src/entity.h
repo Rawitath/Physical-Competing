@@ -72,6 +72,25 @@ Entity* create_entity(
     void (*destroy)()
     );
 
+Entity* create_text_entity(
+    const char* fontPath,
+    float size,
+    void (*start)(), 
+    void (*poll)(SDL_Event* event), 
+    void (*loop)(),
+    void (*render)(SDL_Renderer* renderer),
+    void (*destroy)()
+    );
+    
+Entity* ui_create_image(
+    const char* imgPath,
+    void (*start)(), 
+    void (*poll)(SDL_Event* event), 
+    void (*loop)(),
+    void (*render)(SDL_Renderer* renderer),
+    void (*destroy)()
+    );
+
 Entity* ui_create_text(
     const char* fontPath,
     float size,
@@ -92,6 +111,7 @@ void destroy_entity(Entity* entity);
 int set_image(Entity* entity, const char* imgPath);
 int set_image_surface(Entity* entity, SDL_Surface* surface);
 int set_text(Entity* entity, const char* text);
+int set_name(Entity* entity, const char* name);
 const char* get_text(Entity* entity);
 int set_font(Entity* entity, const char* fontPath, float fontSize);
 int set_font_size(Entity* entity, float fontSize);

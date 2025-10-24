@@ -1,8 +1,15 @@
-typedef Uint8 Uint8;
-typedef Uint32 Uint32;
+typedef struct SDL_AudioStream SDL_AudioStream;
+
+#define SET_PAUSED_FALSE 0
+#define SET_PAUSED_TRUE 1
+
+#define SET_LOOP_INFINITY -1
+#define SET_LOOP_ONCE 0
 
 typedef struct Audio {
-    Uint8 **wav_data;
-    Uint32* wav_data_len;
+    void **wav_data;
+    int* wav_data_len;
+    int loop;
+    int paused;
     SDL_AudioStream *stream;
 } Audio;
