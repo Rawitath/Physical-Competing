@@ -36,6 +36,9 @@
         "exitbutton.h": "c",
         "stdio.h": "c",
         "scenecontroller.h": "c",
-        "startbuttontext.h": "c"
+        "startbuttontext.h": "c",
+        "tweener.h": "c",
+        "menustate.h": "c",
+        "cstdlib": "c"
     }
 }

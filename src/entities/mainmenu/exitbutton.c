@@ -5,6 +5,8 @@
 #include "../../scenecontroller.h"
 #include <stdio.h>
 #include "../../animation.h"
+#include "../pcutils/tweener.h"
+#include "menustate.h"
 
 #include <SDL3/SDL.h>
 
@@ -44,7 +46,12 @@ void exitbutton_poll(SDL_Event* event){
 }
 
 void exitbutton_loop(){
-
+    if(*menustate_state == 0){
+        linear_tween_to(&exitbutton->y, 75, 100 * get_delta(), 0.1);
+    }
+    else{
+        linear_tween_to(&exitbutton->y, 120, 100 * get_delta(), 0.1);
+    }
 }
 void exitbutton_render(SDL_Renderer* renderer){
     render_entity(exitbutton, renderer, NULL);

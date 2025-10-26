@@ -6,6 +6,8 @@
 #include "../../scenecontroller.h"
 #include <stdio.h>
 #include "../../animation.h"
+#include "menustate.h"
+#include "../pcutils/tweener.h"
 
 #include <SDL3/SDL.h>
 
@@ -49,6 +51,12 @@ void startbutton_poll(SDL_Event* event){
 }
 
 void startbutton_loop(){
+    if(*menustate_state == 0){
+        linear_tween_to(&startbutton->y, 75, 100 * get_delta(), 0.1);
+    }
+    else{
+        linear_tween_to(&startbutton->y, 120, 100 * get_delta(), 0.1);
+    }
     if(startbuttontext != NULL) startbuttontext->loop();
     startbuttontext->x = startbutton->x;
     startbuttontext->y = startbutton->y;
@@ -64,6 +72,5 @@ void startbutton_destroy(){
 }
 
 void startbutton_interact(){
-    printf("Start!");
-    sc_load_scene(1);
+    *menustate_state = 1;
 }

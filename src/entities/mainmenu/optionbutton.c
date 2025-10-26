@@ -5,6 +5,8 @@
 #include "../../scenecontroller.h"
 #include <stdio.h>
 #include "../../animation.h"
+#include "../pcutils/tweener.h"
+#include "menustate.h"
 
 #include <SDL3/SDL.h>
 
@@ -42,8 +44,12 @@ void optionbutton_poll(SDL_Event* event){
 }
 
 void optionbutton_loop(){
-
-
+    if(*menustate_state == 0){
+        linear_tween_to(&optionbutton->y, 75, 100 * get_delta(), 0.1);
+    }
+    else{
+        linear_tween_to(&optionbutton->y, 120, 100 * get_delta(), 0.1);
+    }
 }
 void optionbutton_render(SDL_Renderer* renderer){
     render_entity(optionbutton, renderer, NULL);

@@ -6,6 +6,14 @@
 #include "../entities/mainmenu/optionbutton.h"
 #include "../entities/mainmenu/exitbutton.h"
 #include "../entities/mainmenu/menuselector.h"
+#include "../entities/mainmenu/menustate.h"
+
+#include "../entities/selectionmenu/asiabanner.h"
+#include "../entities/selectionmenu/basbanner.h"
+#include "../entities/selectionmenu/flukebanner.h"
+#include "../entities/selectionmenu/golfbanner.h"
+
+#include <stdlib.h>
 
 #include <stdio.h>
 
@@ -18,26 +26,49 @@ void menuscene_init()
 }
 
 void menuscene_load(){
+    menustate_state = (int*)malloc(sizeof(int));
+    *menustate_state = 0;
     startbutton_init();
     optionbutton_init();
     exitbutton_init();
     menuselector_init();
+
+    flukebanner_init();
+    basbanner_init();
+    asiabanner_init();
+    golfbanner_init();
 
     add_entity(menuscene, startbutton);
     add_entity(menuscene, optionbutton);
     add_entity(menuscene, exitbutton);
     add_entity(menuscene, menuselector);
 
+    add_entity(menuscene, flukebanner);
+    add_entity(menuscene, basbanner);
+    add_entity(menuscene, asiabanner);
+    add_entity(menuscene, golfbanner);
+
 }
 
 void menuscene_unload(){
+    remove_entity(menuscene, asiabanner);
+    remove_entity(menuscene, flukebanner);
+    remove_entity(menuscene, basbanner);
+    remove_entity(menuscene, golfbanner);
+
     remove_entity(menuscene, menuselector);
     remove_entity(menuscene, exitbutton);
     remove_entity(menuscene, optionbutton);
     remove_entity(menuscene, startbutton);
 
+    flukebanner->destroy();
+    basbanner->destroy();
+    asiabanner->destroy();
+    golfbanner->destroy();
+
     menuselector->destroy();
     exitbutton->destroy();
     optionbutton->destroy();
     startbutton->destroy();
+    free(menustate_state);
 }
