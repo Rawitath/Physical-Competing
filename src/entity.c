@@ -177,7 +177,7 @@ int render_image(Entity* entity, SDL_Renderer* renderer, SDL_FRect* sRect){
     SDL_GetCurrentRenderOutputSize(renderer, &offsetX, &offsetY);
 
     offsetX = offsetX / 2 - entity->scene->viewportX * entity->scene->viewportZoom;
-    offsetY = offsetY / 2 - entity->scene->viewportY * entity->scene->viewportZoom;
+    offsetY = offsetY / 2 + entity->scene->viewportY * entity->scene->viewportZoom;
 
     float sizeW = entity->img->imgSizeX * entity->w * entity->scene->viewportZoom * entity->img->pixelRatio;
     float sizeH = entity->img->imgSizeY * entity->h * entity->scene->viewportZoom * entity->img->pixelRatio;
@@ -213,7 +213,7 @@ int render_text(Entity* entity, SDL_Renderer* renderer, SDL_FRect* sRect){
     SDL_GetCurrentRenderOutputSize(renderer, &offsetX, &offsetY);
 
     offsetX = offsetX / 2 - entity->scene->viewportX * entity->scene->viewportZoom;
-    offsetY = offsetY / 2 - entity->scene->viewportY * entity->scene->viewportZoom;
+    offsetY = offsetY / 2 + entity->scene->viewportY * entity->scene->viewportZoom;
 
     float sizeW;
     float sizeH;
@@ -253,8 +253,8 @@ int ui_render_image(Entity* entity, SDL_Renderer* renderer, SDL_FRect* sRect){
     float sizeW = entity->img->imgSizeX * entity->img->pixelRatio * entity->w;
     float sizeH = entity->img->imgSizeY * entity->img->pixelRatio * entity->h;
 
-    fRect.x = (entity->x + entity->anchorX) * fOffsetX - sizeW / 2;
-    fRect.y = (entity->y + entity->anchorY) * fOffsetY - sizeH / 2;
+    fRect.x = (entity->x + entity->anchorX) * fOffsetX;
+    fRect.y = (entity->y + entity->anchorY) * fOffsetY;
     fRect.w = sizeW * fOffsetX;
     fRect.h = sizeH * fOffsetY;
 
@@ -371,6 +371,25 @@ int set_text(Entity *entity, const char *text)
         return ENTITY_INVALID_TYPE;
     }
     strcpy(entity->txt->text, text);
+    return SET_SUCCESS;
+}
+int set_text_color(Entity *entity, int r, int g, int b, int a)
+{
+    if(entity->type != ENTITY_TYPE_TEXT && entity->type != ENTITY_TYPE_UITEXT){
+        return ENTITY_INVALID_TYPE;
+    }
+    entity->txt->r = r;
+    entity->txt->g = g;
+    entity->txt->b = b;
+    entity->txt->a = a;
+    return SET_SUCCESS;
+}
+int set_pixel_ratio(Entity *entity, float ratio)
+{
+    if(entity->type != ENTITY_TYPE_SPRITE && entity->type != ENTITY_TYPE_UIIMAGE){
+        return ENTITY_INVALID_TYPE;
+    }
+    entity->img->pixelRatio = ratio;
     return SET_SUCCESS;
 }
 const char *get_text(Entity *entity)

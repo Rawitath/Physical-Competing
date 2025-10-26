@@ -44,7 +44,7 @@ void poll(SDL_Event* event){
     if(sm->activeScene != NULL){
         for(int i = 0; i < sm->activeScene->entityCount; i++){
             Entity* e = get_entity_by_index(sm->activeScene, i);
-            if(e && e->poll && e->active == ACTIVE_TRUE){
+            if(e && e->poll && e->active == ACTIVE_TRUE && e->needStart == 0){
                 e->poll(event);
             }
         }
@@ -55,7 +55,7 @@ void loop(){
     if(sm->activeScene != NULL){
         for(int i = 0; i < sm->activeScene->entityCount; i++){
             Entity* e = get_entity_by_index(sm->activeScene, i);
-            if(e && e->loop && e->active == ACTIVE_TRUE){
+            if(e && e->loop && e->active == ACTIVE_TRUE && e->needStart == 0){
                 e->loop();
             }
         }
@@ -66,7 +66,7 @@ void render(SDL_Renderer* renderer){
     if(sm->activeScene != NULL){
         for(int i = 0; i < sm->activeScene->entityCount; i++){
             Entity* e = get_entity_by_index(sm->activeScene, i);
-            if(e && e->render && e->active == ACTIVE_TRUE){
+            if(e && e->render && e->active == ACTIVE_TRUE && e->needStart == 0){
                 e->render(renderer);
             }
         }
