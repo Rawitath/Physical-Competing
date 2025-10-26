@@ -37,4 +37,5 @@ void startbuttontext_render(SDL_Renderer* renderer){
 }
 void startbuttontext_destroy(){
     destroy_entity(startbuttontext);
+    startbuttontext = NULL;
 }
