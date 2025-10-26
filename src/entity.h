@@ -111,6 +111,8 @@ void destroy_entity(Entity* entity);
 int set_image(Entity* entity, const char* imgPath);
 int set_image_surface(Entity* entity, SDL_Surface* surface);
 int set_text(Entity* entity, const char* text);
+int set_text_color(Entity* entity, int r, int g, int b, int a);
+int set_pixel_ratio(Entity* entity, float ratio);
 int set_name(Entity* entity, const char* name);
 const char* get_text(Entity* entity);
 int set_font(Entity* entity, const char* fontPath, float fontSize);
