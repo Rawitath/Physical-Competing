@@ -1,11 +1,11 @@
-#include "../entity.h"
+#include "../../entity.h"
 #include "startbutton.h"
 #include "startbuttontext.h"
-#include "../timesystem.h"
-#include "../scene.h"
-#include "../scenecontroller.h"
+#include "../../timesystem.h"
+#include "../../scene.h"
+#include "../../scenecontroller.h"
 #include <stdio.h>
-#include "../animation.h"
+#include "../../animation.h"
 
 #include <SDL3/SDL.h>
 
@@ -65,4 +65,5 @@ void startbutton_destroy(){
 
 void startbutton_interact(){
     printf("Start!");
+    sc_load_scene(1);
 }

@@ -1,7 +1,7 @@
 #include "startbuttontext.h"
-#include "../entity.h"
-#include "../timesystem.h"
-#include "../scene.h"
+#include "../../entity.h"
+#include "../../timesystem.h"
+#include "../../scene.h"
 
 #include <SDL3/SDL.h>
 

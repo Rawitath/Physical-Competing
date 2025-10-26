@@ -2,10 +2,10 @@
 #include "../scene.h"
 #include "../entity.h"
 #include "../entities/myentity.h"
-#include "../entities/startbutton.h"
-#include "../entities/optionbutton.h"
-#include "../entities/exitbutton.h"
-#include "../entities/menuselector.h"
+#include "../entities/mainmenu/startbutton.h"
+#include "../entities/mainmenu/optionbutton.h"
+#include "../entities/mainmenu/exitbutton.h"
+#include "../entities/mainmenu/menuselector.h"
 
 #include <stdio.h>
 

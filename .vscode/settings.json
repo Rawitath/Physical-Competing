@@ -29,6 +29,13 @@
         "xutility": "c",
         "stdlib.h": "c",
         "audiostruct.h": "c",
-        "menuscene.h": "c"
+        "menuscene.h": "c",
+        "menuselector.h": "c",
+        "optionbutton.h": "c",
+        "startbutton.h": "c",
+        "exitbutton.h": "c",
+        "stdio.h": "c",
+        "scenecontroller.h": "c",
+        "startbuttontext.h": "c"
     }
 }

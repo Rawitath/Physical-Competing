@@ -1,10 +1,10 @@
-#include "../entity.h"
+#include "../../entity.h"
 #include "exitbutton.h"
-#include "../timesystem.h"
-#include "../scene.h"
-#include "../scenecontroller.h"
+#include "../../timesystem.h"
+#include "../../scene.h"
+#include "../../scenecontroller.h"
 #include <stdio.h>
-#include "../animation.h"
+#include "../../animation.h"
 
 #include <SDL3/SDL.h>
 

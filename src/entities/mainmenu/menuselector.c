@@ -1,10 +1,10 @@
-#include "../entity.h"
+#include "../../entity.h"
 #include "menuselector.h"
-#include "../timesystem.h"
-#include "../scene.h"
-#include "../scenecontroller.h"
+#include "../../timesystem.h"
+#include "../../scene.h"
+#include "../../scenecontroller.h"
 #include <stdio.h>
-#include "../animation.h"
+#include "../../animation.h"
 
 #include "startbutton.h"
 #include "optionbutton.h"
@@ -22,7 +22,7 @@ Entity* buttons[3];
 int selectedIndex = 0;
 
 void menuselector_init(){
-    menuselector = create_entity(
+    menuselector = ui_create_image(
             "res/ui/jaramedflag.png",
             &menuselector_start,
             &menuselector_poll,
@@ -36,6 +36,8 @@ void menuselector_start(){
     // printf("this will run once");
     menuselector->anchorX = -5;
     menuselector->anchorY = -5;
+    menuselector->img->imgSizeX = 100;
+    menuselector->img->imgSizeX = 100;
     menuselector->w = 10;
     exitbutton->h = 10;
     buttons[0] = startbutton;
@@ -73,8 +75,8 @@ void menuselector_poll(SDL_Event* event){
 }
 
 void menuselector_loop(){
-    menuselector->x = buttons[selectedIndex]->x;
-    menuselector->y = buttons[selectedIndex]->y;
+    menuselector->x = buttons[selectedIndex]->x + menuselector->w / 2;
+    menuselector->y = buttons[selectedIndex]->y + menuselector->h;
 }
 void menuselector_render(SDL_Renderer* renderer){
     render_entity(menuselector, renderer, NULL);
