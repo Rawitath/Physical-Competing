@@ -2,6 +2,7 @@
 #include "../scene.h"
 #include "../entity.h"
 #include "../entities/myentity.h"
+#include "../entities/startbutton.h"
 
 #include <stdio.h>
 
@@ -14,9 +15,11 @@ void menuscene_init()
 }
 
 void menuscene_load(){
-    
+    startbutton_init();
+    add_entity(menuscene, startbutton);
 }
 
 void menuscene_unload(){
-    
+    remove_entity(menuscene, startbutton);
+    startbutton->destroy();
 }
