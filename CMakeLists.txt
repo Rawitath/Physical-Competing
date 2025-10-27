@@ -25,16 +25,6 @@ add_executable(phycompet ${phycompet_src})
 #link libraries
 target_link_libraries(phycompet PRIVATE SDL3::SDL3 SDL3_image::SDL3_image SDL3_ttf::SDL3_ttf)
 
-# add_custom_target(delete_resources
-#     COMMAND ${CMAKE_COMMAND} -E remove_directory ${RESOURCE_DIR}
-# )
-
-# add_custom_target(TARGET phycompet POST_BUILD
-#     COMMAND ${CMAKE_COMMAND} -E copy_directory_if_different
-#         ${CMAKE_SOURCE_DIR}/res
-#         ${RESOURCE_DIR}
-# )
-
 
 ### Uncomment to enable sync ###
 set(SYNC_SCRIPT "${CMAKE_CURRENT_SOURCE_DIR}/cmake/sync_res.cmake")
