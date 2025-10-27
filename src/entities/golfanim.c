@@ -4,7 +4,7 @@
 
 void golfAnim_init()
 {
-    float fps = 30;
+    float fps = 15;
     golfAnim = create_fighteranim();
     
     golfAnim->anims[idle] = create_animation("res/fighters/golf/idle_left", fps);
@@ -57,4 +57,8 @@ void golfAnim_init()
     golfAnim->anims[fall + 1] = create_animation("res/fighters/golf/fall_right", fps);
     golfAnim->anims[win] = create_animation("res/fighters/golf/win_left", fps);
     golfAnim->anims[win + 1] = create_animation("res/fighters/golf/win_right", fps);
+
+    for(int i = 0; i < 50; i++){
+        golfAnim->anims[i]->frameSkip = 1;
+    }
 }

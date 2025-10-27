@@ -10,12 +10,15 @@
 
 #include "fighteranim.h"
 #include "golfanim.h"
+#include "flukeanim.h"
 
 void myentity_start();
 void myentity_poll(SDL_Event* event);
 void myentity_loop();
 void myentity_render(SDL_Renderer* renderer);
 void myentity_destroy();
+
+float x = 0;
 
 void myentity_init(){
     myentity = create_entity(
@@ -28,6 +31,7 @@ void myentity_init(){
         );
 
     golfAnim_init();
+    flukeAnim_init();
     myentity->w *= 0.5;
     myentity->h *= 0.5;
 }
@@ -41,22 +45,29 @@ void myentity_start(){
     
 
 }
+int fff = 0;
 void myentity_poll(SDL_Event* event){
     if(event->type == SDL_EVENT_KEY_DOWN){
+        if(event->key.scancode == SDL_SCANCODE_A){
+            fff -= 1;
+        }
         if(event->key.scancode == SDL_SCANCODE_D){
-            sc_load_scene(1);
+            fff += 1;
         }
     }
 }
-float x = 0;
+
 void myentity_loop(){
+    fff %= 50;
     // myentity->scene->viewportZoom += 1 * get_delta();
-    play_animation(myentity, golfAnim, &x, walk, 1);
+    play_animation(myentity, golfAnim, &x, fff, 0);
+    // play_animation(myentity, flukeAnim, &x, fff, 0);
 }
 void myentity_render(SDL_Renderer* renderer){
     render_entity(myentity, renderer, NULL);
 }
 void myentity_destroy(){
+    destroy_fighteranim(flukeAnim);
     destroy_fighteranim(golfAnim);
     destroy_animation(idleLeft);
     destroy_entity(myentity);

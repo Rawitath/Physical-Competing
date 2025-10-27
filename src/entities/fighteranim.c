@@ -29,15 +29,16 @@ void assign_anim(FighterAnim* a, int index, Animation *animation)
 
 void play_animation(Entity* entity, FighterAnim* a, float* framecounter, int index, int side)
 {
+    if(a->anims[index + side]->imageCount < 1){
+        return;
+    }
     if(*framecounter < 1 / a->anims[index + side]->fps){
         *framecounter += get_delta();
     }
     else{
         while(*framecounter > 0){
-            if(a->anims[index + side]->currentFrame < a->anims[index + side]->imageCount - 1){
-            a->anims[index + side]->currentFrame++;
-            }
-            else{
+            a->anims[index + side]->currentFrame += 1 + a->anims[index + side]->frameSkip;
+            if(a->anims[index + side]->currentFrame >= a->anims[index + side]->imageCount - 1){
                 a->anims[index + side]->currentFrame = 0;
             }
             *framecounter -= 1 / a->anims[index + side]->fps;
