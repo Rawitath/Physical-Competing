@@ -33,7 +33,7 @@ void mytext_poll(SDL_Event* event){
     
 }
 void mytext_loop(){
-    set_font_size(mytext, get_font_size(mytext) + 5 * get_delta());
+    // set_font_size(mytext, get_font_size(mytext) + 5 * get_delta());
 }
 void mytext_render(SDL_Renderer* renderer){
     render_entity(mytext, renderer, NULL);

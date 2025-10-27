@@ -57,7 +57,7 @@ int main(int argc, char** argv){
 
         loop();
 
-        SDL_SetRenderDrawColor(renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
+        SDL_SetRenderDrawColor(renderer, 255, 0, 255, SDL_ALPHA_OPAQUE);
         SDL_RenderClear(renderer);
 
         render(renderer);
