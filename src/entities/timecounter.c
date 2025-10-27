@@ -42,6 +42,7 @@ void timecounter_init(){
         );
     currentTime = maxTime;
     counter_set_time(currentTime);
+    set_text_color(timecounter, 255, 255, 255, SDL_ALPHA_OPAQUE);
 }
 
 void timecounter_start(){

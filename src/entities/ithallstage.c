@@ -25,6 +25,8 @@ void ithallstage_init(){
             &ithallstage_render,
             &ithallstage_destroy
         );
+    ithallstage->w *= 2.83;
+    ithallstage->h *= 2.83;
 }
 
 float triggerwin_time = 0;
@@ -37,6 +39,20 @@ void ithallstage_trigger_win(const char *name)
     triggerwin_time = 5;
 }
 
+void ithallstage_set_bg(int type)
+{
+    switch (type){
+        case 0:
+            set_image(ithallstage, "res/stages/ithall.jpg");
+            break;
+        case 1:
+            set_image(ithallstage, "res/stages/blacksquare.png");
+            ithallstage->img->imgSizeX = 1440;
+            ithallstage->img->imgSizeY = 1080;
+            break;
+    }
+}
+
 void ithallstage_start(){
     counter_set_max_time(30);
     counter_set_time(30);
@@ -45,6 +61,12 @@ void ithallstage_poll(SDL_Event* event){
     if(event->type == SDL_EVENT_KEY_DOWN){
         if(event->key.scancode == SDL_SCANCODE_0){
             ithallstage_trigger_win("Asia");
+        }
+        if(event->key.scancode == SDL_SCANCODE_1){
+            ithallstage_set_bg(0);
+        }
+        if(event->key.scancode == SDL_SCANCODE_2){
+            ithallstage_set_bg(1);
         }
     }
 }
