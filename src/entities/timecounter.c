@@ -42,12 +42,12 @@ void timecounter_init(){
         );
     currentTime = maxTime;
     counter_set_time(currentTime);
-    set_text_color(timecounter, 255, 255, 255, SDL_ALPHA_OPAQUE);
+    // set_text_color(timecounter, 255, 255, 255, SDL_ALPHA_OPAQUE);
 }
 
 void timecounter_start(){
-    timecounter->x = 50;
-    timecounter->y = 10;
+    timecounter->x = 49;
+    timecounter->y = 12;
 }
 void timecounter_poll(SDL_Event* event){
 

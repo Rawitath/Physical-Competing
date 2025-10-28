@@ -16,50 +16,62 @@ void lefthealthbar_destroy();
 
 int lefthealthbar_health = 100;
 
+// SDL_FRect lefthealthbar_rect;
+float lefthealthbar_xSize = 6 * 1.285;
+float lefthealthbar_xPos = 12;
+
 void lefthealthbar_init(){
-    lefthealthbar = ui_create_text(
-            "res/UPCDL.TTF",
-            48,
+    lefthealthbar = ui_create_image(
+            "res/stages/healthbar.png",
             &lefthealthbar_start,
             &lefthealthbar_poll,
             &lefthealthbar_loop,
             &lefthealthbar_render,
             &lefthealthbar_destroy
         );
-    set_text_color(lefthealthbar, 255, 255, 255, SDL_ALPHA_OPAQUE);
+    SDL_SetSurfaceColorMod(lefthealthbar->img->surface, 255, 179, 51);
 }
 
-void lefthealthbar_update_text(){
-    char buf[100];
-    sprintf(buf, "%d%%", lefthealthbar_health);
-    set_text(lefthealthbar, buf);
+void lefthealthbar_update_bar(){
+    float h = lefthealthbar_health / 100.0;
+    lefthealthbar->w = lefthealthbar_xSize * h;
+    lefthealthbar->x = lefthealthbar_xPos - (lefthealthbar_xSize / 2 * h);
 }
 
 void lefthealthbar_set_health(int health)
 {
     lefthealthbar_health = health;
-    lefthealthbar_update_text();
+    lefthealthbar_update_bar();
 }
 
 void lefthealthbar_add_health(int health)
 {
     lefthealthbar_health += health;
-    lefthealthbar_update_text();
+    lefthealthbar_update_bar();
 }
 
 void lefthealthbar_subtract_health(int health)
 {
     lefthealthbar_health -= health;
-    lefthealthbar_update_text();
+    lefthealthbar_update_bar();
 }
 
 void lefthealthbar_start(){
-    lefthealthbar_update_text();
-    lefthealthbar->x = 10;
-    lefthealthbar->y = 10;
+    lefthealthbar_update_bar();
+    lefthealthbar->x = lefthealthbar_xPos;
+    lefthealthbar->y = 3;
+    lefthealthbar->w = lefthealthbar_xSize;
+    lefthealthbar->h = 10 * 1.285;
 }
 void lefthealthbar_poll(SDL_Event* event){
-    
+    if(event->type == SDL_EVENT_KEY_DOWN){
+        if(event->key.scancode == SDL_SCANCODE_1){
+            lefthealthbar_subtract_health(1);
+        }
+        if(event->key.scancode == SDL_SCANCODE_2){
+            lefthealthbar_add_health(1);
+        }
+    }
 }
 
 void lefthealthbar_loop(){

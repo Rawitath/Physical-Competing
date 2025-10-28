@@ -30,6 +30,7 @@
         "stdlib.h": "c",
         "audiostruct.h": "c",
         "fighteranim.h": "c",
-        "ithallstage.h": "c"
+        "ithallstage.h": "c",
+        "wintext.h": "c"
     }
 }

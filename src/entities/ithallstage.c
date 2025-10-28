@@ -16,9 +16,11 @@ void ithallstage_loop();
 void ithallstage_render(SDL_Renderer* renderer);
 void ithallstage_destroy();
 
+const char* stagePath = "res/stages/foodcenter.jpg";
+
 void ithallstage_init(){
     ithallstage = create_entity(
-            "res/stages/ithall.jpg",
+            stagePath,
             &ithallstage_start,
             &ithallstage_poll,
             &ithallstage_loop,
@@ -43,7 +45,7 @@ void ithallstage_set_bg(int type)
 {
     switch (type){
         case 0:
-            set_image(ithallstage, "res/stages/ithall.jpg");
+            set_image(ithallstage, stagePath);
             break;
         case 1:
             set_image(ithallstage, "res/stages/blacksquare.png");
@@ -58,17 +60,17 @@ void ithallstage_start(){
     counter_set_time(30);
 }
 void ithallstage_poll(SDL_Event* event){
-    if(event->type == SDL_EVENT_KEY_DOWN){
-        if(event->key.scancode == SDL_SCANCODE_0){
-            ithallstage_trigger_win("Asia");
-        }
-        if(event->key.scancode == SDL_SCANCODE_1){
-            ithallstage_set_bg(0);
-        }
-        if(event->key.scancode == SDL_SCANCODE_2){
-            ithallstage_set_bg(1);
-        }
-    }
+    // if(event->type == SDL_EVENT_KEY_DOWN){
+    //     if(event->key.scancode == SDL_SCANCODE_0){
+    //         ithallstage_trigger_win("Asia");
+    //     }
+    //     if(event->key.scancode == SDL_SCANCODE_1){
+    //         ithallstage_set_bg(0);
+    //     }
+    //     if(event->key.scancode == SDL_SCANCODE_2){
+    //         ithallstage_set_bg(1);
+    //     }
+    // }
 }
 
 void ithallstage_loop(){
