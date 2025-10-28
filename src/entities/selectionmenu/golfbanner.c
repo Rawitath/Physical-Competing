@@ -47,10 +47,10 @@ void golfbanner_poll(SDL_Event* event){
 
 void golfbanner_loop(){
     if(*menustate_state == 1){
-        linear_tween_to(&golfbanner->y, 75, 100 * get_delta(), 0.1);
+        linear_tween_to(&golfbanner->y, 75, 100 * get_delta(), 0.5);
     }
     else{
-        linear_tween_to(&golfbanner->y, 120, 100 * get_delta(), 0.1);
+        linear_tween_to(&golfbanner->y, 120, 100 * get_delta(), 0.5);
     }
 }
 void golfbanner_render(SDL_Renderer* renderer){

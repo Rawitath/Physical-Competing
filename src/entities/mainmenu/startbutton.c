@@ -19,27 +19,29 @@ void startbutton_destroy();
 
 void startbutton_init(){
     startbutton = ui_create_image(
-            "res/ui/phonelog.png",
+            "res/ui/tornpaper.png",
             &startbutton_start,
             &startbutton_poll,
             &startbutton_loop,
             &startbutton_render,
             &startbutton_destroy
         );
-    startbuttontext_init();
+    // startbuttontext_init();
 }
 
 void startbutton_start(){
     startbutton->x = 25;
     startbutton->y = 75;
-    startbutton->anchorX = -5;
-    startbutton->anchorY = -5;
-    startbutton->w = 10;
-    startbutton->h = 10;
+    startbutton->img->imgSizeX = 100;
+    startbutton->img->imgSizeY = 100;
+    startbutton->anchorX = -12.5;
+    startbutton->anchorY = -12.5;
+    startbutton->w = 25;
+    startbutton->h = 25;
 
-    if(startbuttontext != NULL) startbuttontext->start();
-    add_entity(startbutton->scene, startbuttontext);
-    set_text(startbuttontext, "Hi");
+    // if(startbuttontext != NULL) startbuttontext->start();
+    // add_entity(startbutton->scene, startbuttontext);
+    // set_text(startbuttontext, "Hi");
 }
 void startbutton_poll(SDL_Event* event){
     // if(event->type == SDL_EVENT_KEY_DOWN){
@@ -47,27 +49,27 @@ void startbutton_poll(SDL_Event* event){
     //         startbutton_interact();
     //     }
     // }
-    if(startbuttontext != NULL) startbuttontext->poll(event);
+    // if(startbuttontext != NULL) startbuttontext->poll(event);
 }
 
 void startbutton_loop(){
     if(*menustate_state == 0){
-        linear_tween_to(&startbutton->y, 75, 100 * get_delta(), 0.1);
+        linear_tween_to(&startbutton->y, 75, 100 * get_delta(), 0.5);
     }
     else{
-        linear_tween_to(&startbutton->y, 120, 100 * get_delta(), 0.1);
+        linear_tween_to(&startbutton->y, 120, 100 * get_delta(), 0.5);
     }
-    if(startbuttontext != NULL) startbuttontext->loop();
-    startbuttontext->x = startbutton->x;
-    startbuttontext->y = startbutton->y;
+    // if(startbuttontext != NULL) startbuttontext->loop();
+    // startbuttontext->x = startbutton->x;
+    // startbuttontext->y = startbutton->y;
 
 }
 void startbutton_render(SDL_Renderer* renderer){
     render_entity(startbutton, renderer, NULL);
-    if(startbuttontext != NULL) startbuttontext->render(renderer);
+    // if(startbuttontext != NULL) startbuttontext->render(renderer);
 }
 void startbutton_destroy(){
-    startbuttontext->destroy();
+    // startbuttontext->destroy();
     destroy_entity(startbutton);
 }
 

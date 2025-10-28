@@ -39,7 +39,6 @@ void menuselector_start(){
     menuselector->img->imgSizeX = 100;
     menuselector->img->imgSizeX = 100;
     menuselector->w = 10;
-    exitbutton->h = 10;
     buttons[0] = startbutton;
     buttons[1] = optionbutton;
     buttons[2] = exitbutton;

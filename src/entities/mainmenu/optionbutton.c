@@ -18,7 +18,7 @@ void optionbutton_destroy();
 
 void optionbutton_init(){
     optionbutton = ui_create_image(
-            "res/ui/phonelog.png",
+            "res/ui/tornpaper.png",
             &optionbutton_start,
             &optionbutton_poll,
             &optionbutton_loop,
@@ -30,10 +30,12 @@ void optionbutton_init(){
 void optionbutton_start(){
     optionbutton->x = 50;
     optionbutton->y = 75;
-    optionbutton->anchorX = -5;
-    optionbutton->anchorY = -5;
-    optionbutton->w = 10;
-    optionbutton->h = 10;
+    optionbutton->img->imgSizeX = 100;
+    optionbutton->img->imgSizeY = 100;
+    optionbutton->anchorX = -12.5;
+    optionbutton->anchorY = -12.5;
+    optionbutton->w = 25;
+    optionbutton->h = 25;
 }
 void optionbutton_poll(SDL_Event* event){
     // if(event->type == SDL_EVENT_KEY_DOWN){
@@ -45,10 +47,10 @@ void optionbutton_poll(SDL_Event* event){
 
 void optionbutton_loop(){
     if(*menustate_state == 0){
-        linear_tween_to(&optionbutton->y, 75, 100 * get_delta(), 0.1);
+        linear_tween_to(&optionbutton->y, 75, 100 * get_delta(), 0.5);
     }
     else{
-        linear_tween_to(&optionbutton->y, 120, 100 * get_delta(), 0.1);
+        linear_tween_to(&optionbutton->y, 120, 100 * get_delta(), 0.5);
     }
 }
 void optionbutton_render(SDL_Renderer* renderer){

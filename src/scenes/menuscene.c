@@ -2,6 +2,7 @@
 #include "../scene.h"
 #include "../entity.h"
 #include "../entities/myentity.h"
+#include "../entities/mainmenu/menubg.h"
 #include "../entities/mainmenu/startbutton.h"
 #include "../entities/mainmenu/optionbutton.h"
 #include "../entities/mainmenu/exitbutton.h"
@@ -32,12 +33,14 @@ void menuscene_load(){
     optionbutton_init();
     exitbutton_init();
     menuselector_init();
+    menubg_init();
 
     flukebanner_init();
     basbanner_init();
     asiabanner_init();
     golfbanner_init();
 
+    add_entity(menuscene, menubg);
     add_entity(menuscene, startbutton);
     add_entity(menuscene, optionbutton);
     add_entity(menuscene, exitbutton);
@@ -60,6 +63,7 @@ void menuscene_unload(){
     remove_entity(menuscene, exitbutton);
     remove_entity(menuscene, optionbutton);
     remove_entity(menuscene, startbutton);
+    remove_entity(menuscene, menubg);
 
     flukebanner->destroy();
     basbanner->destroy();
@@ -70,5 +74,6 @@ void menuscene_unload(){
     exitbutton->destroy();
     optionbutton->destroy();
     startbutton->destroy();
+    menubg->destroy();
     free(menustate_state);
 }

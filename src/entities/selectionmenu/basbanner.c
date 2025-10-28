@@ -47,10 +47,10 @@ void basbanner_poll(SDL_Event* event){
 
 void basbanner_loop(){
     if(*menustate_state == 1){
-        linear_tween_to(&basbanner->y, 75, 100 * get_delta(), 0.1);
+        linear_tween_to(&basbanner->y, 75, 100 * get_delta(), 0.5);
     }
     else{
-        linear_tween_to(&basbanner->y, 120, 100 * get_delta(), 0.1);
+        linear_tween_to(&basbanner->y, 120, 100 * get_delta(), 0.5);
     }
 }
 void basbanner_render(SDL_Renderer* renderer){

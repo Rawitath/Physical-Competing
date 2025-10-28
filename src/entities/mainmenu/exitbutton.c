@@ -18,7 +18,7 @@ void exitbutton_destroy();
 
 void exitbutton_init(){
     exitbutton = ui_create_image(
-            "res/ui/phonelog.png",
+            "res/ui/tornpaper.png",
             &exitbutton_start,
             &exitbutton_poll,
             &exitbutton_loop,
@@ -30,10 +30,12 @@ void exitbutton_init(){
 void exitbutton_start(){
     exitbutton->x = 75;
     exitbutton->y = 75;
-    exitbutton->anchorX = -5;
-    exitbutton->anchorY = -5;
-    exitbutton->w = 10;
-    exitbutton->h = 10;
+    exitbutton->img->imgSizeX = 100;
+    exitbutton->img->imgSizeY = 100;
+    exitbutton->anchorX = -12.5;
+    exitbutton->anchorY = -12.5;
+    exitbutton->w = 25;
+    exitbutton->h = 25;
 }
 SDL_Event* e;
 void exitbutton_poll(SDL_Event* event){
@@ -47,10 +49,10 @@ void exitbutton_poll(SDL_Event* event){
 
 void exitbutton_loop(){
     if(*menustate_state == 0){
-        linear_tween_to(&exitbutton->y, 75, 100 * get_delta(), 0.1);
+        linear_tween_to(&exitbutton->y, 75, 100 * get_delta(), 0.5);
     }
     else{
-        linear_tween_to(&exitbutton->y, 120, 100 * get_delta(), 0.1);
+        linear_tween_to(&exitbutton->y, 120, 100 * get_delta(), 0.5);
     }
 }
 void exitbutton_render(SDL_Renderer* renderer){
