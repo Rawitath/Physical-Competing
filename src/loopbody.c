@@ -9,6 +9,7 @@
 #include "scenes/menuscene.h"
 #include "scenes/myscene.h"
 #include "scenes/anotherscene.h"
+#include "scenes/ithallscene.h"
 #include "sc_process.h"
 #include "ss_process.h"
 
@@ -22,11 +23,13 @@ void init(){
     menuscene_init();
     myscene_init();
     anotherscene_init();
+    ithallscene_init();
 
     add_scene(sm, menuscene);
     add_scene(sm, myscene);
     add_scene(sm, anotherscene);
-    load_scene(sm, 0);
+    add_scene(sm, ithallscene);
+    load_scene(sm, 2);
 }
 
 void start(){
