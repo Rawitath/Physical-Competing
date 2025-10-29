@@ -44,6 +44,8 @@
         "ithallstage.h": "c",
         "wintext.h": "c",
         "functional": "c",
-        "allbanner.h": "c"
+        "allbanner.h": "c",
+        "asiabanner.h": "c",
+        "animation.h": "c"
     }
 }

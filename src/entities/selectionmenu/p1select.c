@@ -1,3 +1,4 @@
+#include <SDL3/SDL.h>
 #include "../../entity.h"
 #include "p1select.h"
 #include "../../timesystem.h"
@@ -12,7 +13,9 @@
 #include "flukebanner.h"
 #include "basbanner.h"
 
-#include <SDL3/SDL.h>
+#include "leftfighterdisplay.h";
+
+
 
 void p1select_start();
 void p1select_poll(SDL_Event* event);
@@ -55,6 +58,7 @@ void p1select_poll(SDL_Event* event){
 }
 
 void p1select_loop(){
+    leftfighterdisplay_set_fighter(allFighters[p1select_selectedIndex]);
     p1select->x = allBanners[p1select_selectedIndex]->x;
     p1select->y = allBanners[p1select_selectedIndex]->y;
 }

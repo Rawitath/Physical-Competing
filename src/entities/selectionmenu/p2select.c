@@ -1,3 +1,4 @@
+#include <SDL3/SDL.h>
 #include "../../entity.h"
 #include "p2select.h"
 #include "../../timesystem.h"
@@ -11,8 +12,9 @@
 #include "golfbanner.h"
 #include "flukebanner.h"
 #include "basbanner.h"
+#include "rightfighterdisplay.h";
 
-#include <SDL3/SDL.h>
+
 
 void p2select_start();
 void p2select_poll(SDL_Event* event);
@@ -55,6 +57,7 @@ void p2select_poll(SDL_Event* event){
 }
 
 void p2select_loop(){
+    rightfighterdisplay_set_fighter(allFighters[p2select_selectedIndex]);
     p2select->x = allBanners[p2select_selectedIndex]->x;
     p2select->y = allBanners[p2select_selectedIndex]->y;
 }

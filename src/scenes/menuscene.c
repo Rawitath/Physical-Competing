@@ -16,6 +16,12 @@
 #include "../entities/selectionmenu/golfbanner.h"
 #include "../entities/selectionmenu/p1select.h"
 #include "../entities/selectionmenu/p2select.h"
+#include "../entities/selectionmenu/leftfighterdisplay.h"
+#include "../entities/selectionmenu/rightfighterdisplay.h"
+
+#include "../entities/golfanim.h";
+#include "../entities/flukeanim.h";
+#include "../entities/fighteranim.h"
 
 #include <stdlib.h>
 
@@ -32,6 +38,10 @@ void menuscene_init()
 void menuscene_load(){
     menustate_state = (int*)malloc(sizeof(int));
     *menustate_state = 0;
+
+    golfAnim_init();
+    flukeAnim_init();
+
     startbutton_init();
     optionbutton_init();
     exitbutton_init();
@@ -45,11 +55,17 @@ void menuscene_load(){
     p1select_init();
     p2select_init();
 
+    leftfighterdisplay_init();
+    rightfighterdisplay_init();
+
     add_entity(menuscene, menubg);
     add_entity(menuscene, startbutton);
     add_entity(menuscene, optionbutton);
     add_entity(menuscene, exitbutton);
     add_entity(menuscene, menuselector);
+
+    add_entity(menuscene, leftfighterdisplay);
+    add_entity(menuscene, rightfighterdisplay);
 
     add_entity(menuscene, flukebanner);
     add_entity(menuscene, basbanner);
@@ -58,14 +74,20 @@ void menuscene_load(){
     add_entity(menuscene, p1select);
     add_entity(menuscene, p2select);
 
+    allBanners_size = 4;
     allBanners[0] = flukebanner;
     allBanners[1] = basbanner;
     allBanners[2] = asiabanner;
     allBanners[3] = golfbanner;
-
+    allFighters[0] = flukeAnim;
+    allFighters[1] = golfAnim;
+    allFighters[2] = flukeAnim;
+    allFighters[3] = golfAnim;
 }
 
 void menuscene_unload(){
+    remove_entity(menuscene, leftfighterdisplay);
+    remove_entity(menuscene, rightfighterdisplay);
     remove_entity(menuscene, p1select);
     remove_entity(menuscene, p2select);
     remove_entity(menuscene, asiabanner);
@@ -78,6 +100,9 @@ void menuscene_unload(){
     remove_entity(menuscene, optionbutton);
     remove_entity(menuscene, startbutton);
     remove_entity(menuscene, menubg);
+
+    leftfighterdisplay->destroy();
+    rightfighterdisplay->destroy();
 
     p1select->destroy();
     p2select->destroy();
@@ -92,4 +117,7 @@ void menuscene_unload(){
     startbutton->destroy();
     menubg->destroy();
     free(menustate_state);
+
+    destroy_fighteranim(flukeAnim);
+    destroy_fighteranim(golfAnim);
 }

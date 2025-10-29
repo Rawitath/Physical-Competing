@@ -1,5 +1,6 @@
-#include "allbanner.h"
-#include "../../entity.h"
+// #include "allbanner.h"
+// #include "../../entity.h"
 
-Entity* allBanners[4];
-int allBanners_size = 4;
+// FighterAnim* allFighters[4];
+// Entity* allBanners[4];
+// int allBanners_size = 4;
