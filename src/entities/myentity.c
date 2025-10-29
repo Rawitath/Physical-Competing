@@ -14,6 +14,8 @@ void myentity_loop();
 void myentity_render(SDL_Renderer* renderer);
 void myentity_destroy();
 
+void set_animation(Animation* anim);
+
 void myentity_init(){
     myentity = create_entity(
             "res/lucystar.png",
