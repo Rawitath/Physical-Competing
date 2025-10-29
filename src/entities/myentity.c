@@ -44,6 +44,14 @@ Animation* blockCrouchLeft = NULL;
 Animation* blockCrouchRight = NULL;
 Animation* lowPunchLeft = NULL;
 Animation* lowPunchRight = NULL;
+Animation* skill1Left = NULL;
+Animation* skill1Right = NULL;
+Animation* skill2Left = NULL;
+Animation* skill2Right = NULL;
+Animation* skill3Left = NULL;
+Animation* skill3Right = NULL;
+Animation* ultimateLeft = NULL;
+Animation* ultimateRight = NULL;
 
 // State variables
 typedef enum {
@@ -55,7 +63,11 @@ typedef enum {
     STATE_HEAVY_PUNCH,
     STATE_BLOCK_STAND,
     STATE_BLOCK_CROUCH,
-    STATE_LOW_PUNCH
+    STATE_LOW_PUNCH,
+    STATE_SKILL1,
+    STATE_SKILL2,
+    STATE_SKILL3,
+    STATE_ULTIMATE
 } CharacterState;
 
 CharacterState currentState = STATE_IDLE;
@@ -67,6 +79,81 @@ int isGrounded = 1;
 float moveSpeed = 200.0f;
 
 Animation* currentAnim = NULL;
+
+// Combo system
+#define MAX_COMBO_LENGTH 4
+#define COMBO_TIMEOUT 2.0f
+
+typedef enum {
+    INPUT_NONE,
+    INPUT_LIGHT,  // J or 2
+    INPUT_HEAVY   // K or 3
+} ComboInput;
+
+ComboInput comboBuffer[MAX_COMBO_LENGTH];
+int comboCount = 0;
+float comboTimer = 0.0f;
+
+void reset_combo() {
+    comboCount = 0;
+    comboTimer = 0.0f;
+    for(int i = 0; i < MAX_COMBO_LENGTH; i++) {
+        comboBuffer[i] = INPUT_NONE;
+    }
+}
+
+void add_to_combo(ComboInput input) {
+    if(comboCount < MAX_COMBO_LENGTH) {
+        comboBuffer[comboCount] = input;
+        comboCount++;
+        comboTimer = 0.0f; // Reset timer when new input added
+    }
+}
+
+int check_combo_pattern(ComboInput p1, ComboInput p2, ComboInput p3, ComboInput p4) {
+    if(comboCount != 4) return 0;
+    return (comboBuffer[0] == p1 && 
+            comboBuffer[1] == p2 && 
+            comboBuffer[2] == p3 && 
+            comboBuffer[3] == p4);
+}
+
+int check_and_execute_skill() {
+    // Skill 1: J J J K (2 2 2 3)
+    if(check_combo_pattern(INPUT_LIGHT, INPUT_LIGHT, INPUT_LIGHT, INPUT_HEAVY)) {
+        currentState = STATE_SKILL1;
+        if(facingRight) {
+            set_animation(skill1Right);
+        } else {
+            set_animation(skill1Left);
+        }
+        reset_combo();
+        return 1;
+    }
+    // Skill 2: K K K J (3 3 3 2)
+    else if(check_combo_pattern(INPUT_HEAVY, INPUT_HEAVY, INPUT_HEAVY, INPUT_LIGHT)) {
+        currentState = STATE_SKILL2;
+        if(facingRight) {
+            set_animation(skill2Right);
+        } else {
+            set_animation(skill2Left);
+        }
+        reset_combo();
+        return 1;
+    }
+    // Skill 3: J K J K (2 3 2 3)
+    else if(check_combo_pattern(INPUT_LIGHT, INPUT_HEAVY, INPUT_LIGHT, INPUT_HEAVY)) {
+        currentState = STATE_SKILL3;
+        if(facingRight) {
+            set_animation(skill3Right);
+        } else {
+            set_animation(skill3Left);
+        }
+        reset_combo();
+        return 1;
+    }
+    return 0;
+}
 
 void set_animation(Animation* anim) {
     if (currentAnim != anim) {
@@ -97,19 +184,22 @@ void myentity_start(){
     blockCrouchRight = create_animation("res/fighters/bas/block_crouch_right", 10);
     lowPunchLeft = create_animation("res/fighters/bas/low_punch_left", 20);
     lowPunchRight = create_animation("res/fighters/bas/low_punch_right", 20);
+    skill1Left = create_animation("res/fighters/bas/skill1_left", 25);
+    skill1Right = create_animation("res/fighters/bas/skill1_right", 25);
+    skill2Left = create_animation("res/fighters/bas/skill2_left", 25);
+    skill2Right = create_animation("res/fighters/bas/skill2_right", 25);
+    skill3Left = create_animation("res/fighters/bas/skill3_left", 25);
+    skill3Right = create_animation("res/fighters/bas/skill3_right", 25);
+    ultimateLeft = create_animation("res/fighters/bas/ultimate_left", 30);
+    ultimateRight = create_animation("res/fighters/bas/ultimate_right", 30);
     
     currentAnim = idleLeft;
     set_image(myentity, currentAnim->paths[currentAnim->currentFrame]);
+    reset_combo();
 }
 
 void myentity_poll(SDL_Event* event){
     if(event->type == SDL_EVENT_KEY_DOWN){
-        // เปลี่ยนฉาก (ปิดการใช้งานชั่วคราวเพื่อไม่ให้ขัดกับการบล็อก)
-        // if(event->key.scancode == SDL_SCANCODE_D){
-        //     sc_load_scene(1);
-        //     return;
-        // }
-        
         // กระโดด (W หรือ ลูกศรขึ้น)
         if((event->key.scancode == SDL_SCANCODE_W || 
             event->key.scancode == SDL_SCANCODE_UP) && isGrounded){
@@ -124,14 +214,32 @@ void myentity_poll(SDL_Event* event){
             if(currentState != STATE_LIGHT_PUNCH && 
                currentState != STATE_HEAVY_PUNCH &&
                currentState != STATE_LOW_PUNCH &&
+               currentState != STATE_SKILL1 &&
+               currentState != STATE_SKILL2 &&
+               currentState != STATE_SKILL3 &&
+               currentState != STATE_ULTIMATE &&
                currentState != STATE_CROUCH &&
                currentState != STATE_BLOCK_CROUCH){
-                currentState = STATE_LIGHT_PUNCH;
-                if(facingRight){
-                    set_animation(lightPunchRight);
-                } else {
-                    set_animation(lightPunchLeft);
+                
+                // Add to combo
+                add_to_combo(INPUT_LIGHT);
+                
+                // Check if we can execute a skill
+                if(!check_and_execute_skill()) {
+                    // Normal light punch
+                    currentState = STATE_LIGHT_PUNCH;
+                    if(facingRight){
+                        set_animation(lightPunchRight);
+                    } else {
+                        set_animation(lightPunchLeft);
+                    }
                 }
+                
+                printf("Combo: ");
+                for(int i = 0; i < comboCount; i++) {
+                    printf("%d ", comboBuffer[i]);
+                }
+                printf("\n");
             }
         }
         
@@ -141,14 +249,56 @@ void myentity_poll(SDL_Event* event){
             if(currentState != STATE_LIGHT_PUNCH && 
                currentState != STATE_HEAVY_PUNCH &&
                currentState != STATE_LOW_PUNCH &&
+               currentState != STATE_SKILL1 &&
+               currentState != STATE_SKILL2 &&
+               currentState != STATE_SKILL3 &&
+               currentState != STATE_ULTIMATE &&
                currentState != STATE_CROUCH &&
                currentState != STATE_BLOCK_CROUCH){
-                currentState = STATE_HEAVY_PUNCH;
-                if(facingRight){
-                    set_animation(heavyPunchRight);
-                } else {
-                    set_animation(heavyPunchLeft);
+                
+                // Add to combo
+                add_to_combo(INPUT_HEAVY);
+                
+                // Check if we can execute a skill
+                if(!check_and_execute_skill()) {
+                    // Normal heavy punch
+                    currentState = STATE_HEAVY_PUNCH;
+                    if(facingRight){
+                        set_animation(heavyPunchRight);
+                    } else {
+                        set_animation(heavyPunchLeft);
+                    }
                 }
+                
+                printf("Combo: ");
+                for(int i = 0; i < comboCount; i++) {
+                    printf("%d ", comboBuffer[i]);
+                }
+                printf("\n");
+            }
+        }
+        
+        // Ultimate (I หรือ 5) - ไม่สามารถบล็อกได้
+        if(event->key.scancode == SDL_SCANCODE_I || 
+           event->key.scancode == SDL_SCANCODE_5){
+            if(currentState != STATE_LIGHT_PUNCH && 
+               currentState != STATE_HEAVY_PUNCH &&
+               currentState != STATE_LOW_PUNCH &&
+               currentState != STATE_SKILL1 &&
+               currentState != STATE_SKILL2 &&
+               currentState != STATE_SKILL3 &&
+               currentState != STATE_ULTIMATE &&
+               currentState != STATE_CROUCH &&
+               currentState != STATE_BLOCK_CROUCH &&
+               currentState != STATE_BLOCK_STAND){
+                
+                currentState = STATE_ULTIMATE;
+                if(facingRight){
+                    set_animation(ultimateRight);
+                } else {
+                    set_animation(ultimateLeft);
+                }
+                printf("ULTIMATE ACTIVATED!\n");
             }
         }
     }
@@ -159,6 +309,15 @@ float animTimer = 0;
 void myentity_loop(){
     float delta = get_delta();
     
+    // Update combo timer
+    if(comboCount > 0) {
+        comboTimer += delta;
+        if(comboTimer >= COMBO_TIMEOUT) {
+            printf("Combo timeout! Resetting...\n");
+            reset_combo();
+        }
+    }
+    
     // จัดการ animation timer
     if(animTimer < 1.0f / currentAnim->fps){
         animTimer += delta;
@@ -168,9 +327,13 @@ void myentity_loop(){
         } else {
             currentAnim->currentFrame = 0;
             
-            // ถ้าจบ animation การโจมตี กลับไป idle หรือ crouch
+            // ถ้าจบ animation การโจมตีและสกิล กลับไป idle หรือ crouch
             if(currentState == STATE_LIGHT_PUNCH || 
-               currentState == STATE_HEAVY_PUNCH){
+               currentState == STATE_HEAVY_PUNCH ||
+               currentState == STATE_SKILL1 ||
+               currentState == STATE_SKILL2 ||
+               currentState == STATE_SKILL3 ||
+               currentState == STATE_ULTIMATE){
                 currentState = STATE_IDLE;
             }
             if(currentState == STATE_LOW_PUNCH){
@@ -190,10 +353,14 @@ void myentity_loop(){
     // ตรวจสอบการกดปุ่มนั่ง (S หรือ ลูกศรลง)
     int isCrouching = keyState[SDL_SCANCODE_S] || keyState[SDL_SCANCODE_DOWN];
     
-    // ถ้าไม่ได้กำลังโจมตี ให้สามารถเคลื่อนไหวได้
+    // ถ้าไม่ได้กำลังโจมตีหรือใช้สกิล ให้สามารถเคลื่อนไหวได้
     if(currentState != STATE_LIGHT_PUNCH && 
        currentState != STATE_HEAVY_PUNCH && 
-       currentState != STATE_LOW_PUNCH){
+       currentState != STATE_LOW_PUNCH &&
+       currentState != STATE_SKILL1 &&
+       currentState != STATE_SKILL2 &&
+       currentState != STATE_SKILL3 &&
+       currentState != STATE_ULTIMATE){
         
         int moving = 0;
         
@@ -309,5 +476,13 @@ void myentity_destroy(){
     destroy_animation(blockCrouchRight);
     destroy_animation(lowPunchLeft);
     destroy_animation(lowPunchRight);
+    destroy_animation(skill1Left);
+    destroy_animation(skill1Right);
+    destroy_animation(skill2Left);
+    destroy_animation(skill2Right);
+    destroy_animation(skill3Left);
+    destroy_animation(skill3Right);
+    destroy_animation(ultimateLeft);
+    destroy_animation(ultimateRight);
     destroy_entity(myentity);
 }
