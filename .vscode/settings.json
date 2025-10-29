@@ -29,9 +29,6 @@
         "xutility": "c",
         "stdlib.h": "c",
         "audiostruct.h": "c",
-        "fighteranim.h": "c",
-        "ithallstage.h": "c",
-        "wintext.h": "c",
         "menuscene.h": "c",
         "menuselector.h": "c",
         "optionbutton.h": "c",
@@ -42,6 +39,11 @@
         "startbuttontext.h": "c",
         "tweener.h": "c",
         "menustate.h": "c",
-        "cstdlib": "c"
+        "cstdlib": "c",
+        "fighteranim.h": "c",
+        "ithallstage.h": "c",
+        "wintext.h": "c",
+        "functional": "c",
+        "allbanner.h": "c"
     }
 }

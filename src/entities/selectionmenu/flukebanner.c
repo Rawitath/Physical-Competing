@@ -18,7 +18,7 @@ void flukebanner_destroy();
 
 void flukebanner_init(){
     flukebanner = ui_create_image(
-            "res/ui/phonelog.png",
+            "res/fighters/flukebanner.png",
             &flukebanner_start,
             &flukebanner_poll,
             &flukebanner_loop,
@@ -30,10 +30,8 @@ void flukebanner_init(){
 void flukebanner_start(){
     flukebanner->x = 20;
     flukebanner->y = 120;
-    flukebanner->anchorX = -5;
-    flukebanner->anchorY = -5;
-    flukebanner->w = 10;
-    flukebanner->h = 10;
+    flukebanner->w = 6 * 0.8;
+    flukebanner->h = 10 * 0.8;
 }
 SDL_Event* e;
 void flukebanner_poll(SDL_Event* event){
@@ -47,7 +45,7 @@ void flukebanner_poll(SDL_Event* event){
 
 void flukebanner_loop(){
     if(*menustate_state == 1){
-        linear_tween_to(&flukebanner->y, 75, 100 * get_delta(), 0.5);
+        linear_tween_to(&flukebanner->y, 65, 100 * get_delta(), 0.5);
     }
     else{
         linear_tween_to(&flukebanner->y, 120, 100 * get_delta(), 0.5);

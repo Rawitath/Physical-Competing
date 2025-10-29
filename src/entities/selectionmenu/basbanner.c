@@ -18,7 +18,7 @@ void basbanner_destroy();
 
 void basbanner_init(){
     basbanner = ui_create_image(
-            "res/ui/phonelog.png",
+            "res/fighters/golfbanner.png",
             &basbanner_start,
             &basbanner_poll,
             &basbanner_loop,
@@ -28,12 +28,10 @@ void basbanner_init(){
 }
 
 void basbanner_start(){
-    basbanner->x = 40;
+    basbanner->x = 35;
     basbanner->y = 120;
-    basbanner->anchorX = -5;
-    basbanner->anchorY = -5;
-    basbanner->w = 10;
-    basbanner->h = 10;
+    basbanner->w = 6 * 0.8;
+    basbanner->h = 10 * 0.8;
 }
 SDL_Event* e;
 void basbanner_poll(SDL_Event* event){
@@ -47,7 +45,7 @@ void basbanner_poll(SDL_Event* event){
 
 void basbanner_loop(){
     if(*menustate_state == 1){
-        linear_tween_to(&basbanner->y, 75, 100 * get_delta(), 0.5);
+        linear_tween_to(&basbanner->y, 65, 100 * get_delta(), 0.5);
     }
     else{
         linear_tween_to(&basbanner->y, 120, 100 * get_delta(), 0.5);

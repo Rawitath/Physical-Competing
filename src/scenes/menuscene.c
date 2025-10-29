@@ -9,10 +9,13 @@
 #include "../entities/mainmenu/menuselector.h"
 #include "../entities/mainmenu/menustate.h"
 
+#include "../entities/selectionmenu/allbanner.h"
 #include "../entities/selectionmenu/asiabanner.h"
 #include "../entities/selectionmenu/basbanner.h"
 #include "../entities/selectionmenu/flukebanner.h"
 #include "../entities/selectionmenu/golfbanner.h"
+#include "../entities/selectionmenu/p1select.h"
+#include "../entities/selectionmenu/p2select.h"
 
 #include <stdlib.h>
 
@@ -39,6 +42,8 @@ void menuscene_load(){
     basbanner_init();
     asiabanner_init();
     golfbanner_init();
+    p1select_init();
+    p2select_init();
 
     add_entity(menuscene, menubg);
     add_entity(menuscene, startbutton);
@@ -50,10 +55,19 @@ void menuscene_load(){
     add_entity(menuscene, basbanner);
     add_entity(menuscene, asiabanner);
     add_entity(menuscene, golfbanner);
+    add_entity(menuscene, p1select);
+    add_entity(menuscene, p2select);
+
+    allBanners[0] = flukebanner;
+    allBanners[1] = basbanner;
+    allBanners[2] = asiabanner;
+    allBanners[3] = golfbanner;
 
 }
 
 void menuscene_unload(){
+    remove_entity(menuscene, p1select);
+    remove_entity(menuscene, p2select);
     remove_entity(menuscene, asiabanner);
     remove_entity(menuscene, flukebanner);
     remove_entity(menuscene, basbanner);
@@ -65,6 +79,8 @@ void menuscene_unload(){
     remove_entity(menuscene, startbutton);
     remove_entity(menuscene, menubg);
 
+    p1select->destroy();
+    p2select->destroy();
     flukebanner->destroy();
     basbanner->destroy();
     asiabanner->destroy();

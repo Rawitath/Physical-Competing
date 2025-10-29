@@ -18,7 +18,7 @@ void golfbanner_destroy();
 
 void golfbanner_init(){
     golfbanner = ui_create_image(
-            "res/ui/phonelog.png",
+            "res/fighters/golfbanner.png",
             &golfbanner_start,
             &golfbanner_poll,
             &golfbanner_loop,
@@ -28,12 +28,10 @@ void golfbanner_init(){
 }
 
 void golfbanner_start(){
-    golfbanner->x = 80;
+    golfbanner->x = 65;
     golfbanner->y = 120;
-    golfbanner->anchorX = -5;
-    golfbanner->anchorY = -5;
-    golfbanner->w = 10;
-    golfbanner->h = 10;
+    golfbanner->w = 6 * 0.8;
+    golfbanner->h = 10 * 0.8;
 }
 SDL_Event* e;
 void golfbanner_poll(SDL_Event* event){
@@ -47,7 +45,7 @@ void golfbanner_poll(SDL_Event* event){
 
 void golfbanner_loop(){
     if(*menustate_state == 1){
-        linear_tween_to(&golfbanner->y, 75, 100 * get_delta(), 0.5);
+        linear_tween_to(&golfbanner->y, 65, 100 * get_delta(), 0.5);
     }
     else{
         linear_tween_to(&golfbanner->y, 120, 100 * get_delta(), 0.5);

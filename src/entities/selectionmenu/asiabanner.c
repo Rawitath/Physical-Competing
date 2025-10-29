@@ -18,7 +18,7 @@ void asiabanner_destroy();
 
 void asiabanner_init(){
     asiabanner = ui_create_image(
-            "res/ui/phonelog.png",
+            "res/fighters/golfbanner.png",
             &asiabanner_start,
             &asiabanner_poll,
             &asiabanner_loop,
@@ -28,12 +28,10 @@ void asiabanner_init(){
 }
 
 void asiabanner_start(){
-    asiabanner->x = 60;
+    asiabanner->x = 50;
     asiabanner->y = 120;
-    asiabanner->anchorX = -5;
-    asiabanner->anchorY = -5;
-    asiabanner->w = 10;
-    asiabanner->h = 10;
+    asiabanner->w = 6 * 0.8;
+    asiabanner->h = 10 * 0.8;
 }
 SDL_Event* e;
 void asiabanner_poll(SDL_Event* event){
@@ -47,7 +45,7 @@ void asiabanner_poll(SDL_Event* event){
 
 void asiabanner_loop(){
     if(*menustate_state == 1){
-        linear_tween_to(&asiabanner->y, 75, 100 * get_delta(), 0.5);
+        linear_tween_to(&asiabanner->y, 65, 100 * get_delta(), 0.5);
     }
     else{
         linear_tween_to(&asiabanner->y, 120, 100 * get_delta(), 0.5);
