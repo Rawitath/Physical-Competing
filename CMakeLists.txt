@@ -27,19 +27,19 @@ target_link_libraries(phycompet PRIVATE SDL3::SDL3 SDL3_image::SDL3_image SDL3_t
 
 
 ### Uncomment to enable sync ###
-set(SYNC_SCRIPT "${CMAKE_CURRENT_SOURCE_DIR}/cmake/sync_res.cmake")
+# set(SYNC_SCRIPT "${CMAKE_CURRENT_SOURCE_DIR}/cmake/sync_res.cmake")
 
-# Add the custom command to run POST_BUILD
-add_custom_command(
-    TARGET phycompet POST_BUILD
+# # Add the custom command to run POST_BUILD
+# add_custom_command(
+#     TARGET phycompet POST_BUILD
     
-    # This is the command that will run
-    COMMAND ${CMAKE_COMMAND}
-        -DSOURCE_DIR=${CMAKE_SOURCE_DIR}/res
-        -DDEST_DIR=${RESOURCE_DIR}
-        -P ${SYNC_SCRIPT}
+#     # This is the command that will run
+#     COMMAND ${CMAKE_COMMAND}
+#         -DSOURCE_DIR=${CMAKE_SOURCE_DIR}/res
+#         -DDEST_DIR=${RESOURCE_DIR}
+#         -P ${SYNC_SCRIPT}
         
-    COMMENT "Syncing 'res' folder (with delete)..."
-    VERBATIM  # Important for correct path handling
-)
+#     COMMENT "Syncing 'res' folder (with delete)..."
+#     VERBATIM  # Important for correct path handling
+# )
 
