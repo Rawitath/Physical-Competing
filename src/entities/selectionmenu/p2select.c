@@ -13,7 +13,7 @@
 #include "flukebanner.h"
 #include "basbanner.h"
 #include "rightfighterdisplay.h";
-
+#include "../mainmenu/menustate.h"
 
 
 void p2select_start();
@@ -23,6 +23,7 @@ void p2select_render(SDL_Renderer* renderer);
 void p2select_destroy();
 
 int p2select_selectedIndex = 0;
+int p2select_confirmed = 0;
 
 void p2select_init(){
     p2select = ui_create_image(
@@ -40,18 +41,27 @@ void p2select_start(){
     p2select->h = 10 * 0.8;
 }
 void p2select_poll(SDL_Event* event){
-    if(event->type == SDL_EVENT_KEY_DOWN){
-        if(event->key.scancode == SDL_SCANCODE_LEFT){
-            if(p2select_selectedIndex - 1 < 0){
-                p2select_selectedIndex = allBanners_size;
+    if(*menustate_state == 1){
+        if(event->type == SDL_EVENT_KEY_DOWN){
+            if(event->key.scancode == SDL_SCANCODE_KP_1){
+                p2select_confirmed = !p2select_confirmed;
+                rightfighterdisplay_select(p2select_confirmed);
             }
-            p2select_selectedIndex--;
-        }
-        else if(event->key.scancode == SDL_SCANCODE_RIGHT){
-            if(p2select_selectedIndex + 1 > allBanners_size - 1){
-                p2select_selectedIndex = -1;
+
+            if (!p2select_confirmed) {
+                if(event->key.scancode == SDL_SCANCODE_LEFT){
+                    if(p2select_selectedIndex - 1 < 0){
+                        p2select_selectedIndex = allBanners_size;
+                    }
+                    p2select_selectedIndex--;
+                }
+                else if(event->key.scancode == SDL_SCANCODE_RIGHT){
+                    if(p2select_selectedIndex + 1 > allBanners_size - 1){
+                        p2select_selectedIndex = -1;
+                    }
+                    p2select_selectedIndex++;
+                }
             }
-            p2select_selectedIndex++;
         }
     }
 }

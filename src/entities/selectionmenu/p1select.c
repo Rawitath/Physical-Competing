@@ -14,6 +14,7 @@
 #include "basbanner.h"
 
 #include "leftfighterdisplay.h";
+#include "../mainmenu/menustate.h"
 
 
 
@@ -24,6 +25,7 @@ void p1select_render(SDL_Renderer* renderer);
 void p1select_destroy();
 
 int p1select_selectedIndex = 0;
+int p1select_confirmed = 0;
 
 void p1select_init(){
     p1select = ui_create_image(
@@ -41,20 +43,29 @@ void p1select_start(){
     p1select->h = 10 * 0.8;
 }
 void p1select_poll(SDL_Event* event){
-    if(event->type == SDL_EVENT_KEY_DOWN){
-        if(event->key.scancode == SDL_SCANCODE_A){
-            if(p1select_selectedIndex - 1 < 0){
-                p1select_selectedIndex = allBanners_size;
+    if(*menustate_state == 1){
+        if(event->type == SDL_EVENT_KEY_DOWN){
+            if(event->key.scancode == SDL_SCANCODE_J){
+                p1select_confirmed = !p1select_confirmed;
+                leftfighterdisplay_select(p1select_confirmed);
             }
-            p1select_selectedIndex--;
-        }
-        else if(event->key.scancode == SDL_SCANCODE_D){
-            if(p1select_selectedIndex + 1 > allBanners_size - 1){
-                p1select_selectedIndex = -1;
+
+            if (!p1select_confirmed) {
+                if(event->key.scancode == SDL_SCANCODE_A){
+                    if(p1select_selectedIndex - 1 < 0){
+                        p1select_selectedIndex = allBanners_size;
+                    }
+                    p1select_selectedIndex--;
+                } else if(event->key.scancode == SDL_SCANCODE_D){
+                    if(p1select_selectedIndex + 1 > allBanners_size - 1){
+                        p1select_selectedIndex = -1;
+                    }
+                    p1select_selectedIndex++;
+                }
             }
-            p1select_selectedIndex++;
         }
     }
+    
 }
 
 void p1select_loop(){

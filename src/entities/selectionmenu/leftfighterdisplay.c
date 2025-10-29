@@ -7,6 +7,7 @@
 #include "../../scenecontroller.h"
 #include "../../animation.h"
 #include "../fighteranim.h"
+#include "../mainmenu/menustate.h"
 
 
 void leftfighterdisplay_start();
@@ -34,6 +35,14 @@ void leftfighterdisplay_set_fighter(FighterAnim* fighter)
     leftfighterdisplay_fighter = fighter;
 }
 
+int leftfighterdisplay_selected = 0;
+
+
+void leftfighterdisplay_select(int select)
+{
+    leftfighterdisplay_selected = select;
+}
+
 void leftfighterdisplay_start(){
     leftfighterdisplay->x = -20;
     leftfighterdisplay->y = 0;
@@ -50,10 +59,17 @@ float leftfighterdisplay_frame = 0;
 
 void leftfighterdisplay_loop(){
     if(leftfighterdisplay_fighter != NULL){
-        play_animation(leftfighterdisplay, leftfighterdisplay_fighter, &leftfighterdisplay_frame, idle, 1);
+        if(leftfighterdisplay_selected == 0){
+            play_animation(leftfighterdisplay, leftfighterdisplay_fighter, &leftfighterdisplay_frame, idle, 1);
+        }
+        else{
+            play_animation(leftfighterdisplay, leftfighterdisplay_fighter, &leftfighterdisplay_frame, win, 1);
+        }
+        
     }
 }
 void leftfighterdisplay_render(SDL_Renderer* renderer){
+    if(*menustate_state == 1)
     render_entity(leftfighterdisplay, renderer, NULL);
 }
 void leftfighterdisplay_destroy(){

@@ -6,6 +6,7 @@
 #include "../../scenecontroller.h"
 #include "../../animation.h"
 #include "../fighteranim.h"
+#include "../mainmenu/menustate.h"
 
 void rightfighterdisplay_start();
 void rightfighterdisplay_poll(SDL_Event* event);
@@ -32,6 +33,13 @@ void rightfighterdisplay_set_fighter(FighterAnim* fighter)
     rightfighterdisplay_fighter = fighter;
 }
 
+int rightfighterdisplay_selected = 0;
+
+void rightfighterdisplay_select(int select)
+{
+    rightfighterdisplay_selected = select;
+}
+
 void rightfighterdisplay_start(){
     rightfighterdisplay->x = 50;
     rightfighterdisplay->y = 0;
@@ -48,10 +56,16 @@ float rightfighterdisplay_frame = 0;
 
 void rightfighterdisplay_loop(){
     if(rightfighterdisplay_fighter != NULL){
-        play_animation(rightfighterdisplay, rightfighterdisplay_fighter, &rightfighterdisplay_frame, idle, 0);
+        if(rightfighterdisplay_selected == 0){
+            play_animation(rightfighterdisplay, rightfighterdisplay_fighter, &rightfighterdisplay_frame, idle, 0);
+        }
+        else{
+            play_animation(rightfighterdisplay, rightfighterdisplay_fighter, &rightfighterdisplay_frame, win, 0);
+        }
     }
 }
 void rightfighterdisplay_render(SDL_Renderer* renderer){
+    if(*menustate_state == 1)
     render_entity(rightfighterdisplay, renderer, NULL);
 }
 void rightfighterdisplay_destroy(){

@@ -9,6 +9,7 @@
 #include "startbutton.h"
 #include "optionbutton.h"
 #include "exitbutton.h"
+#include "menustate.h"
 
 #include <SDL3/SDL.h>
 
@@ -44,20 +45,21 @@ void menuselector_start(){
     menuselector_buttons[2] = exitbutton;
 }
 void menuselector_poll(SDL_Event* event){
+    if(*menustate_state == 0){
     if(event->type == SDL_EVENT_KEY_DOWN){
-        if(event->key.scancode == SDL_SCANCODE_W){
+        if(event->key.scancode == SDL_SCANCODE_A){
             if(menuselector_selectedIndex - 1 < 0){
                 menuselector_selectedIndex = 3;
             }
             menuselector_selectedIndex--;
         }
-        else if(event->key.scancode == SDL_SCANCODE_S){
+        else if(event->key.scancode == SDL_SCANCODE_D){
             if(menuselector_selectedIndex + 1 > 2){
                 menuselector_selectedIndex = -1;
             }
             menuselector_selectedIndex++;
         }
-        else if(event->key.scancode == SDL_SCANCODE_Q){
+        else if(event->key.scancode == SDL_SCANCODE_J){
             switch(menuselector_selectedIndex){
                 case 0:
                     startbutton_interact();
@@ -71,6 +73,7 @@ void menuselector_poll(SDL_Event* event){
             }
         }
     }
+}
 }
 
 void menuselector_loop(){
