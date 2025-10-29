@@ -35,7 +35,7 @@ void leftultibar_init(){
 void leftultibar_update_bar(){
     float h = leftultibar_health / 100.0;
     leftultibar->w = leftultibar_xSize * h;
-    leftultibar->x = leftultibar_xPos - (leftultibar_xSize / 2 * h);
+    leftultibar->x = leftultibar_xPos + (leftultibar_xSize / 4 * (1 - h));
 }
 
 void leftultibar_set_health(int health)

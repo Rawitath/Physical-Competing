@@ -35,7 +35,7 @@ void righthealthbar_init(){
 void righthealthbar_update_bar(){
     float h = righthealthbar_health / 100.0;
     righthealthbar->w = righthealthbar_xSize * h;
-    righthealthbar->x = righthealthbar_xPos + (righthealthbar_xSize / 2 * h);
+    righthealthbar->x = righthealthbar_xPos + (righthealthbar_xSize * 4 * (1 - h));
 }
 
 void righthealthbar_set_health(int health)

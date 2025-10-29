@@ -35,7 +35,7 @@ void rightultibar_init(){
 void rightultibar_update_bar(){
     float h = rightultibar_health / 100.0;
     rightultibar->w = rightultibar_xSize * h;
-    rightultibar->x = rightultibar_xPos + (rightultibar_xSize / 2 * h);
+    rightultibar->x = rightultibar_xPos + (rightultibar_xSize * 2.27 * (1 - h));
 }
 
 void rightultibar_set_health(int health)
