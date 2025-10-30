@@ -1,5 +1,5 @@
 #include "../entity.h"
-#include "myentity.h"
+#include "golf.h"
 #include "../timesystem.h"
 #include "../scene.h"
 #include "../scenecontroller.h"
@@ -8,33 +8,23 @@
 
 #include <SDL3/SDL.h>
 
-#include "fighteranim.h"
-#include "golfanim.h"
-#include "flukeanim.h"
-
-void myentity_start();
-void myentity_poll(SDL_Event* event);
-void myentity_loop();
-void myentity_render(SDL_Renderer* renderer);
-void myentity_destroy();
+void golf_start();
+void golf_poll(SDL_Event* event);
+void golf_loop();
+void golf_render(SDL_Renderer* renderer);
+void golf_destroy();
 
 void set_animation(Animation* anim);
-float x = 0;
 
-void myentity_init(){
-    myentity = create_entity(
+void golf_init(){
+    golf = create_entity(
             "res/lucystar.png",
-            &myentity_start,
-            &myentity_poll,
-            &myentity_loop,
-            &myentity_render,
-            &myentity_destroy
+            &golf_start,
+            &golf_poll,
+            &golf_loop,
+            &golf_render,
+            &golf_destroy
         );
-
-    golfAnim_init();
-    flukeAnim_init();
-    myentity->w *= 0.5;
-    myentity->h *= 0.5;
 }
 
 // Animation pointers
@@ -118,7 +108,7 @@ void add_to_combo(ComboInput input) {
     if(comboCount < MAX_COMBO_LENGTH) {
         comboBuffer[comboCount] = input;
         comboCount++;
-        comboTimer = 0.0f; // Reset timer when new input added
+        comboTimer = 0.0f;
     }
 }
 
@@ -131,39 +121,13 @@ int check_combo_pattern(ComboInput p1, ComboInput p2, ComboInput p3, ComboInput 
 }
 
 int check_and_execute_skill() {
-    // Skill 1: J J J K (2 2 2 3)
-    if(check_combo_pattern(INPUT_LIGHT, INPUT_LIGHT, INPUT_LIGHT, INPUT_HEAVY)) {
-        currentState = STATE_SKILL1;
-        if(facingRight) {
-            set_animation(skill1Right);
-        } else {
-            set_animation(skill1Left);
-        }
-        reset_combo();
-        return 1;
-    }
-    // Skill 2: K K K J (3 3 3 2)
-    else if(check_combo_pattern(INPUT_HEAVY, INPUT_HEAVY, INPUT_HEAVY, INPUT_LIGHT)) {
-        currentState = STATE_SKILL2;
-        if(facingRight) {
-            set_animation(skill2Right);
-        } else {
-            set_animation(skill2Left);
-        }
-        reset_combo();
-        return 1;
-    }
-    // Skill 3: J K J K (2 3 2 3)
-    else if(check_combo_pattern(INPUT_LIGHT, INPUT_HEAVY, INPUT_LIGHT, INPUT_HEAVY)) {
-        currentState = STATE_SKILL3;
-        if(facingRight) {
-            set_animation(skill3Right);
-        } else {
-            set_animation(skill3Left);
-        }
-        reset_combo();
-        return 1;
-    }
+    // TODO: เพิ่มคอมโบสำหรับ golf ที่นี่
+    // Skill 1: ???
+    
+    // Skill 2: ???
+    
+    // Skill 3: ???
+    
     return 0;
 }
 
@@ -176,43 +140,41 @@ void set_animation(Animation* anim) {
     }
 }
 
-void myentity_start(){
-    // โหลด animations ทั้งหมด
-    idleLeft = create_animation("res/fighters/bas/idle_left", 15);
-    idleRight = create_animation("res/fighters/bas/idle_right", 15);
-    walkLeft = create_animation("res/fighters/bas/walk_left", 15);
-    walkRight = create_animation("res/fighters/bas/walk_right", 15);
-    crouchLeft = create_animation("res/fighters/bas/crouch_left", 15);
-    crouchRight = create_animation("res/fighters/bas/crouch_right", 15);
-    jumpLeft = create_animation("res/fighters/bas/jump_left", 15);
-    jumpRight = create_animation("res/fighters/bas/jump_right", 15);
-    lightPunchLeft = create_animation("res/fighters/bas/light_punch_left", 20);
-    lightPunchRight = create_animation("res/fighters/bas/light_punch_right", 20);
-    heavyPunchLeft = create_animation("res/fighters/bas/heavy_punch_left", 20);
-    heavyPunchRight = create_animation("res/fighters/bas/heavy_punch_right", 20);
-    blockStandLeft = create_animation("res/fighters/bas/block_stand_left", 10);
-    blockStandRight = create_animation("res/fighters/bas/block_stand_right", 10);
-    blockCrouchLeft = create_animation("res/fighters/bas/block_crouch_left", 10);
-    blockCrouchRight = create_animation("res/fighters/bas/block_crouch_right", 10);
-    lowPunchLeft = create_animation("res/fighters/bas/low_punch_left", 20);
-    lowPunchRight = create_animation("res/fighters/bas/low_punch_right", 20);
-    skill1Left = create_animation("res/fighters/bas/skill1_left", 25);
-    skill1Right = create_animation("res/fighters/bas/skill1_right", 25);
-    skill2Left = create_animation("res/fighters/bas/skill2_left", 25);
-    skill2Right = create_animation("res/fighters/bas/skill2_right", 25);
-    skill3Left = create_animation("res/fighters/bas/skill3_left", 25);
-    skill3Right = create_animation("res/fighters/bas/skill3_right", 25);
-    ultimateLeft = create_animation("res/fighters/bas/ultimate_left", 30);
-    ultimateRight = create_animation("res/fighters/bas/ultimate_right", 30);
+void golf_start(){
+    idleLeft = create_animation("res/fighters/golf/idle_left", 15);
+    idleRight = create_animation("res/fighters/golf/idle_right", 15);
+    walkLeft = create_animation("res/fighters/golf/walk_left", 15);
+    walkRight = create_animation("res/fighters/golf/walk_right", 15);
+    crouchLeft = create_animation("res/fighters/golf/crouch_left", 15);
+    crouchRight = create_animation("res/fighters/golf/crouch_right", 15);
+    jumpLeft = create_animation("res/fighters/golf/jump_left", 15);
+    jumpRight = create_animation("res/fighters/golf/jump_right", 15);
+    lightPunchLeft = create_animation("res/fighters/golf/light_punch_left", 20);
+    lightPunchRight = create_animation("res/fighters/golf/light_punch_right", 20);
+    heavyPunchLeft = create_animation("res/fighters/golf/heavy_punch_left", 20);
+    heavyPunchRight = create_animation("res/fighters/golf/heavy_punch_right", 20);
+    blockStandLeft = create_animation("res/fighters/golf/block_stand_left", 10);
+    blockStandRight = create_animation("res/fighters/golf/block_stand_right", 10);
+    blockCrouchLeft = create_animation("res/fighters/golf/block_crouch_left", 10);
+    blockCrouchRight = create_animation("res/fighters/golf/block_crouch_right", 10);
+    lowPunchLeft = create_animation("res/fighters/golf/low_punch_left", 20);
+    lowPunchRight = create_animation("res/fighters/golf/low_punch_right", 20);
+    skill1Left = create_animation("res/fighters/golf/skill1_left", 25);
+    skill1Right = create_animation("res/fighters/golf/skill1_right", 25);
+    skill2Left = create_animation("res/fighters/golf/skill2_left", 25);
+    skill2Right = create_animation("res/fighters/golf/skill2_right", 25);
+    skill3Left = create_animation("res/fighters/golf/skill3_left", 25);
+    skill3Right = create_animation("res/fighters/golf/skill3_right", 25);
+    ultimateLeft = create_animation("res/fighters/golf/ultimate_left", 30);
+    ultimateRight = create_animation("res/fighters/golf/ultimate_right", 30);
     
     currentAnim = idleLeft;
-    set_image(myentity, currentAnim->paths[currentAnim->currentFrame]);
+    set_image(golf, currentAnim->paths[currentAnim->currentFrame]);
     reset_combo();
 }
 
-void myentity_poll(SDL_Event* event){
+void golf_poll(SDL_Event* event){
     if(event->type == SDL_EVENT_KEY_DOWN){
-        // กระโดด (W หรือ ลูกศรขึ้น)
         if((event->key.scancode == SDL_SCANCODE_W || 
             event->key.scancode == SDL_SCANCODE_UP) && isGrounded){
             currentState = STATE_JUMP;
@@ -220,7 +182,6 @@ void myentity_poll(SDL_Event* event){
             isGrounded = 0;
         }
         
-        // ต่อยเบา (J หรือ 2) - ยืนเท่านั้น
         if(event->key.scancode == SDL_SCANCODE_J || 
            event->key.scancode == SDL_SCANCODE_2){
             if(currentState != STATE_LIGHT_PUNCH && 
@@ -233,12 +194,9 @@ void myentity_poll(SDL_Event* event){
                currentState != STATE_CROUCH &&
                currentState != STATE_BLOCK_CROUCH){
                 
-                // Add to combo
                 add_to_combo(INPUT_LIGHT);
                 
-                // Check if we can execute a skill
                 if(!check_and_execute_skill()) {
-                    // Normal light punch
                     currentState = STATE_LIGHT_PUNCH;
                     if(facingRight){
                         set_animation(lightPunchRight);
@@ -255,7 +213,6 @@ void myentity_poll(SDL_Event* event){
             }
         }
         
-        // ต่อยหนัก (K หรือ 3) - ยืนเท่านั้น
         if(event->key.scancode == SDL_SCANCODE_K || 
            event->key.scancode == SDL_SCANCODE_3){
             if(currentState != STATE_LIGHT_PUNCH && 
@@ -268,12 +225,9 @@ void myentity_poll(SDL_Event* event){
                currentState != STATE_CROUCH &&
                currentState != STATE_BLOCK_CROUCH){
                 
-                // Add to combo
                 add_to_combo(INPUT_HEAVY);
                 
-                // Check if we can execute a skill
                 if(!check_and_execute_skill()) {
-                    // Normal heavy punch
                     currentState = STATE_HEAVY_PUNCH;
                     if(facingRight){
                         set_animation(heavyPunchRight);
@@ -290,7 +244,6 @@ void myentity_poll(SDL_Event* event){
             }
         }
         
-        // Ultimate (I หรือ 5) - ไม่สามารถบล็อกได้
         if(event->key.scancode == SDL_SCANCODE_I || 
            event->key.scancode == SDL_SCANCODE_5){
             if(currentState != STATE_LIGHT_PUNCH && 
@@ -318,10 +271,9 @@ void myentity_poll(SDL_Event* event){
 
 float animTimer = 0;
 
-void myentity_loop(){
+void golf_loop(){
     float delta = get_delta();
     
-    // Update combo timer
     if(comboCount > 0) {
         comboTimer += delta;
         if(comboTimer >= COMBO_TIMEOUT) {
@@ -330,7 +282,6 @@ void myentity_loop(){
         }
     }
     
-    // จัดการ animation timer
     if(animTimer < 1.0f / currentAnim->fps){
         animTimer += delta;
     } else {
@@ -339,7 +290,6 @@ void myentity_loop(){
         } else {
             currentAnim->currentFrame = 0;
             
-            // ถ้าจบ animation การโจมตีและสกิล กลับไป idle หรือ crouch
             if(currentState == STATE_LIGHT_PUNCH || 
                currentState == STATE_HEAVY_PUNCH ||
                currentState == STATE_SKILL1 ||
@@ -352,20 +302,15 @@ void myentity_loop(){
                 currentState = STATE_CROUCH;
             }
         }
-        set_image(myentity, currentAnim->paths[currentAnim->currentFrame]);
+        set_image(golf, currentAnim->paths[currentAnim->currentFrame]);
         animTimer = 0;
     }
     
-    // อ่านค่า keyboard state
     const bool* keyState = SDL_GetKeyboardState(NULL);
     
-    // ตรวจสอบการกดปุ่มบล็อก (L หรือ 1)
     int isBlocking = keyState[SDL_SCANCODE_L] || keyState[SDL_SCANCODE_1];
-    
-    // ตรวจสอบการกดปุ่มนั่ง (S หรือ ลูกศรลง)
     int isCrouching = keyState[SDL_SCANCODE_S] || keyState[SDL_SCANCODE_DOWN];
     
-    // ถ้าไม่ได้กำลังโจมตีหรือใช้สกิล ให้สามารถเคลื่อนไหวได้
     if(currentState != STATE_LIGHT_PUNCH && 
        currentState != STATE_HEAVY_PUNCH && 
        currentState != STATE_LOW_PUNCH &&
@@ -376,7 +321,6 @@ void myentity_loop(){
         
         int moving = 0;
         
-        // ถ้ากด Block + Crouch = บล็อกแบบนั่ง
         if(isBlocking && isCrouching && isGrounded){
             currentState = STATE_BLOCK_CROUCH;
             if(facingRight){
@@ -385,7 +329,6 @@ void myentity_loop(){
                 set_animation(blockCrouchLeft);
             }
         }
-        // ถ้ากด Block เฉยๆ = บล็อกแบบยืน
         else if(isBlocking && isGrounded && currentState != STATE_JUMP){
             currentState = STATE_BLOCK_STAND;
             if(facingRight){
@@ -394,7 +337,6 @@ void myentity_loop(){
                 set_animation(blockStandLeft);
             }
         }
-        // ถ้ากด Crouch เฉยๆ
         else if(isCrouching && isGrounded){
             currentState = STATE_CROUCH;
             if(facingRight){
@@ -403,7 +345,6 @@ void myentity_loop(){
                 set_animation(crouchLeft);
             }
             
-            // เช็คว่ากดปุ่มโจมตีในขณะนั่งหรือไม่
             if(keyState[SDL_SCANCODE_J] || keyState[SDL_SCANCODE_2]){
                 currentState = STATE_LOW_PUNCH;
                 if(facingRight){
@@ -413,9 +354,8 @@ void myentity_loop(){
                 }
             }
         }
-        // เดินซ้าย (A หรือ ลูกศรซ้าย)
         else if((keyState[SDL_SCANCODE_A] || keyState[SDL_SCANCODE_LEFT]) && !isCrouching){
-            myentity->x -= moveSpeed * delta;
+            golf->x -= moveSpeed * delta;
             facingRight = 0;
             if(isGrounded && currentState != STATE_CROUCH){
                 currentState = STATE_WALK;
@@ -423,9 +363,8 @@ void myentity_loop(){
             }
             moving = 1;
         }
-        // เดินขวา (D หรือ ลูกศรขวา)
         else if((keyState[SDL_SCANCODE_D] || keyState[SDL_SCANCODE_RIGHT]) && !isCrouching){
-            myentity->x += moveSpeed * delta;
+            golf->x += moveSpeed * delta;
             facingRight = 1;
             if(isGrounded && currentState != STATE_CROUCH){
                 currentState = STATE_WALK;
@@ -433,7 +372,6 @@ void myentity_loop(){
             }
             moving = 1;
         }
-        // ถ้าไม่กดปุ่มใดๆ และอยู่บนพื้น ให้ idle
         else if(!moving && isGrounded && currentState != STATE_JUMP){
             currentState = STATE_IDLE;
             if(facingRight){
@@ -444,10 +382,9 @@ void myentity_loop(){
         }
     }
     
-    // จัดการแรงโน้มถ่วงและการกระโดด
     if(!isGrounded){
         velocityY -= gravity * delta;
-        myentity->y += velocityY * delta;
+        golf->y += velocityY * delta;
         
         if(facingRight){
             set_animation(jumpRight);
@@ -455,9 +392,8 @@ void myentity_loop(){
             set_animation(jumpLeft);
         }
         
-        // ตรวจสอบว่ากลับมาถึงพื้นหรือยัง (y = 0)
-        if(myentity->y <= 0){
-            myentity->y = 0;
+        if(golf->y <= 0){
+            golf->y = 0;
             velocityY = 0;
             isGrounded = 1;
             currentState = STATE_IDLE;
@@ -465,13 +401,11 @@ void myentity_loop(){
     }
 }
 
-void myentity_render(SDL_Renderer* renderer){
-    render_entity(myentity, renderer, NULL);
+void golf_render(SDL_Renderer* renderer){
+    render_entity(golf, renderer, NULL);
 }
 
-void myentity_destroy(){
-    destroy_fighteranim(flukeAnim);
-    destroy_fighteranim(golfAnim);
+void golf_destroy(){
     destroy_animation(idleLeft);
     destroy_animation(idleRight);
     destroy_animation(walkLeft);
@@ -498,5 +432,5 @@ void myentity_destroy(){
     destroy_animation(skill3Right);
     destroy_animation(ultimateLeft);
     destroy_animation(ultimateRight);
-    destroy_entity(myentity);
+    destroy_entity(golf);
 }

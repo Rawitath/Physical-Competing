@@ -1,5 +1,5 @@
 #include "../entity.h"
-#include "myentity.h"
+#include "bas.h"
 #include "../timesystem.h"
 #include "../scene.h"
 #include "../scenecontroller.h"
@@ -8,33 +8,23 @@
 
 #include <SDL3/SDL.h>
 
-#include "fighteranim.h"
-#include "golfanim.h"
-#include "flukeanim.h"
-
-void myentity_start();
-void myentity_poll(SDL_Event* event);
-void myentity_loop();
-void myentity_render(SDL_Renderer* renderer);
-void myentity_destroy();
+void bas_start();
+void bas_poll(SDL_Event* event);
+void bas_loop();
+void bas_render(SDL_Renderer* renderer);
+void bas_destroy();
 
 void set_animation(Animation* anim);
-float x = 0;
 
-void myentity_init(){
-    myentity = create_entity(
+void bas_init(){
+    bas = create_entity(
             "res/lucystar.png",
-            &myentity_start,
-            &myentity_poll,
-            &myentity_loop,
-            &myentity_render,
-            &myentity_destroy
+            &bas_start,
+            &bas_poll,
+            &bas_loop,
+            &bas_render,
+            &bas_destroy
         );
-
-    golfAnim_init();
-    flukeAnim_init();
-    myentity->w *= 0.5;
-    myentity->h *= 0.5;
 }
 
 // Animation pointers
@@ -176,7 +166,7 @@ void set_animation(Animation* anim) {
     }
 }
 
-void myentity_start(){
+void bas_start(){
     // โหลด animations ทั้งหมด
     idleLeft = create_animation("res/fighters/bas/idle_left", 15);
     idleRight = create_animation("res/fighters/bas/idle_right", 15);
@@ -206,11 +196,11 @@ void myentity_start(){
     ultimateRight = create_animation("res/fighters/bas/ultimate_right", 30);
     
     currentAnim = idleLeft;
-    set_image(myentity, currentAnim->paths[currentAnim->currentFrame]);
+    set_image(bas, currentAnim->paths[currentAnim->currentFrame]);
     reset_combo();
 }
 
-void myentity_poll(SDL_Event* event){
+void bas_poll(SDL_Event* event){
     if(event->type == SDL_EVENT_KEY_DOWN){
         // กระโดด (W หรือ ลูกศรขึ้น)
         if((event->key.scancode == SDL_SCANCODE_W || 
@@ -318,7 +308,7 @@ void myentity_poll(SDL_Event* event){
 
 float animTimer = 0;
 
-void myentity_loop(){
+void bas_loop(){
     float delta = get_delta();
     
     // Update combo timer
@@ -352,7 +342,7 @@ void myentity_loop(){
                 currentState = STATE_CROUCH;
             }
         }
-        set_image(myentity, currentAnim->paths[currentAnim->currentFrame]);
+        set_image(bas, currentAnim->paths[currentAnim->currentFrame]);
         animTimer = 0;
     }
     
@@ -415,7 +405,7 @@ void myentity_loop(){
         }
         // เดินซ้าย (A หรือ ลูกศรซ้าย)
         else if((keyState[SDL_SCANCODE_A] || keyState[SDL_SCANCODE_LEFT]) && !isCrouching){
-            myentity->x -= moveSpeed * delta;
+            bas->x -= moveSpeed * delta;
             facingRight = 0;
             if(isGrounded && currentState != STATE_CROUCH){
                 currentState = STATE_WALK;
@@ -425,7 +415,7 @@ void myentity_loop(){
         }
         // เดินขวา (D หรือ ลูกศรขวา)
         else if((keyState[SDL_SCANCODE_D] || keyState[SDL_SCANCODE_RIGHT]) && !isCrouching){
-            myentity->x += moveSpeed * delta;
+            bas->x += moveSpeed * delta;
             facingRight = 1;
             if(isGrounded && currentState != STATE_CROUCH){
                 currentState = STATE_WALK;
@@ -447,7 +437,7 @@ void myentity_loop(){
     // จัดการแรงโน้มถ่วงและการกระโดด
     if(!isGrounded){
         velocityY -= gravity * delta;
-        myentity->y += velocityY * delta;
+        bas->y += velocityY * delta;
         
         if(facingRight){
             set_animation(jumpRight);
@@ -456,8 +446,8 @@ void myentity_loop(){
         }
         
         // ตรวจสอบว่ากลับมาถึงพื้นหรือยัง (y = 0)
-        if(myentity->y <= 0){
-            myentity->y = 0;
+        if(bas->y <= 0){
+            bas->y = 0;
             velocityY = 0;
             isGrounded = 1;
             currentState = STATE_IDLE;
@@ -465,13 +455,11 @@ void myentity_loop(){
     }
 }
 
-void myentity_render(SDL_Renderer* renderer){
-    render_entity(myentity, renderer, NULL);
+void bas_render(SDL_Renderer* renderer){
+    render_entity(bas, renderer, NULL);
 }
 
-void myentity_destroy(){
-    destroy_fighteranim(flukeAnim);
-    destroy_fighteranim(golfAnim);
+void bas_destroy(){
     destroy_animation(idleLeft);
     destroy_animation(idleRight);
     destroy_animation(walkLeft);
@@ -498,5 +486,5 @@ void myentity_destroy(){
     destroy_animation(skill3Right);
     destroy_animation(ultimateLeft);
     destroy_animation(ultimateRight);
-    destroy_entity(myentity);
+    destroy_entity(bas);
 }
