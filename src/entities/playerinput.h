@@ -1,0 +1,10 @@
+typedef enum {
+    INPUT_NONE,
+    INPUT_JUMP,
+    INPUT_CROUCH,
+    INPUT_LEFT,
+    INPUT_RIGHT,
+    INPUT_LIGHT,
+    INPUT_HEAVY,
+    INPUT_ULTIMATE
+} PlayerInput;

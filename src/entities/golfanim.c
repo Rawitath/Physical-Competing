@@ -57,8 +57,13 @@ void golfAnim_init()
     golfAnim->anims[fall + 1] = create_animation("res/fighters/golf/fall_right", fps);
     golfAnim->anims[win] = create_animation("res/fighters/golf/win_left", fps);
     golfAnim->anims[win + 1] = create_animation("res/fighters/golf/win_right", fps);
+    // Add block animations
+    golfAnim->anims[block_stand] = create_animation("res/fighters/golf/block_stand_left", fps);
+    golfAnim->anims[block_stand + 1] = create_animation("res/fighters/golf/block_stand_right", fps);
+    golfAnim->anims[block_crouch] = create_animation("res/fighters/golf/block_crouch_left", fps);
+    golfAnim->anims[block_crouch + 1] = create_animation("res/fighters/golf/block_crouch_right", fps);
 
-    for(int i = 0; i < 50; i++){
+    for(int i = 0; i < sizeof(golfAnim->anims) / sizeof(golfAnim->anims[0]); i++){ // Use sizeof to get array size
         golfAnim->anims[i]->frameSkip = 1;
     }
 }

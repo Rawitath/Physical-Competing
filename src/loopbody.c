@@ -29,7 +29,7 @@ void init(){
     add_scene(sm, myscene);
     add_scene(sm, anotherscene);
     add_scene(sm, ithallscene);
-    load_scene(sm, 0);
+    load_scene(sm, 3);
 }
 
 void start(){

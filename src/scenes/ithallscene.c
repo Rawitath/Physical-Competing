@@ -11,6 +11,10 @@
 #include "../entities/rightbanner.h"
 #include "../entities/leftbanner.h"
 #include "../entities/stageui.h"
+#include "../entities/leftFighter.h"
+#include "../entities/flukeanim.h";
+#include "../entities/golfanim.h";
+#include "../entities/fighteranim.h";
 
 #include <stdio.h>
 
@@ -23,6 +27,9 @@ void ithallscene_init()
 }
 
 void ithallscene_load(){
+    golfAnim_init();
+    flukeAnim_init();
+
     ithallstage_init();
     timecounter_init();
     wintext_init();
@@ -33,6 +40,7 @@ void ithallscene_load(){
     stageui_init();
     leftultibar_init();
     rightultibar_init();
+    leftFighter_init();
 
     add_entity(ithallscene, ithallstage);
 
@@ -47,6 +55,7 @@ void ithallscene_load(){
     add_entity(ithallscene, righthealthbar);
     add_entity(ithallscene, leftultibar);
     add_entity(ithallscene, rightultibar);
+    add_entity(ithallscene, leftFighter);
 
     
 
@@ -58,13 +67,14 @@ void ithallscene_unload(){
     remove_entity(ithallscene, stageui);
     remove_entity(ithallscene, rightbanner);
     remove_entity(ithallscene, leftbanner);
-    add_entity(ithallscene, leftultibar);
-    add_entity(ithallscene, rightultibar);
+    remove_entity(ithallscene, leftultibar);
+    remove_entity(ithallscene, rightultibar);
     remove_entity(ithallscene, lefthealthbar);
     remove_entity(ithallscene, righthealthbar);
     remove_entity(ithallscene, wintext);
     remove_entity(ithallscene, timecounter);
     remove_entity(ithallscene, ithallstage);
+    remove_entity(ithallscene, leftFighter);
     leftultibar->destroy();
     rightultibar->destroy();
     stageui->destroy();
@@ -75,4 +85,9 @@ void ithallscene_unload(){
     wintext->destroy();
     timecounter->destroy();
     ithallstage->destroy();
+    leftFighter->destroy();
+    
+    destroy_fighteranim(flukeAnim);
+    destroy_fighteranim(golfAnim);
+
 }

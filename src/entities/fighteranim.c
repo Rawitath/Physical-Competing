@@ -8,7 +8,7 @@
 FighterAnim *create_fighteranim()
 {
     FighterAnim* a = (FighterAnim*) malloc(sizeof(FighterAnim));
-    for(int i = 0; i < 50; i++){
+    for(int i = 0; i < sizeof(a->anims) / sizeof(a->anims[0]); i++){ // Use sizeof to get array size
         a->anims[i] = NULL;
     }
     return a;
@@ -16,7 +16,7 @@ FighterAnim *create_fighteranim()
 
 void destroy_fighteranim(FighterAnim *a)
 {
-    for(int i = 0; i < 50; i++){
+    for(int i = 0; i < sizeof(a->anims) / sizeof(a->anims[0]); i++){ // Use sizeof to get array size
         if(a->anims[i] != NULL) free(a->anims[i]);
     }
     free(a);
@@ -45,4 +45,8 @@ void play_animation(Entity* entity, FighterAnim* a, float* framecounter, int ind
         }
         set_image(entity, a->anims[index + side]->paths[a->anims[index + side]->currentFrame]);
     }
+}
+
+void reset_animation_frame(FighterAnim* a, int index){
+    a->anims[index]->currentFrame = 0;
 }

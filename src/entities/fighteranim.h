@@ -26,6 +26,8 @@ typedef struct Entity Entity;
 #define startle 44
 #define fall 46
 #define win 48
+#define block_stand 50
+#define block_crouch 52
 
 #define left 0;
 #define right 1;
@@ -79,12 +81,14 @@ typedef struct FighterAnim{
     // Animation* startle_right;
     // Animation* fall_left;
     // Animation* fall_right;
-    // Animation* win_left;
-    // Animation* win_right;
-    Animation* anims[50];
+    // Animation* win_left; // These comments are outdated, the array is used directly
+    // Animation* win_right; // These comments are outdated, the array is used directly
+    Animation* anims[54]; // Increased size to accommodate new animation types
+    
 } FighterAnim;
 
 FighterAnim* create_fighteranim();
 void destroy_fighteranim(FighterAnim* a);
 void assign_anim(FighterAnim* a, int index, Animation* animation);
 void play_animation(Entity* entity, FighterAnim* a, float* framecounter, int index, int side);
+void reset_animation_frame(FighterAnim* a, int index);

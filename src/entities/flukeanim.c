@@ -57,4 +57,15 @@ void flukeAnim_init()
     flukeAnim->anims[fall + 1] = create_animation("res/fighters/fluke/fall_right", fps);
     flukeAnim->anims[win] = create_animation("res/fighters/fluke/win_left", fps);
     flukeAnim->anims[win + 1] = create_animation("res/fighters/fluke/win_right", fps);
+    // Add block animations
+    flukeAnim->anims[block_stand] = create_animation("res/fighters/fluke/guard_left", fps * 2);
+    flukeAnim->anims[block_stand + 1] = create_animation("res/fighters/fluke/guard_right", fps * 2);
+    flukeAnim->anims[block_crouch] = create_animation("res/fighters/fluke/crouch_guard_left", fps * 2);
+    flukeAnim->anims[block_crouch + 1] = create_animation("res/fighters/fluke/crouch_guard_right", fps * 2);
+
+    for(int i = 0; i < sizeof(flukeAnim->anims) / sizeof(flukeAnim->anims[0]); i++){ 
+        if(i == jump){
+            flukeAnim->anims[i]->frameSkip = 1;
+        }
+    }
 }
