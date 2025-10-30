@@ -54,10 +54,10 @@ void startbutton_poll(SDL_Event* event){
 
 void startbutton_loop(){
     if(*menustate_state == 0){
-        linear_tween_to(&startbutton->y, 75, 100 * get_delta(), 0.5);
+        linear_tween_to(&startbutton->y, 75, 100 * get_delta(), 0);
     }
     else{
-        linear_tween_to(&startbutton->y, 120, 100 * get_delta(), 0.5);
+        linear_tween_to(&startbutton->y, 120, 100 * get_delta(), 1);
     }
     // if(startbuttontext != NULL) startbuttontext->loop();
     // startbuttontext->x = startbutton->x;

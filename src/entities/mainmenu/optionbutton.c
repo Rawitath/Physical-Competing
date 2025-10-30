@@ -47,10 +47,10 @@ void optionbutton_poll(SDL_Event* event){
 
 void optionbutton_loop(){
     if(*menustate_state == 0){
-        linear_tween_to(&optionbutton->y, 75, 100 * get_delta(), 0.5);
+        linear_tween_to(&optionbutton->y, 75, 100 * get_delta(), 0);
     }
     else{
-        linear_tween_to(&optionbutton->y, 120, 100 * get_delta(), 0.5);
+        linear_tween_to(&optionbutton->y, 120, 100 * get_delta(), 1);
     }
 }
 void optionbutton_render(SDL_Renderer* renderer){

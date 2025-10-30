@@ -19,6 +19,7 @@
 #include "../entities/selectionmenu/leftfighterdisplay.h"
 #include "../entities/selectionmenu/rightfighterdisplay.h"
 #include "../entities/selectionmenu/selectioncheck.h"
+#include "../entities/selectionmenu/shadescreen.h"
 
 #include "../entities/golfanim.h";
 #include "../entities/flukeanim.h";
@@ -59,6 +60,7 @@ void menuscene_load(){
     leftfighterdisplay_init();
     rightfighterdisplay_init();
     selectioncheck_init();
+    shadescreen_init();
 
     add_entity(menuscene, menubg);
     add_entity(menuscene, startbutton);
@@ -76,6 +78,7 @@ void menuscene_load(){
     add_entity(menuscene, p1select);
     add_entity(menuscene, p2select);
     add_entity(menuscene, selectioncheck);
+    add_entity(menuscene, shadescreen);
 
     allBanners_size = 4;
     allBanners[0] = flukebanner;
@@ -89,6 +92,7 @@ void menuscene_load(){
 }
 
 void menuscene_unload(){
+    remove_entity(menuscene, shadescreen);
     remove_entity(menuscene, selectioncheck);
     remove_entity(menuscene, leftfighterdisplay);
     remove_entity(menuscene, rightfighterdisplay);
@@ -105,6 +109,7 @@ void menuscene_unload(){
     remove_entity(menuscene, startbutton);
     remove_entity(menuscene, menubg);
 
+    shadescreen->destroy();
     selectioncheck->destroy();
     leftfighterdisplay->destroy();
     rightfighterdisplay->destroy();

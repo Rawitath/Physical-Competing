@@ -45,10 +45,10 @@ void asiabanner_poll(SDL_Event* event){
 
 void asiabanner_loop(){
     if(*menustate_state == 1){
-        linear_tween_to(&asiabanner->y, 65, 100 * get_delta(), 0.5);
+        linear_tween_to(&asiabanner->y, 65, 100 * get_delta(), 0);
     }
     else{
-        linear_tween_to(&asiabanner->y, 120, 100 * get_delta(), 0.5);
+        linear_tween_to(&asiabanner->y, 120, 100 * get_delta(), 1);
     }
 }
 void asiabanner_render(SDL_Renderer* renderer){

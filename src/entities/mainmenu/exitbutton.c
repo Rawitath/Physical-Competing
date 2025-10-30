@@ -49,10 +49,10 @@ void exitbutton_poll(SDL_Event* event){
 
 void exitbutton_loop(){
     if(*menustate_state == 0){
-        linear_tween_to(&exitbutton->y, 75, 100 * get_delta(), 0.5);
+        linear_tween_to(&exitbutton->y, 75, 100 * get_delta(), 0);
     }
     else{
-        linear_tween_to(&exitbutton->y, 120, 100 * get_delta(), 0.5);
+        linear_tween_to(&exitbutton->y, 120, 100 * get_delta(), 1);
     }
 }
 void exitbutton_render(SDL_Renderer* renderer){

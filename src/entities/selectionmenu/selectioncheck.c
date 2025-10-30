@@ -7,6 +7,8 @@
 #include <stdio.h>
 #include "p1select.h"
 #include "p2select.h"
+#include "../roundsystem.h"
+#include "shadescreen.h"
 
 void selectioncheck_start();
 void selectioncheck_poll(SDL_Event* event);
@@ -31,10 +33,25 @@ void selectioncheck_start(){
 void selectioncheck_poll(SDL_Event* event){
 
 }
-
+float selectioncheck_x = 0;
 void selectioncheck_loop(){
     if(p1select_confirmed == 1 && p2select_confirmed == 1){
-        sc_load_scene(2);
+        if(selectioncheck_x < 0.05){
+            rs_leftfighter = p1select_selectedIndex;
+            rs_rightfighter = p2select_selectedIndex;
+            rs_round = 0;
+            rs_leftfighterpoint = 0;
+            rs_rightfighterpoint = 0;
+        }
+        
+        selectioncheck_x += get_delta();
+        
+        if(selectioncheck_x >= 2.2){
+            shadescreen_set(1);
+        }
+        if(selectioncheck_x >= 4.5){
+            sc_load_scene(3);
+        }
     }
     
 }
