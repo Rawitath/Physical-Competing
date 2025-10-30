@@ -6,6 +6,7 @@
 #include "entity.h"
 #include "scene.h"
 
+#include "scenes/menuscene.h"
 #include "scenes/myscene.h"
 #include "scenes/anotherscene.h"
 #include "scenes/ithallscene.h"
@@ -19,14 +20,16 @@ void init(){
     sc_init(sm);
     ss_init();
 
+    menuscene_init();
     myscene_init();
     anotherscene_init();
     ithallscene_init();
 
+    add_scene(sm, menuscene);
     add_scene(sm, myscene);
     add_scene(sm, anotherscene);
     add_scene(sm, ithallscene);
-    load_scene(sm, 2);
+    load_scene(sm, 0);
 }
 
 void start(){

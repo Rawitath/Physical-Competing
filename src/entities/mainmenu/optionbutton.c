@@ -1,0 +1,67 @@
+#include "../../entity.h"
+#include "optionbutton.h"
+#include "../../timesystem.h"
+#include "../../scene.h"
+#include "../../scenecontroller.h"
+#include <stdio.h>
+#include "../../animation.h"
+#include "../pcutils/tweener.h"
+#include "menustate.h"
+
+#include <SDL3/SDL.h>
+
+void optionbutton_start();
+void optionbutton_poll(SDL_Event* event);
+void optionbutton_loop();
+void optionbutton_render(SDL_Renderer* renderer);
+void optionbutton_destroy();
+
+void optionbutton_init(){
+    optionbutton = ui_create_image(
+            "res/ui/tornpaper.png",
+            &optionbutton_start,
+            &optionbutton_poll,
+            &optionbutton_loop,
+            &optionbutton_render,
+            &optionbutton_destroy
+        );
+}
+
+void optionbutton_start(){
+    optionbutton->x = 50;
+    optionbutton->y = 75;
+    optionbutton->img->imgSizeX = 100;
+    optionbutton->img->imgSizeY = 100;
+    optionbutton->anchorX = -12.5;
+    optionbutton->anchorY = -12.5;
+    optionbutton->w = 25;
+    optionbutton->h = 25;
+}
+void optionbutton_poll(SDL_Event* event){
+    // if(event->type == SDL_EVENT_KEY_DOWN){
+    //     if(event->key.scancode == SDL_SCANCODE_Q){
+    //         optionbutton_interact();
+    //     }
+    // }
+}
+
+void optionbutton_loop(){
+    if(*menustate_state == 0){
+        linear_tween_to(&optionbutton->y, 75, 100 * get_delta(), 0);
+    }
+    else{
+        linear_tween_to(&optionbutton->y, 120, 100 * get_delta(), 1);
+    }
+}
+void optionbutton_render(SDL_Renderer* renderer){
+    render_entity(optionbutton, renderer, NULL);
+
+}
+void optionbutton_destroy(){
+
+    destroy_entity(optionbutton);
+}
+
+void optionbutton_interact(){
+    printf("Option");
+}
