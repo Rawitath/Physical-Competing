@@ -8,6 +8,10 @@
 
 #include <SDL3/SDL.h>
 
+#include "fighteranim.h"
+#include "golfanim.h"
+#include "flukeanim.h"
+
 void myentity_start();
 void myentity_poll(SDL_Event* event);
 void myentity_loop();
@@ -15,6 +19,7 @@ void myentity_render(SDL_Renderer* renderer);
 void myentity_destroy();
 
 void set_animation(Animation* anim);
+float x = 0;
 
 void myentity_init(){
     myentity = create_entity(
@@ -25,6 +30,11 @@ void myentity_init(){
             &myentity_render,
             &myentity_destroy
         );
+
+    golfAnim_init();
+    flukeAnim_init();
+    myentity->w *= 0.5;
+    myentity->h *= 0.5;
 }
 
 // Animation pointers
@@ -460,6 +470,8 @@ void myentity_render(SDL_Renderer* renderer){
 }
 
 void myentity_destroy(){
+    destroy_fighteranim(flukeAnim);
+    destroy_fighteranim(golfAnim);
     destroy_animation(idleLeft);
     destroy_animation(idleRight);
     destroy_animation(walkLeft);

@@ -28,6 +28,9 @@
         "xstring": "c",
         "xutility": "c",
         "stdlib.h": "c",
-        "audiostruct.h": "c"
+        "audiostruct.h": "c",
+        "fighteranim.h": "c",
+        "ithallstage.h": "c",
+        "wintext.h": "c"
     }
 }
