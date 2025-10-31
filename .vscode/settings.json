@@ -59,6 +59,10 @@
         "xhash": "c",
         "xiosbase": "c",
         "xlocbuf": "c",
-        "playerinput.h": "c"
+        "playerinput.h": "c",
+        "fighterstruct.h": "c",
+        "sdl_scancode.h": "c",
+        "playerkeybind.h": "c",
+        "roundsystem.h": "c"
     }
 }

@@ -1,6 +1,6 @@
 #pragma once
 typedef struct FighterAnim FighterAnim;
 
-FighterAnim* flukeAnim;
+FighterAnim* basAnim;
 
-void flukeAnim_init();
+void basAnim_init();

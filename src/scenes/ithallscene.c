@@ -14,8 +14,14 @@
 #include "../entities/leftFighter.h"
 #include "../entities/flukeanim.h";
 #include "../entities/golfanim.h";
+#include "../entities/basanim.h";
 #include "../entities/fighteranim.h";
 
+#include "../entities/allfighterstruct.h"
+#include "../entities/asia.h"
+#include "../entities/bas.h"
+#include "../entities/fluke.h"
+#include "../entities/golf.h"
 #include <stdio.h>
 
 void ithallscene_load();
@@ -29,6 +35,12 @@ void ithallscene_init()
 void ithallscene_load(){
     golfAnim_init();
     flukeAnim_init();
+    basAnim_init();
+
+    asia_init();
+    bas_init();
+    fluke_init();
+    golf_init();
 
     ithallstage_init();
     timecounter_init();
@@ -57,7 +69,10 @@ void ithallscene_load(){
     add_entity(ithallscene, rightultibar);
     add_entity(ithallscene, leftFighter);
 
-    
+    allFighters[0] = &fluke;
+    allFighters[1] = &bas;
+    allFighters[2] = &asia;
+    allFighters[3] = &golf;
 
     ithallscene->viewportY = -2;
     ithallscene->viewportZoom = 60;
@@ -89,5 +104,5 @@ void ithallscene_unload(){
     
     destroy_fighteranim(flukeAnim);
     destroy_fighteranim(golfAnim);
-
+    destroy_fighteranim(basAnim);
 }

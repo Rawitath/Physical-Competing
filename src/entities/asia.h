@@ -1,4 +1,9 @@
-// typedef struct Entity Entity;
+#ifndef ASIA_H
+#define ASIA_H
 
-// Entity* asia;
-// void asia_init();
+#include "fighterstruct.h"
+
+extern Fighter asia;
+void asia_init();
+
+#endif // ASIA_H

@@ -13,6 +13,9 @@
 #include "flukeanim.h"
 #include "characterstate.h"
 #include "playerkeybind.h"
+#include "roundsystem.h"
+#include "allfighterstruct.h"
+#include "fighterstruct.h"
 
 void leftFighter_start();
 void leftFighter_poll(SDL_Event* event);
@@ -44,23 +47,34 @@ CharacterState leftFighter_currentState = STATE_IDLE;
 int leftFighter_currentAnimIndex = idle;
 int leftFighter_facingRight = 0; // 0 = left, 1 = right
 float leftFighter_velocityY = 0;
-float leftFighter_gravity = 80.0f;
-float leftFighter_jumpForce = 30.0f;
+float leftFighter_gravity = 80.0;
+float leftFighter_jumpForce = 30.0;
 int leftFighter_isGrounded = 1;
-float leftFighter_moveSpeed = 9.0f;
+float leftFighter_moveSpeed = 9.0;
 PlayerKeybind leftFighter_keybind;
 float leftFighter_currentFrameCounter = 0;
 
 int leftFighter_ultimateGauge = 0;
 
 // State timer
-float leftFighter_stateTimer = 0.0f;
-#define ATTACK_STATE_TIMEOUT 0.5f // 0.5 seconds for an attack state
+float leftFighter_stateTimer = 0.0;
+float leftFighter_light_attack_timeout = 0.3;
+float leftFighter_heavy_attack_timeout = 0.6;
+float leftFighter_crouch_light_attack_timeout = 0.4;
+float leftFighter_crouch_heavy_attack_timeout = 0.7;
+// #define LIGHT_ATTACK_STATE_TIMEOUT 0.3 // Time for a light attack
+// #define HEAVY_ATTACK_STATE_TIMEOUT 0.6 // Time for a heavy attack
+// #define CROUCH_LIGHT_ATTACK_STATE_TIMEOUT 0.4 // Time for a crouch light attack
+// #define CROUCH_HEAVY_ATTACK_STATE_TIMEOUT 0.7 // Time for a crouch heavy attack
+
+// Animation segment points
+int leftFighter_block_stand_hold_frame = 0;
+int leftFighter_block_crouch_hold_frame = 0;
 
 
 // Combo system
 #define MAX_COMBO_LENGTH 4
-#define COMBO_TIMEOUT 2.0f
+#define COMBO_TIMEOUT 1.0f
 
 SDL_Scancode leftFighter_comboBuffer[MAX_COMBO_LENGTH];
 int leftFighter_comboCount = 0;
@@ -93,12 +107,33 @@ int check_combo_pattern(SDL_Scancode p1, SDL_Scancode p2, SDL_Scancode p3, SDL_S
 int check_and_execute_skill() {
     // TODO: Implement actual skill combos for leftFighter
     // Example: Skill 3: Light, Heavy, Light, Heavy
-    // if(check_combo_pattern(leftFighter_keybind._light_punch, leftFighter_keybind._heavy_punch,
-    //                        leftFighter_keybind._light_punch, leftFighter_keybind._heavy_punch)) {
-    //     leftFighter_currentState = STATE_SKILL3;
-    //     reset_combo();
-    //     return 1;
-    // }
+    if(check_combo_pattern(allFighters[rs_leftfighter]->skill1Keys[0],
+                           allFighters[rs_leftfighter]->skill1Keys[1],
+                           allFighters[rs_leftfighter]->skill1Keys[2],
+                           allFighters[rs_leftfighter]->skill1Keys[3])) {
+        leftFighter_currentState = STATE_SKILL1;
+        allFighters[rs_leftfighter]->skill1();
+        reset_combo();
+        return 1;
+    }
+    if(check_combo_pattern(allFighters[rs_leftfighter]->skill2Keys[0],
+                           allFighters[rs_leftfighter]->skill2Keys[1],
+                           allFighters[rs_leftfighter]->skill2Keys[2],
+                           allFighters[rs_leftfighter]->skill2Keys[3])) {
+        leftFighter_currentState = STATE_SKILL2;
+        allFighters[rs_leftfighter]->skill2();
+        reset_combo();
+        return 1;
+    }
+    if(check_combo_pattern(allFighters[rs_leftfighter]->skill3Keys[0],
+                           allFighters[rs_leftfighter]->skill3Keys[1],
+                           allFighters[rs_leftfighter]->skill3Keys[2],
+                           allFighters[rs_leftfighter]->skill3Keys[3])) {
+        leftFighter_currentState = STATE_SKILL3;
+        allFighters[rs_leftfighter]->skill3();
+        reset_combo();
+        return 1;
+    }
     return 0;
 }
 
@@ -115,18 +150,31 @@ int get_anim_index_from_state(CharacterState state) {
         case STATE_IDLE: return idle;
         case STATE_WALK: return walk;
         case STATE_JUMP: return jump;
-        case STATE_CROUCH: return crouch;
+        case STATE_CROUCH: return crouching;
         case STATE_BLOCK_STAND: return block_stand;
+        case STATE_BLOCK_RELEASE: return block_stand;
         case STATE_BLOCK_CROUCH: return block_crouch;
         case STATE_LIGHT_PUNCH: return light1; // Assuming light1 for generic light punch
         case STATE_HEAVY_PUNCH: return heavy1; // Assuming heavy1 for generic heavy punch
-        case STATE_LOW_PUNCH: return crouch_light1; // Assuming crouch_light1 for low punch
+        case STATE_LOW_LIGHT_PUNCH: return crouch_light1; // Assuming crouch_light1 for low punch
+        case STATE_LOW_HEAVY_PUNCH: return crouch_heavy1;
         case STATE_SKILL1: return skill1;
         case STATE_SKILL2: return skill2;
         case STATE_SKILL3: return skill3;
         case STATE_ULTIMATE: return ultimate;
         default: return idle; // Fallback to idle
     }
+}
+void leftFighter_setup_player(){
+    leftFighter_anim = allFighters[rs_leftfighter]->fighterAnim;
+    leftFighter_currentAnimIndex = idle;
+    leftFighter_gravity = 80.0f;
+    leftFighter_jumpForce = 30.0f;
+    leftFighter_moveSpeed = allFighters[rs_leftfighter]->speed;
+    leftFighter_light_attack_timeout = allFighters[rs_leftfighter]->lightAttackTime;
+    leftFighter_heavy_attack_timeout = allFighters[rs_leftfighter]->heavyAttackTime;
+    leftFighter_crouch_light_attack_timeout = allFighters[rs_leftfighter]->crouchLightAttackTime;
+    leftFighter_crouch_heavy_attack_timeout = allFighters[rs_leftfighter]->crouchHeavyAttackTime;
 }
 
 void leftFighter_start(){
@@ -143,8 +191,14 @@ void leftFighter_start(){
 
     // Assign a FighterAnim (e.g., Fluke's animations)
     // In a real game, this would be determined by player selection
-    leftFighter_anim = flukeAnim; // Assuming flukeAnim is initialized elsewhere (e.g., menuscene)
+    leftFighter_setup_player();
     leftFighter_currentState = STATE_JUMP;
+
+    if (leftFighter_anim && leftFighter_anim->anims[block_stand]) {
+        leftFighter_block_stand_hold_frame = leftFighter_anim->anims[block_stand]->imageCount / 2;
+        leftFighter_block_crouch_hold_frame = leftFighter_anim->anims[block_crouch]->imageCount / 2;
+    }
+
     // leftFighter_set_current_animation_state(idle);
 }
 
@@ -162,7 +216,9 @@ void leftFighter_poll(SDL_Event* event){
         if(event->key.scancode == leftFighter_keybind._light_punch){
             if(leftFighter_currentState != STATE_LIGHT_PUNCH && 
                leftFighter_currentState != STATE_HEAVY_PUNCH &&
-               leftFighter_currentState != STATE_LOW_PUNCH &&
+               leftFighter_currentState != STATE_BLOCK_RELEASE &&
+               leftFighter_currentState != STATE_LOW_LIGHT_PUNCH &&
+               leftFighter_currentState != STATE_LOW_HEAVY_PUNCH &&
                leftFighter_currentState != STATE_SKILL1 &&
                leftFighter_currentState != STATE_SKILL2 &&
                leftFighter_currentState != STATE_SKILL3 &&
@@ -185,7 +241,9 @@ void leftFighter_poll(SDL_Event* event){
         if(event->key.scancode == leftFighter_keybind._heavy_punch){
             if(leftFighter_currentState != STATE_LIGHT_PUNCH && 
                leftFighter_currentState != STATE_HEAVY_PUNCH &&
-               leftFighter_currentState != STATE_LOW_PUNCH &&
+               leftFighter_currentState != STATE_BLOCK_RELEASE &&
+               leftFighter_currentState != STATE_LOW_LIGHT_PUNCH &&
+               leftFighter_currentState != STATE_LOW_HEAVY_PUNCH &&
                leftFighter_currentState != STATE_SKILL1 &&
                leftFighter_currentState != STATE_SKILL2 &&
                leftFighter_currentState != STATE_SKILL3 &&
@@ -208,7 +266,9 @@ void leftFighter_poll(SDL_Event* event){
         if(leftFighter_ultimateGauge >= 100 && event->key.scancode == leftFighter_keybind._ultimate){
             if(leftFighter_currentState != STATE_LIGHT_PUNCH && 
                leftFighter_currentState != STATE_HEAVY_PUNCH &&
-               leftFighter_currentState != STATE_LOW_PUNCH &&
+               leftFighter_currentState != STATE_BLOCK_RELEASE &&
+               leftFighter_currentState != STATE_LOW_LIGHT_PUNCH &&
+               leftFighter_currentState != STATE_LOW_HEAVY_PUNCH &&
                leftFighter_currentState != STATE_SKILL1 &&
                leftFighter_currentState != STATE_SKILL2 &&
                leftFighter_currentState != STATE_SKILL3 &&
@@ -222,10 +282,22 @@ void leftFighter_poll(SDL_Event* event){
             }
         }
     }
+    else if (event->type == SDL_EVENT_KEY_UP) {
+        if (event->key.scancode == leftFighter_keybind._block) {
+            if (leftFighter_currentState == STATE_BLOCK_STAND || leftFighter_currentState == STATE_BLOCK_CROUCH) {
+                leftFighter_currentState = STATE_BLOCK_RELEASE;
+            }
+        }
+    }
 }
+
+void on_block_release_complete() {
+        leftFighter_currentState = STATE_IDLE;
+    }
 
 void leftFighter_loop(){
     float delta = get_delta();
+    printf("%d, %d, %d, %d\n", leftFighter_comboBuffer[0], leftFighter_comboBuffer[1], leftFighter_comboBuffer[2], leftFighter_comboBuffer[3]);
     
     // Update combo timer
     if(leftFighter_comboCount > 0) {
@@ -237,12 +309,28 @@ void leftFighter_loop(){
     }
 
     // Handle state timer for attacks
-    if (leftFighter_currentState == STATE_LIGHT_PUNCH ||
-        leftFighter_currentState == STATE_HEAVY_PUNCH ||
-        leftFighter_currentState == STATE_LOW_PUNCH) {
+    if (leftFighter_currentState == STATE_LIGHT_PUNCH) {
         leftFighter_stateTimer += delta;
-        if (leftFighter_stateTimer >= ATTACK_STATE_TIMEOUT) {
+        if (leftFighter_stateTimer >= leftFighter_light_attack_timeout) {
             leftFighter_currentState = STATE_IDLE;
+            leftFighter_stateTimer = 0.0f;
+        }
+    } else if (leftFighter_currentState == STATE_HEAVY_PUNCH) {
+        leftFighter_stateTimer += delta;
+        if (leftFighter_stateTimer >= leftFighter_heavy_attack_timeout) {
+            leftFighter_currentState = STATE_IDLE;
+            leftFighter_stateTimer = 0.0f;
+        }
+    } else if (leftFighter_currentState == STATE_LOW_LIGHT_PUNCH) {
+        leftFighter_stateTimer += delta;
+        if (leftFighter_stateTimer >= leftFighter_crouch_light_attack_timeout){
+            leftFighter_currentState = STATE_CROUCH; // Return to crouch after low punch
+            leftFighter_stateTimer = 0.0f;
+        }
+    } else if (leftFighter_currentState == STATE_LOW_HEAVY_PUNCH) {
+        leftFighter_stateTimer += delta;
+        if (leftFighter_stateTimer >= leftFighter_crouch_heavy_attack_timeout) {
+            leftFighter_currentState = STATE_CROUCH; // Return to crouch after low heavy punch
             leftFighter_stateTimer = 0.0f;
         }
     } else {
@@ -262,7 +350,9 @@ void leftFighter_loop(){
     // ถ้าไม่ได้กำลังโจมตีหรือใช้สกิล ให้สามารถเคลื่อนไหวได้
     if(leftFighter_currentState != STATE_LIGHT_PUNCH && 
        leftFighter_currentState != STATE_HEAVY_PUNCH && 
-       leftFighter_currentState != STATE_LOW_PUNCH &&
+       leftFighter_currentState != STATE_BLOCK_RELEASE &&
+       leftFighter_currentState != STATE_LOW_LIGHT_PUNCH &&
+       leftFighter_currentState != STATE_LOW_HEAVY_PUNCH &&
        leftFighter_currentState != STATE_SKILL1 &&
        leftFighter_currentState != STATE_SKILL2 &&
        leftFighter_currentState != STATE_SKILL3 &&
@@ -283,7 +373,10 @@ void leftFighter_loop(){
             
             // เช็คว่ากดปุ่มโจมตีในขณะนั่งหรือไม่
             if(keyState[leftFighter_keybind._light_punch]){
-                leftFighter_currentState = STATE_LOW_PUNCH;
+                leftFighter_currentState = STATE_LOW_LIGHT_PUNCH;
+            }
+            else if(keyState[leftFighter_keybind._heavy_punch]){
+                leftFighter_currentState = STATE_LOW_HEAVY_PUNCH;
             }
         }
         // เดินซ้าย (A หรือ ลูกศรซ้าย)
@@ -330,11 +423,23 @@ void leftFighter_loop(){
     }
 
     // Update animation based on current state
-    leftFighter_set_current_animation_state(get_anim_index_from_state(leftFighter_currentState));
-
-    // Play the current animation
-    if (leftFighter_anim != NULL) {
-        play_animation(leftFighter, leftFighter_anim, &leftFighter_currentFrameCounter, leftFighter_currentAnimIndex, leftFighter_facingRight);
+    if (leftFighter_currentState == STATE_BLOCK_STAND) {
+        leftFighter_set_current_animation_state(block_stand);
+        play_start_stop(leftFighter, leftFighter_anim, &leftFighter_currentFrameCounter, block_stand, leftFighter_facingRight, 0, leftFighter_block_stand_hold_frame);
+    } else if (leftFighter_currentState == STATE_BLOCK_CROUCH) {
+        leftFighter_set_current_animation_state(block_crouch);
+        play_start_stop(leftFighter, leftFighter_anim, &leftFighter_currentFrameCounter, block_crouch, leftFighter_facingRight, 0, leftFighter_block_crouch_hold_frame);
+    } else if (leftFighter_currentState == STATE_BLOCK_RELEASE) {
+        int anim_index = (leftFighter_anim->anims[block_stand]->currentFrame > 0) ? block_stand : block_crouch;
+        int start_frame = (anim_index == block_stand) ? leftFighter_block_stand_hold_frame : leftFighter_block_crouch_hold_frame;
+        int end_frame = leftFighter_anim->anims[anim_index]->imageCount;
+        play_animation_once(leftFighter, leftFighter_anim, &leftFighter_currentFrameCounter, anim_index, leftFighter_facingRight, start_frame, end_frame, on_block_release_complete);
+    } else {
+        leftFighter_set_current_animation_state(get_anim_index_from_state(leftFighter_currentState));
+        // Play the current animation
+        if (leftFighter_anim != NULL) {
+            play_animation(leftFighter, leftFighter_anim, &leftFighter_currentFrameCounter, leftFighter_currentAnimIndex, leftFighter_facingRight);
+        }
     }
 }
 
