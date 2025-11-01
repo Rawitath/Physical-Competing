@@ -62,6 +62,7 @@ float rightFighter_currentFrameCounter = 0;
 int rightFighter_health = 100;
 int rightFighter_ultimateGauge = 0;
 int rightFighter_breakGauge = 100;
+int rightFighter_isFrozen = 0;
 
 // State timer
 float rightFighter_stateTimer = 0.0;
@@ -195,6 +196,9 @@ void rightFighter_setup_player(){
 }
 
 void rightFighter_start(){
+    rightFighter_health = 100;
+    rightFighter_ultimateGauge = 0;
+    rightFighter_breakGauge = 100;
     rightFighter->x = 5;
     rightFighter_reset_combo();
     // Initialize keybinds (example default for Player 2)
@@ -210,14 +214,18 @@ void rightFighter_start(){
     // Assign a FighterAnim (e.g., Fluke's animations)
     // In a real game, this would be determined by player selection
     rightFighter_setup_player();
-    rightFighter_currentState = STATE_JUMP;
-
+    rightFighter_currentState = STATE_IDLE;
+    rightFighter->y = rightFighter_groundLevel;
     if (rightFighter_anim && rightFighter_anim->anims[block_stand]) {
         rightFighter_block_stand_hold_frame = rightFighter_anim->anims[block_stand]->imageCount / 2;
         rightFighter_block_crouch_hold_frame = rightFighter_anim->anims[block_crouch]->imageCount / 2;
     }
 
     // rightFighter_set_current_animation_state(idle);
+}
+
+void rightFighter_set_frozen(int frozen) {
+    rightFighter_isFrozen = frozen;
 }
 
 void rightFighter_poll(SDL_Event* event){
@@ -355,6 +363,15 @@ void rightFighter_loop(){
     righthealthbar_set_health(rightFighter_health);
     rightultibar_set_health(rightFighter_ultimateGauge);
     // printf("%d, %d, %d, %d\n", rightFighter_comboBuffer[0], rightFighter_comboBuffer[1], rightFighter_comboBuffer[2], rightFighter_comboBuffer[3]);
+
+    if (rightFighter_isFrozen) {
+        if(rightFighter_health <= 0){
+            rightFighter_currentState = STATE_FALL;
+            goto animation_update;
+        }
+        rightFighter_currentState = STATE_IDLE;
+        goto animation_update;
+    }
     
     if (rightFighter_health <= 0) goto animation_update;
     //Fall logic

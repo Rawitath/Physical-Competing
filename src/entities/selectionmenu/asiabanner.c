@@ -18,7 +18,7 @@ void asiabanner_destroy();
 
 void asiabanner_init(){
     asiabanner = ui_create_image(
-            "res/fighters/golfbanner.png",
+            "res/fighters/asiabanner.png",
             &asiabanner_start,
             &asiabanner_poll,
             &asiabanner_loop,

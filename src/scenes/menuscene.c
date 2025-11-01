@@ -23,6 +23,8 @@
 
 #include "../entities/golfanim.h";
 #include "../entities/flukeanim.h";
+#include "../entities/basanim.h";
+#include "../entities/asiaanim.h";
 #include "../entities/fighteranim.h"
 
 #include <stdlib.h>
@@ -43,6 +45,9 @@ void menuscene_load(){
 
     golfAnim_init();
     flukeAnim_init();
+    basAnim_init();
+    asiaAnim_init();
+
 
     startbutton_init();
     optionbutton_init();
@@ -86,8 +91,8 @@ void menuscene_load(){
     allBanners[2] = asiabanner;
     allBanners[3] = golfbanner;
     allFighters[0] = flukeAnim;
-    allFighters[1] = golfAnim;
-    allFighters[2] = flukeAnim;
+    allFighters[1] = basAnim;
+    allFighters[2] = asiaAnim;
     allFighters[3] = golfAnim;
 }
 
@@ -130,4 +135,7 @@ void menuscene_unload(){
 
     destroy_fighteranim(flukeAnim);
     destroy_fighteranim(golfAnim);
+    destroy_fighteranim(basAnim);
+    destroy_fighteranim(asiaAnim);
+
 }

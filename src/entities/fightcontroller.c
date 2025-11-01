@@ -4,7 +4,16 @@
 #include "leftFighter.h"
 #include "rightFighter.h"
 #include "characterstate.h"
+#include "roundsystem.h"
+#include "allfighterstruct.h"
+#include "timecounter.h"
+#include "selectionmenu/shadescreen.h"
+#include "../timesystem.h"
 #include <math.h>
+#include "fighterstruct.h"
+#include "../scenecontroller.h"
+#include <stdio.h>
+
 
 // External variables from fighters
 extern Entity* leftFighter;
@@ -15,6 +24,8 @@ extern int leftFighter_facingRight;
 extern int rightFighter_facingRight;
 extern float leftFighter_stateTimer;
 extern float rightFighter_stateTimer;
+extern int leftFighter_health;
+extern int rightFighter_health;
 
 // Forward declarations for entity functions
 void fightcontroller_start();
@@ -28,30 +39,30 @@ void check_leftfighter_attack();
 void check_rightfighter_attack();
 int is_in_attack_range(float attacker_x, float target_x, float attacker_facing, float attack_range);
 int is_facing_target(float attacker_x, float target_x, int attacker_facing);
-int get_attack_damage(CharacterState attack_state);
+int get_attack_damage(CharacterState attack_state, int fighter_index);
+float get_attack_range(CharacterState attack_state, int fighter_index);
+void freeze_fighters();
+void unfreeze_fighters();
+
+typedef enum {
+    FIGHT_STATE_STARTING,
+    FIGHT_STATE_FIGHTING,
+    FIGHT_STATE_ROUND_OVER,
+    FIGHT_STATE_FADEOUT
+} FightState;
+static FightState currentFightState;
+static float fightStateTimer;
 
 // Global entity pointer
 Entity* fightcontroller;
 
-// Attack range settings
-#define LIGHT_ATTACK_RANGE 1.5f
-#define HEAVY_ATTACK_RANGE 1.8f
-#define CROUCH_LIGHT_ATTACK_RANGE 1.3f
-#define CROUCH_HEAVY_ATTACK_RANGE 1.5f
-#define SKILL_ATTACK_RANGE 2.5f
-#define ULTIMATE_ATTACK_RANGE 3.0f
-
-// Damage values
-#define LIGHT_DAMAGE 5
-#define HEAVY_DAMAGE 10
-#define CROUCH_LIGHT_DAMAGE 4
-#define CROUCH_HEAVY_DAMAGE 8
-#define SKILL_DAMAGE 15
-#define ULTIMATE_DAMAGE 30
-
 // Track previous states to detect attack start
 CharacterState leftfighter_prev_state = STATE_IDLE;
 CharacterState rightfighter_prev_state = STATE_IDLE;
+
+int fightcontroller_initial_countdown = 4;
+int fightcontroller_round_time = 120;
+int fightcontroller_exit_times = 5;
 
 void fightcontroller_init() {
     fightcontroller = create_entity(
@@ -68,6 +79,10 @@ void fightcontroller_start() {
     // Initialization logic on scene start
     leftfighter_prev_state = STATE_IDLE;
     rightfighter_prev_state = STATE_IDLE;
+    currentFightState = FIGHT_STATE_STARTING;
+    fightStateTimer = 0.0f;
+    counter_set_time(fightcontroller_initial_countdown); // Initial countdown
+    shadescreen_set_instant(1);
 }
 
 void fightcontroller_poll(SDL_Event* event) {
@@ -95,9 +110,66 @@ void fightcontroller_poll(SDL_Event* event) {
 }
 
 void fightcontroller_loop() {
-    // Check for attacks every frame
-    check_leftfighter_attack();
-    check_rightfighter_attack();
+    float delta = get_delta();
+    fightStateTimer += delta;
+
+    switch (currentFightState) {
+        case FIGHT_STATE_STARTING:
+            freeze_fighters();
+            shadescreen_set(0);
+            // Countdown from 4 to 1, then "FIGHT"
+            if (fightStateTimer >= fightcontroller_initial_countdown) {
+                fightStateTimer = 0.0f;
+                counter_set_time(currentTime - 1);
+                if (currentTime <= 0) {
+                    // "FIGHT" would be displayed here, then we switch state
+                    // For now, let's just switch
+                    currentFightState = FIGHT_STATE_FIGHTING;
+                    unfreeze_fighters();
+                    counter_set_max_time(fightcontroller_round_time); // Set round timer
+                    counter_set_time(fightcontroller_round_time);
+                }
+            }
+            break;
+
+        case FIGHT_STATE_FIGHTING:
+            // Normal fight logic
+            check_leftfighter_attack();
+            check_rightfighter_attack();
+
+            // Check for round end
+            if (currentTime <= 0 || leftFighter_health <= 0 || rightFighter_health <= 0) {
+                currentFightState = FIGHT_STATE_ROUND_OVER;
+                fightStateTimer = 0.0f;
+                freeze_fighters();
+            }
+            break;
+
+        case FIGHT_STATE_ROUND_OVER:
+            freeze_fighters();
+            // Wait for 5 seconds
+            if (fightStateTimer >= fightcontroller_exit_times) {
+                currentFightState = FIGHT_STATE_FADEOUT;
+                shadescreen_set(1); // Start fade to black
+            }
+            break;
+
+        case FIGHT_STATE_FADEOUT:
+            sc_load_scene(3); //this scene
+            // Screen is fading. Nothing to do here for now.
+            // We could transition to another scene after the fade.
+            break;
+    }
+}
+
+void freeze_fighters() {
+    leftFighter_set_frozen(1);
+    rightFighter_set_frozen(1);
+}
+
+void unfreeze_fighters() {
+    leftFighter_set_frozen(0);
+    rightFighter_set_frozen(0);
 }
 
 void check_leftfighter_attack() {
@@ -114,37 +186,40 @@ void check_leftfighter_attack() {
         return;
     }
     
-    // Determine attack type and range
-    float attack_range = 0.0f;
+    // Determine attack type
+    int is_attack_state = 0;
     int is_crouching_attack = 0;
+    int is_skill_or_ultimate = 0;
     
     switch(leftFighter_currentState) {
         case STATE_LIGHT_PUNCH:
-            attack_range = LIGHT_ATTACK_RANGE;
-            break;
         case STATE_HEAVY_PUNCH:
-            attack_range = HEAVY_ATTACK_RANGE;
+            is_attack_state = 1;
             break;
         case STATE_LOW_LIGHT_PUNCH:
-            attack_range = CROUCH_LIGHT_ATTACK_RANGE;
-            is_crouching_attack = 1;
-            break;
         case STATE_LOW_HEAVY_PUNCH:
-            attack_range = CROUCH_HEAVY_ATTACK_RANGE;
+            is_attack_state = 1;
             is_crouching_attack = 1;
             break;
         case STATE_SKILL1:
         case STATE_SKILL2:
         case STATE_SKILL3:
-            attack_range = SKILL_ATTACK_RANGE;
-            break;
         case STATE_ULTIMATE:
-            attack_range = ULTIMATE_ATTACK_RANGE;
+            is_attack_state = 1;
+            is_skill_or_ultimate = 1;
             break;
         default:
             leftfighter_prev_state = leftFighter_currentState;
             return; // Not an attack state
     }
+    
+    if (!is_attack_state) {
+        leftfighter_prev_state = leftFighter_currentState;
+        return;
+    }
+    
+    // Get attack range from fighter stats
+    float attack_range = get_attack_range(leftFighter_currentState, rs_leftfighter);
     
     // Check if target is in range and facing correct direction
     extern CharacterState rightFighter_currentState;
@@ -152,30 +227,37 @@ void check_leftfighter_attack() {
     if (is_in_attack_range(leftFighter->x, rightFighter->x, leftFighter_facingRight, attack_range) &&
         is_facing_target(leftFighter->x, rightFighter->x, leftFighter_facingRight)) {
         
-        // Check if target is blocking
+        // Skills and Ultimate bypass blocks
         int is_blocked = 0;
-        if (rightFighter_currentState == STATE_BLOCK_STAND && !is_crouching_attack) {
-            is_blocked = 1;
-        } else if (rightFighter_currentState == STATE_BLOCK_CROUCH && is_crouching_attack) {
-            is_blocked = 1;
+        if (!is_skill_or_ultimate) {
+            if (rightFighter_currentState == STATE_BLOCK_STAND && !is_crouching_attack) {
+                is_blocked = 1;
+            } else if (rightFighter_currentState == STATE_BLOCK_CROUCH && is_crouching_attack) {
+                is_blocked = 1;
+            }
         }
         
-        // Check if attack type matches target stance
+        // Check if attack type matches target stance (only for normal attacks)
         int hit_connects = 1;
-        if (!is_crouching_attack && rightFighter_currentState == STATE_CROUCH) {
+        if (!is_crouching_attack && !is_skill_or_ultimate && rightFighter_currentState == STATE_CROUCH) {
             hit_connects = 0; // Standing attack misses crouching target
         }
         
         if (hit_connects && !is_blocked) {
-            // Deal damage
-            int damage = get_attack_damage(leftFighter_currentState);
+            // Deal damage from fighter stats
+            int damage = get_attack_damage(leftFighter_currentState, rs_leftfighter);
             rightFighter_subtract_health(damage);
             
             // Add ultimate gauge for attacker
-            leftFighter_add_ultimate(damage / 2);
+            if (is_skill_or_ultimate) {
+                leftFighter_add_ultimate(damage / 3);
+            } else {
+                leftFighter_add_ultimate(damage / 2);
+            }
         } else if (is_blocked) {
             // Reduce break gauge on successful block
-            rightFighter_subtract_break(get_attack_damage(leftFighter_currentState) / 3);
+            int damage = get_attack_damage(leftFighter_currentState, rs_leftfighter);
+            rightFighter_subtract_break(damage / 3);
             
             // Small ultimate gain for blocker
             rightFighter_add_ultimate(2);
@@ -199,37 +281,40 @@ void check_rightfighter_attack() {
         return;
     }
     
-    // Determine attack type and range
-    float attack_range = 0.0f;
+    // Determine attack type
+    int is_attack_state = 0;
     int is_crouching_attack = 0;
+    int is_skill_or_ultimate = 0;
     
     switch(rightFighter_currentState) {
         case STATE_LIGHT_PUNCH:
-            attack_range = LIGHT_ATTACK_RANGE;
-            break;
         case STATE_HEAVY_PUNCH:
-            attack_range = HEAVY_ATTACK_RANGE;
+            is_attack_state = 1;
             break;
         case STATE_LOW_LIGHT_PUNCH:
-            attack_range = CROUCH_LIGHT_ATTACK_RANGE;
-            is_crouching_attack = 1;
-            break;
         case STATE_LOW_HEAVY_PUNCH:
-            attack_range = CROUCH_HEAVY_ATTACK_RANGE;
+            is_attack_state = 1;
             is_crouching_attack = 1;
             break;
         case STATE_SKILL1:
         case STATE_SKILL2:
         case STATE_SKILL3:
-            attack_range = SKILL_ATTACK_RANGE;
-            break;
         case STATE_ULTIMATE:
-            attack_range = ULTIMATE_ATTACK_RANGE;
+            is_attack_state = 1;
+            is_skill_or_ultimate = 1;
             break;
         default:
             rightfighter_prev_state = rightFighter_currentState;
             return;
     }
+    
+    if (!is_attack_state) {
+        rightfighter_prev_state = rightFighter_currentState;
+        return;
+    }
+    
+    // Get attack range from fighter stats
+    float attack_range = get_attack_range(rightFighter_currentState, rs_rightfighter);
     
     // Check if target is in range and facing correct direction
     extern CharacterState leftFighter_currentState;
@@ -237,30 +322,37 @@ void check_rightfighter_attack() {
     if (is_in_attack_range(rightFighter->x, leftFighter->x, rightFighter_facingRight, attack_range) &&
         is_facing_target(rightFighter->x, leftFighter->x, rightFighter_facingRight)) {
         
-        // Check if target is blocking
+        // Skills and Ultimate bypass blocks
         int is_blocked = 0;
-        if (leftFighter_currentState == STATE_BLOCK_STAND && !is_crouching_attack) {
-            is_blocked = 1;
-        } else if (leftFighter_currentState == STATE_BLOCK_CROUCH && is_crouching_attack) {
-            is_blocked = 1;
+        if (!is_skill_or_ultimate) {
+            if (leftFighter_currentState == STATE_BLOCK_STAND && !is_crouching_attack) {
+                is_blocked = 1;
+            } else if (leftFighter_currentState == STATE_BLOCK_CROUCH && is_crouching_attack) {
+                is_blocked = 1;
+            }
         }
         
-        // Check if attack type matches target stance
+        // Check if attack type matches target stance (only for normal attacks)
         int hit_connects = 1;
-        if (!is_crouching_attack && leftFighter_currentState == STATE_CROUCH) {
+        if (!is_crouching_attack && !is_skill_or_ultimate && leftFighter_currentState == STATE_CROUCH) {
             hit_connects = 0;
         }
         
         if (hit_connects && !is_blocked) {
-            // Deal damage
-            int damage = get_attack_damage(rightFighter_currentState);
+            // Deal damage from fighter stats
+            int damage = get_attack_damage(rightFighter_currentState, rs_rightfighter);
             leftFighter_subtract_health(damage);
             
             // Add ultimate gauge for attacker
-            rightFighter_add_ultimate(damage / 2);
+            if (is_skill_or_ultimate) {
+                rightFighter_add_ultimate(damage / 3);
+            } else {
+                rightFighter_add_ultimate(damage / 2);
+            }
         } else if (is_blocked) {
             // Reduce break gauge on successful block
-            leftFighter_subtract_break(get_attack_damage(rightFighter_currentState) / 3);
+            int damage = get_attack_damage(rightFighter_currentState, rs_rightfighter);
+            leftFighter_subtract_break(damage / 3);
             
             // Small ultimate gain for blocker
             leftFighter_add_ultimate(2);
@@ -284,24 +376,61 @@ int is_facing_target(float attacker_x, float target_x, int attacker_facing) {
     }
 }
 
-int get_attack_damage(CharacterState attack_state) {
+// Get damage from fighter stats based on attack state
+int get_attack_damage(CharacterState attack_state, int fighter_index) {
+    if (fighter_index < 0 || fighter_index >= 4) return 0;
+    
+    Fighter* fighter = allFighters[fighter_index];
+    if (fighter == NULL) return 0;
+    
     switch(attack_state) {
         case STATE_LIGHT_PUNCH:
-            return LIGHT_DAMAGE;
+            return fighter->lightDamage;
         case STATE_HEAVY_PUNCH:
-            return HEAVY_DAMAGE;
+            return fighter->heavyDamage;
         case STATE_LOW_LIGHT_PUNCH:
-            return CROUCH_LIGHT_DAMAGE;
+            return fighter->crouchLightDamage;
         case STATE_LOW_HEAVY_PUNCH:
-            return CROUCH_HEAVY_DAMAGE;
+            return fighter->crouchHeavyDamage;
         case STATE_SKILL1:
+            return fighter->skill1Damage;
         case STATE_SKILL2:
+            return fighter->skill2Damage;
         case STATE_SKILL3:
-            return SKILL_DAMAGE;
+            return fighter->skill3Damage;
         case STATE_ULTIMATE:
-            return ULTIMATE_DAMAGE;
+            return fighter->ultimateDamage;
         default:
             return 0;
+    }
+}
+
+// Get attack range from fighter stats based on attack state
+float get_attack_range(CharacterState attack_state, int fighter_index) {
+    if (fighter_index < 0 || fighter_index >= 4) return 0.0f;
+    
+    Fighter* fighter = allFighters[fighter_index];
+    if (fighter == NULL) return 0.0f;
+    
+    switch(attack_state) {
+        case STATE_LIGHT_PUNCH:
+            return fighter->lightRange;
+        case STATE_HEAVY_PUNCH:
+            return fighter->heavyRange;
+        case STATE_LOW_LIGHT_PUNCH:
+            return fighter->crouchLightRange;
+        case STATE_LOW_HEAVY_PUNCH:
+            return fighter->crouchHeavyRange;
+        case STATE_SKILL1:
+            return fighter->skill1Range;
+        case STATE_SKILL2:
+            return fighter->skill2Range;
+        case STATE_SKILL3:
+            return fighter->skill3Range;
+        case STATE_ULTIMATE:
+            return fighter->ultimateRange;
+        default:
+            return 0.0f;
     }
 }
 

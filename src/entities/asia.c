@@ -3,7 +3,9 @@
 #include "../entity.h"
 #include "bottle.h"
 #include "../scene.h"
+#include "asiaanim.h"
 #include "playerinput.h"
+#include <stdio.h>
 
 Fighter asia;
 
@@ -13,12 +15,40 @@ void asia_skill3(Entity* fighter, int direction);
 void asia_ultimate(Entity* fighter);
 
 void asia_init() {
-    asia.id = 2;
-    asia.speed = 10.0f;
-    asia.lightAttackTime = 0.25f;
-    asia.heavyAttackTime = 0.5f;
-    asia.crouchLightAttackTime = 0.3f;
-    asia.crouchHeavyAttackTime = 0.6f;
+    asia.id = 0;
+    asia.speed = 9.0f;
+    
+    // Attack times
+    asia.lightAttackTime = 0.3f;
+    asia.heavyAttackTime = 0.6f;
+    asia.crouchLightAttackTime = 0.4f;
+    asia.crouchHeavyAttackTime = 0.7f;
+    asia.skill1Time = 4;
+    asia.skill2Time = 5;
+    asia.skill3Time = 3.5;
+    asia.ultimateTime = 6;
+    
+    // Attack damage (asia - Balanced fighter)
+    asia.lightDamage = 5;
+    asia.heavyDamage = 10;
+    asia.crouchLightDamage = 4;
+    asia.crouchHeavyDamage = 8;
+    asia.skill1Damage = 15;      // มาตรฐาน
+    asia.skill2Damage = 18;      // มาตรฐาน
+    asia.skill3Damage = 20;      // มาตรฐาน
+    asia.ultimateDamage = 35;    // มาตรฐาน
+    
+    // Attack ranges (asia - Medium range)
+    asia.lightRange = 1.5f;
+    asia.heavyRange = 1.8f;
+    asia.crouchLightRange = 1.3f;
+    asia.crouchHeavyRange = 1.5f;
+    asia.skill1Range = 2.5f;     // มาตรฐาน
+    asia.skill2Range = 2.5f;     // มาตรฐาน
+    asia.skill3Range = 2.5f;     // มาตรฐาน
+    asia.ultimateRange = 3.0f;   // มาตรฐาน
+    
+    asia.fighterAnim = asiaAnim;
 
     asia.skill1 = &asia_skill1;
     asia.skill1Time = 4;

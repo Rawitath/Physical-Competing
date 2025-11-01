@@ -18,7 +18,7 @@ void basbanner_destroy();
 
 void basbanner_init(){
     basbanner = ui_create_image(
-            "res/fighters/golfbanner.png",
+            "res/fighters/basbanner.png",
             &basbanner_start,
             &basbanner_poll,
             &basbanner_loop,
