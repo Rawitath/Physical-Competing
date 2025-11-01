@@ -1,6 +1,7 @@
 #include "golf.h"
 #include <SDL3/SDL_scancode.h>
 #include "golfanim.h"
+#include "playerinput.h"
 
 Fighter golf;
 
@@ -19,22 +20,22 @@ void golf_init() {
     golf.fighterAnim = golfAnim;
 
     golf.skill1 = &golf_skill1;
-    golf.skill1Keys[0] = SDL_SCANCODE_J;
-    golf.skill1Keys[1] = SDL_SCANCODE_J;
-    golf.skill1Keys[2] = SDL_SCANCODE_J;
-    golf.skill1Keys[3] = SDL_SCANCODE_J;
+    golf.skill1Keys[0] = INPUT_LIGHT;
+    golf.skill1Keys[1] = INPUT_LIGHT;
+    golf.skill1Keys[2] = INPUT_LIGHT;
+    golf.skill1Keys[3] = INPUT_LIGHT;
 
     golf.skill2 = &golf_skill2;
-    golf.skill2Keys[0] = SDL_SCANCODE_K;
-    golf.skill2Keys[1] = SDL_SCANCODE_K;
-    golf.skill2Keys[2] = SDL_SCANCODE_K;
-    golf.skill2Keys[3] = SDL_SCANCODE_K;
+    golf.skill2Keys[0] = INPUT_HEAVY;
+    golf.skill2Keys[1] = INPUT_HEAVY;
+    golf.skill2Keys[2] = INPUT_HEAVY;
+    golf.skill2Keys[3] = INPUT_HEAVY;
 
     golf.skill3 = &golf_skill3;
-    golf.skill3Keys[0] = SDL_SCANCODE_J;
-    golf.skill3Keys[1] = SDL_SCANCODE_K;
-    golf.skill3Keys[2] = SDL_SCANCODE_K;
-    golf.skill3Keys[3] = SDL_SCANCODE_J;
+    golf.skill3Keys[0] = INPUT_LIGHT;
+    golf.skill3Keys[1] = INPUT_HEAVY;
+    golf.skill3Keys[2] = INPUT_HEAVY;
+    golf.skill3Keys[3] = INPUT_LIGHT;
 
     golf.ultimate = &golf_ultimate;
 }
