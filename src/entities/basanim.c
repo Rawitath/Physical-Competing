@@ -63,14 +63,31 @@ void basAnim_init()
     basAnim->anims[block_crouch] = create_animation("res/fighters/bas/crouch_guard_left", fps * 2);
     basAnim->anims[block_crouch + 1] = create_animation("res/fighters/bas/crouch_guard_right", fps * 2);
 
-    // for(int i = 0; i < sizeof(basAnim->anims) / sizeof(basAnim->anims[0]); i+=2){ 
-    //     switch(i){
-    //         case jump:
-    //             basAnim->anims[i]->frameSkip = 1;
-    //             break;
-    //         case light1:
-    //             basAnim->anims[i]->frameSkip = 1;
-    //             break;
-    //     }
-    // }
+    for(int i = 0; i < sizeof(basAnim->anims) / sizeof(basAnim->anims[0]); i++){ 
+        for(int j = 0; j < basAnim->anims[i]->imageCount; j++){
+            if(i == walk || i == walk + 1 || 
+                i == crouch || i == crouch + 1 || 
+                i == crouch_light1 || i == crouch_light1 + 1 ||
+                 i == crouch_light2 || i == crouch_light2 + 1 ||
+                 i == crouch_light3 || i == crouch_light3 + 1 ||
+                  i == crouch_heavy1 || i == crouch_heavy1 + 1 ||
+                  i == crouch_heavy2 || i == crouch_heavy2 + 1 ||
+                   i == crouch_heavy3 || i == crouch_heavy3 + 1 ||
+                 i == block_crouch || i == block_crouch + 1 ||
+                i == jump || i == jump + 1){
+                basAnim->anims[i]->offsets[j].x = 0;
+                basAnim->anims[i]->offsets[j].y = 0;
+                basAnim->anims[i]->offsets[j].w = 1.8;
+                basAnim->anims[i]->offsets[j].h = 1.8;
+            }
+            else{
+                basAnim->anims[i]->offsets[j].x = 0;
+                basAnim->anims[i]->offsets[j].y = 0;
+                basAnim->anims[i]->offsets[j].w = 1.45;
+                basAnim->anims[i]->offsets[j].h = 1.45;
+                
+            }
+            
+        }
+    }
 }

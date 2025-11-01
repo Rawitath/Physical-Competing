@@ -27,6 +27,18 @@ void assign_anim(FighterAnim* a, int index, Animation *animation)
     a->anims[index] = animation;
 }
 
+void apply_animation_offset(Entity* entity, Animation* anim) {
+    if (anim == NULL || entity == NULL || anim->offsets == NULL) return;
+
+    // Get the offset for the current frame
+    AnimOffset* offset = &anim->offsets[anim->currentFrame];
+
+    // Apply offsets. You might want to use these as multipliers or direct values.
+    // Here I'm assuming they modify the base entity properties.
+    entity->img->imgSizeX *= offset->w;
+    entity->img->imgSizeY *= offset->h;
+}
+
 void play_start_stop(Entity* entity, FighterAnim* a, float* framecounter, int index, int side, int start, int stop){
     if(a->anims[index + side]->imageCount < 1){
         return;
@@ -45,6 +57,7 @@ void play_start_stop(Entity* entity, FighterAnim* a, float* framecounter, int in
             *framecounter -= 1 / a->anims[index + side]->fps;
         }
         set_image(entity, a->anims[index + side]->paths[a->anims[index + side]->currentFrame]);
+        apply_animation_offset(entity, a->anims[index + side]);
     }
 }
 
@@ -65,6 +78,7 @@ void play_animation(Entity* entity, FighterAnim* a, float* framecounter, int ind
             *framecounter -= 1 / a->anims[index + side]->fps;
         }
         set_image(entity, a->anims[index + side]->paths[a->anims[index + side]->currentFrame]);
+        apply_animation_offset(entity, a->anims[index + side]);
     }
 }
 
@@ -90,11 +104,13 @@ void play_animation_once(Entity* entity, FighterAnim* a, float* framecounter, in
             if (anim->currentFrame >= stop) {
                 anim->currentFrame = stop - 1; // Clamp to last frame
                 set_image(entity, anim->paths[anim->currentFrame]);
+                apply_animation_offset(entity, anim);
                 if (on_complete) on_complete();
                 return;
             }
         }
         set_image(entity, anim->paths[anim->currentFrame]);
+        apply_animation_offset(entity, anim);
     }
 }
 

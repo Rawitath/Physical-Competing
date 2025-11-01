@@ -20,8 +20,8 @@ typedef struct Fighter{
     PlayerInput skill1Keys[4];
     PlayerInput skill2Keys[4];
     PlayerInput skill3Keys[4];
-    void(*skill1)(Entity* fighter);
-    void(*skill2)(Entity* fighter);
+    void(*skill1)(Entity* fighter, int direction);
+    void(*skill2)(Entity* fighter, int direction);
     void(*skill3)(Entity* fighter, int direction);
     void(*ultimate)(Entity* fighter);
 } Fighter;

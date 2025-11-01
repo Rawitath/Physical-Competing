@@ -120,7 +120,7 @@ int leftFighter_check_and_execute_skill() {
                            allFighters[rs_leftfighter]->skill1Keys[2],
                            allFighters[rs_leftfighter]->skill1Keys[3])) {
         leftFighter_currentState = STATE_SKILL1;
-        allFighters[rs_leftfighter]->skill1(leftFighter);
+        allFighters[rs_leftfighter]->skill1(leftFighter, leftFighter_facingRight);
         leftFighter_stateTimer = 0.0f;
         leftFighter_reset_combo();
         return 1;
@@ -130,7 +130,7 @@ int leftFighter_check_and_execute_skill() {
                            allFighters[rs_leftfighter]->skill2Keys[2],
                            allFighters[rs_leftfighter]->skill2Keys[3])) {
         leftFighter_currentState = STATE_SKILL2;
-        allFighters[rs_leftfighter]->skill2(leftFighter);
+        allFighters[rs_leftfighter]->skill2(leftFighter, leftFighter_facingRight);
         leftFighter_stateTimer = 0.0f;
         leftFighter_reset_combo();
         return 1;
