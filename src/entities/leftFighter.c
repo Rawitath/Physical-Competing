@@ -142,6 +142,7 @@ int leftFighter_check_and_execute_skill() {
                            allFighters[rs_leftfighter]->skill3Keys[3])) {
         leftFighter_currentState = STATE_SKILL3;
         allFighters[rs_leftfighter]->skill3(leftFighter, leftFighter_facingRight);
+        leftFighter_stateTimer = 0.0f;
         leftFighter_reset_combo();
         return 1;
     }
