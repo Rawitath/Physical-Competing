@@ -1,5 +1,6 @@
 #include "asia.h"
 #include <SDL3/SDL_scancode.h>
+#include "asiaanim.h"
 #include "playerinput.h"
 
 Fighter asia;
