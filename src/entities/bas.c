@@ -1,13 +1,14 @@
 #include "bas.h"
 #include <SDL3/SDL_scancode.h>
 #include "basanim.h"
+#include "../entity.h"
 
 Fighter bas;
 
-void bas_skill1();
-void bas_skill2();
-void bas_skill3();
-void bas_ultimate();
+void bas_skill1(Entity* fighter);
+void bas_skill2(Entity* fighter);
+void bas_skill3(Entity* fighter, int direction);
+void bas_ultimate(Entity* fighter);
 
 void bas_init() {
     bas.id = 1;
@@ -39,7 +40,7 @@ void bas_init() {
     bas.ultimate = &bas_ultimate;
 }
 
-void bas_skill1() {}
-void bas_skill2() {}
-void bas_skill3() {}
-void bas_ultimate() {}
+void bas_skill1(Entity* fighter) {}
+void bas_skill2(Entity* fighter) {}
+void bas_skill3(Entity* fighter, int direction) {}
+void bas_ultimate(Entity* fighter) {}

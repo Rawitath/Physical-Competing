@@ -1,12 +1,13 @@
 #include "asia.h"
 #include <SDL3/SDL_scancode.h>
+#include "../entity.h"
 
 Fighter asia;
 
-void asia_skill1();
-void asia_skill2();
-void asia_skill3();
-void asia_ultimate();
+void asia_skill1(Entity* fighter);
+void asia_skill2(Entity* fighter);
+void asia_skill3(Entity* fighter, int direction);
+void asia_ultimate(Entity* fighter);
 
 void asia_init() {
     asia.id = 2;
@@ -37,7 +38,7 @@ void asia_init() {
     asia.ultimate = &asia_ultimate;
 }
 
-void asia_skill1() {}
-void asia_skill2() {}
-void asia_skill3() {}
-void asia_ultimate() {}
+void asia_skill1(Entity* fighter) {}
+void asia_skill2(Entity* fighter) {}
+void asia_skill3(Entity* fighter, int direction) {}
+void asia_ultimate(Entity* fighter) {}

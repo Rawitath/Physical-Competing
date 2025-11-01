@@ -1,13 +1,14 @@
 #include "golf.h"
 #include <SDL3/SDL_scancode.h>
 #include "golfanim.h"
+#include "../entity.h"
 
 Fighter golf;
 
-void golf_skill1();
-void golf_skill2();
-void golf_skill3();
-void golf_ultimate();
+void golf_skill1(Entity* fighter);
+void golf_skill2(Entity* fighter);
+void golf_skill3(Entity* fighter, int direction);
+void golf_ultimate(Entity* fighter);
 
 void golf_init() {
     golf.id = 3;
@@ -39,7 +40,7 @@ void golf_init() {
     golf.ultimate = &golf_ultimate;
 }
 
-void golf_skill1() {}
-void golf_skill2() {}
-void golf_skill3() {}
-void golf_ultimate() {}
+void golf_skill1(Entity* fighter) {}
+void golf_skill2(Entity* fighter) {}
+void golf_skill3(Entity* fighter, int direction) {}
+void golf_ultimate(Entity* fighter) {}
