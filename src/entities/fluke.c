@@ -6,9 +6,9 @@
 
 Fighter fluke;
 
-void fluke_skill1();
-void fluke_skill2();
-void fluke_skill3();
+void fluke_skill1(Entity* fighter, int direction);
+void fluke_skill2(Entity* fighter, int direction);
+void fluke_skill3(Entity* fighter, int direction);
 void fluke_ultimate();
 
 void fluke_init() {
@@ -68,16 +68,16 @@ void fluke_init() {
     fluke.ultimate = &fluke_ultimate;
 }
 
-void fluke_skill1(){
+void fluke_skill1(Entity* fighter, int direction){
     
 }
 
-void fluke_skill2()
+void fluke_skill2(Entity* fighter, int direction)
 {
 
 }
 
-void fluke_skill3()
+void fluke_skill3(Entity* fighter, int direction)
 {
 }
 

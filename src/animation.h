@@ -2,8 +2,10 @@ typedef struct SDL_Surface SDL_Surface;
 
 typedef struct AnimOffset{
     unsigned int index;
-    int x;
-    int y;
+    float x;
+    float y;
+    float w;
+    float h;
 } AnimOffset;
 
 typedef struct Animation{

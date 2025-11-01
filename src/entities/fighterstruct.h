@@ -3,6 +3,7 @@
 
 typedef enum PlayerInput PlayerInput;
 typedef struct FighterAnim FighterAnim;
+typedef struct Entity Entity;
 
 typedef struct Fighter{
     int id;
@@ -43,12 +44,10 @@ typedef struct Fighter{
     PlayerInput skill1Keys[4];
     PlayerInput skill2Keys[4];
     PlayerInput skill3Keys[4];
-    
-    // Skill functions
-    void(*skill1)();
-    void(*skill2)();
-    void(*skill3)();
-    void(*ultimate)();
+    void(*skill1)(Entity* fighter, int direction);
+    void(*skill2)(Entity* fighter, int direction);
+    void(*skill3)(Entity* fighter, int direction);
+    void(*ultimate)(Entity* fighter);
 } Fighter;
 
 #endif // FIGHTERSTRUCT_H

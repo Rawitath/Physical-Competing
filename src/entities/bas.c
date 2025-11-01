@@ -1,15 +1,18 @@
 #include "bas.h"
 #include <SDL3/SDL_scancode.h>
 #include "basanim.h"
+#include "../entity.h"
 #include "playerinput.h"
+#include "jobpaper.h"
+#include "../scene.h"
 #include <stdio.h>
 
 Fighter bas;
 
-void bas_skill1();
-void bas_skill2();
-void bas_skill3();
-void bas_ultimate();
+void bas_skill1(Entity* fighter, int direction);
+void bas_skill2(Entity* fighter, int direction);
+void bas_skill3(Entity* fighter, int direction);
+void bas_ultimate(Entity* fighter);
 
 void bas_init() {
     bas.id = 0;
@@ -48,39 +51,37 @@ void bas_init() {
     bas.fighterAnim = basAnim;
 
     bas.skill1 = &bas_skill1;
+    bas.skill1Time = 4;
     bas.skill1Keys[0] = INPUT_JUMP;
     bas.skill1Keys[1] = INPUT_JUMP;
     bas.skill1Keys[2] = INPUT_LIGHT;
     bas.skill1Keys[3] = INPUT_HEAVY;
 
     bas.skill2 = &bas_skill2;
+    bas.skill2Time = 5;
     bas.skill2Keys[0] = INPUT_LIGHT;
     bas.skill2Keys[1] = INPUT_LIGHT;
     bas.skill2Keys[2] = INPUT_LIGHT;
     bas.skill2Keys[3] = INPUT_JUMP;
 
     bas.skill3 = &bas_skill3;
-    bas.skill3Keys[0] = INPUT_LIGHT;
+    bas.skill3Time = 3.5;
+    bas.skill3Keys[0] = INPUT_HEAVY;
     bas.skill3Keys[1] = INPUT_HEAVY;
     bas.skill3Keys[2] = INPUT_HEAVY;
     bas.skill3Keys[3] = INPUT_LIGHT;
 
     bas.ultimate = &bas_ultimate;
+    bas.ultimateTime = 6;
 }
 
-void bas_skill1(){
+void bas_skill1(Entity* fighter, int direction) {}
+void bas_skill2(Entity* fighter, int direction) {
+    if(!jobpaper) jobpaper_init();
+    add_entity(fighter->scene, jobpaper);
+    release_jobpaper(fighter, direction);
+}
+void bas_skill3(Entity* fighter, int direction) {
     
 }
-
-void bas_skill2()
-{
-
-}
-
-void bas_skill3()
-{
-}
-
-void bas_ultimate()
-{
-}
+void bas_ultimate(Entity* fighter) {}
