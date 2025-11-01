@@ -46,8 +46,10 @@ Entity* fightcontroller;
 #define HEAVY_DAMAGE 10
 #define CROUCH_LIGHT_DAMAGE 4
 #define CROUCH_HEAVY_DAMAGE 8
-#define SKILL_DAMAGE 15
-#define ULTIMATE_DAMAGE 30
+#define SKILL1_DAMAGE 15
+#define SKILL2_DAMAGE 18
+#define SKILL3_DAMAGE 20
+#define ULTIMATE_DAMAGE 35
 
 // Track previous states to detect attack start
 CharacterState leftfighter_prev_state = STATE_IDLE;
@@ -117,6 +119,7 @@ void check_leftfighter_attack() {
     // Determine attack type and range
     float attack_range = 0.0f;
     int is_crouching_attack = 0;
+    int is_skill_or_ultimate = 0;
     
     switch(leftFighter_currentState) {
         case STATE_LIGHT_PUNCH:
@@ -137,9 +140,11 @@ void check_leftfighter_attack() {
         case STATE_SKILL2:
         case STATE_SKILL3:
             attack_range = SKILL_ATTACK_RANGE;
+            is_skill_or_ultimate = 1;
             break;
         case STATE_ULTIMATE:
             attack_range = ULTIMATE_ATTACK_RANGE;
+            is_skill_or_ultimate = 1;
             break;
         default:
             leftfighter_prev_state = leftFighter_currentState;
@@ -152,17 +157,19 @@ void check_leftfighter_attack() {
     if (is_in_attack_range(leftFighter->x, rightFighter->x, leftFighter_facingRight, attack_range) &&
         is_facing_target(leftFighter->x, rightFighter->x, leftFighter_facingRight)) {
         
-        // Check if target is blocking
+        // Skills and Ultimate bypass blocks
         int is_blocked = 0;
-        if (rightFighter_currentState == STATE_BLOCK_STAND && !is_crouching_attack) {
-            is_blocked = 1;
-        } else if (rightFighter_currentState == STATE_BLOCK_CROUCH && is_crouching_attack) {
-            is_blocked = 1;
+        if (!is_skill_or_ultimate) {
+            if (rightFighter_currentState == STATE_BLOCK_STAND && !is_crouching_attack) {
+                is_blocked = 1;
+            } else if (rightFighter_currentState == STATE_BLOCK_CROUCH && is_crouching_attack) {
+                is_blocked = 1;
+            }
         }
         
-        // Check if attack type matches target stance
+        // Check if attack type matches target stance (only for normal attacks)
         int hit_connects = 1;
-        if (!is_crouching_attack && rightFighter_currentState == STATE_CROUCH) {
+        if (!is_crouching_attack && !is_skill_or_ultimate && rightFighter_currentState == STATE_CROUCH) {
             hit_connects = 0; // Standing attack misses crouching target
         }
         
@@ -171,8 +178,12 @@ void check_leftfighter_attack() {
             int damage = get_attack_damage(leftFighter_currentState);
             rightFighter_subtract_health(damage);
             
-            // Add ultimate gauge for attacker
-            leftFighter_add_ultimate(damage / 2);
+            // Add ultimate gauge for attacker (more for skills/ultimate)
+            if (is_skill_or_ultimate) {
+                leftFighter_add_ultimate(damage / 3);
+            } else {
+                leftFighter_add_ultimate(damage / 2);
+            }
         } else if (is_blocked) {
             // Reduce break gauge on successful block
             rightFighter_subtract_break(get_attack_damage(leftFighter_currentState) / 3);
@@ -202,6 +213,7 @@ void check_rightfighter_attack() {
     // Determine attack type and range
     float attack_range = 0.0f;
     int is_crouching_attack = 0;
+    int is_skill_or_ultimate = 0;
     
     switch(rightFighter_currentState) {
         case STATE_LIGHT_PUNCH:
@@ -222,9 +234,11 @@ void check_rightfighter_attack() {
         case STATE_SKILL2:
         case STATE_SKILL3:
             attack_range = SKILL_ATTACK_RANGE;
+            is_skill_or_ultimate = 1;
             break;
         case STATE_ULTIMATE:
             attack_range = ULTIMATE_ATTACK_RANGE;
+            is_skill_or_ultimate = 1;
             break;
         default:
             rightfighter_prev_state = rightFighter_currentState;
@@ -237,17 +251,19 @@ void check_rightfighter_attack() {
     if (is_in_attack_range(rightFighter->x, leftFighter->x, rightFighter_facingRight, attack_range) &&
         is_facing_target(rightFighter->x, leftFighter->x, rightFighter_facingRight)) {
         
-        // Check if target is blocking
+        // Skills and Ultimate bypass blocks
         int is_blocked = 0;
-        if (leftFighter_currentState == STATE_BLOCK_STAND && !is_crouching_attack) {
-            is_blocked = 1;
-        } else if (leftFighter_currentState == STATE_BLOCK_CROUCH && is_crouching_attack) {
-            is_blocked = 1;
+        if (!is_skill_or_ultimate) {
+            if (leftFighter_currentState == STATE_BLOCK_STAND && !is_crouching_attack) {
+                is_blocked = 1;
+            } else if (leftFighter_currentState == STATE_BLOCK_CROUCH && is_crouching_attack) {
+                is_blocked = 1;
+            }
         }
         
-        // Check if attack type matches target stance
+        // Check if attack type matches target stance (only for normal attacks)
         int hit_connects = 1;
-        if (!is_crouching_attack && leftFighter_currentState == STATE_CROUCH) {
+        if (!is_crouching_attack && !is_skill_or_ultimate && leftFighter_currentState == STATE_CROUCH) {
             hit_connects = 0;
         }
         
@@ -256,8 +272,17 @@ void check_rightfighter_attack() {
             int damage = get_attack_damage(rightFighter_currentState);
             leftFighter_subtract_health(damage);
             
-            // Add ultimate gauge for attacker
-            rightFighter_add_ultimate(damage / 2);
+            // Add ultimate gauge for attacker (more for skills/ultimate)
+            if (is_skill_or_ultimate) {
+                rightFighter_add_ultimate(damage / 3);
+            } else {
+                rightFighter_add_ultimate(damage / 2);
+            }
+            
+            // Break guard on skills/ultimate hit
+            if (is_skill_or_ultimate) {
+                leftFighter_subtract_break(damage / 2);
+            }
         } else if (is_blocked) {
             // Reduce break gauge on successful block
             leftFighter_subtract_break(get_attack_damage(rightFighter_currentState) / 3);
@@ -295,9 +320,11 @@ int get_attack_damage(CharacterState attack_state) {
         case STATE_LOW_HEAVY_PUNCH:
             return CROUCH_HEAVY_DAMAGE;
         case STATE_SKILL1:
+            return SKILL1_DAMAGE;
         case STATE_SKILL2:
+            return SKILL2_DAMAGE;
         case STATE_SKILL3:
-            return SKILL_DAMAGE;
+            return SKILL3_DAMAGE;
         case STATE_ULTIMATE:
             return ULTIMATE_DAMAGE;
         default:
