@@ -10,7 +10,7 @@ void bas_skill3();
 void bas_ultimate();
 
 void bas_init() {
-    bas.id = 1; // Example ID
+    bas.id = 1;
     bas.speed = 9.5f;
     bas.lightAttackTime = 0.28f;
     bas.heavyAttackTime = 0.55f;

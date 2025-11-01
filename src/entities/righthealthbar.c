@@ -64,12 +64,7 @@ void righthealthbar_start(){
     righthealthbar->h = 10 * 1.285;
 }
 void righthealthbar_poll(SDL_Event* event){
-    if(event->key.scancode == SDL_SCANCODE_9){
-            righthealthbar_add_health(1);
-        }
-        if(event->key.scancode == SDL_SCANCODE_0){
-            righthealthbar_subtract_health(1);
-        }
+    
 }
 
 void righthealthbar_loop(){

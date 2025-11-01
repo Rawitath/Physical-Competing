@@ -64,12 +64,7 @@ void leftultibar_start(){
     leftultibar->h = 10 * 1.285;
 }
 void leftultibar_poll(SDL_Event* event){
-    if(event->key.scancode == SDL_SCANCODE_3){
-            leftultibar_subtract_health(1);
-        }
-        if(event->key.scancode == SDL_SCANCODE_4){
-            leftultibar_add_health(1);
-        }
+    
 }
 
 void leftultibar_loop(){

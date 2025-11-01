@@ -12,7 +12,9 @@
 #include "../entities/leftbanner.h"
 #include "../entities/stageui.h"
 #include "../entities/leftFighter.h"
+#include "../entities/rightFighter.h"
 #include "../entities/flukeanim.h";
+#include "../entities/fightcontroller.h"
 #include "../entities/golfanim.h";
 #include "../entities/basanim.h";
 #include "../entities/fighteranim.h";
@@ -53,6 +55,8 @@ void ithallscene_load(){
     leftultibar_init();
     rightultibar_init();
     leftFighter_init();
+    rightFighter_init();
+    fightcontroller_init();
 
     add_entity(ithallscene, ithallstage);
 
@@ -68,6 +72,8 @@ void ithallscene_load(){
     add_entity(ithallscene, leftultibar);
     add_entity(ithallscene, rightultibar);
     add_entity(ithallscene, leftFighter);
+    add_entity(ithallscene, rightFighter);
+    add_entity(ithallscene, fightcontroller);
 
     allFighters[0] = &fluke;
     allFighters[1] = &bas;
@@ -79,6 +85,7 @@ void ithallscene_load(){
 }
 
 void ithallscene_unload(){
+    remove_entity(ithallscene, fightcontroller);
     remove_entity(ithallscene, stageui);
     remove_entity(ithallscene, rightbanner);
     remove_entity(ithallscene, leftbanner);
@@ -90,6 +97,9 @@ void ithallscene_unload(){
     remove_entity(ithallscene, timecounter);
     remove_entity(ithallscene, ithallstage);
     remove_entity(ithallscene, leftFighter);
+    remove_entity(ithallscene, rightFighter);
+
+    fightcontroller->destroy();
     leftultibar->destroy();
     rightultibar->destroy();
     stageui->destroy();
@@ -101,6 +111,7 @@ void ithallscene_unload(){
     timecounter->destroy();
     ithallstage->destroy();
     leftFighter->destroy();
+    rightFighter->destroy();
     
     destroy_fighteranim(flukeAnim);
     destroy_fighteranim(golfAnim);

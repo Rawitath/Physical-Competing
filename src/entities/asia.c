@@ -9,7 +9,7 @@ void asia_skill3();
 void asia_ultimate();
 
 void asia_init() {
-    asia.id = 0; // Example ID
+    asia.id = 2;
     asia.speed = 10.0f;
     asia.lightAttackTime = 0.25f;
     asia.heavyAttackTime = 0.5f;

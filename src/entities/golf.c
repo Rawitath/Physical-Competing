@@ -10,7 +10,7 @@ void golf_skill3();
 void golf_ultimate();
 
 void golf_init() {
-    golf.id = 3; // Example ID
+    golf.id = 3;
     golf.speed = 8.5f;
     golf.lightAttackTime = 0.35f;
     golf.heavyAttackTime = 0.65f;

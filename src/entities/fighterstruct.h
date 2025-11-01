@@ -1,7 +1,7 @@
 #ifndef FIGHTERSTRUCT_H
 #define FIGHTERSTRUCT_H
 
-#include <SDL3/SDL_scancode.h>
+typedef enum PlayerInput PlayerInput;
 typedef struct FighterAnim FighterAnim;
 
 typedef struct Fighter{
@@ -16,9 +16,9 @@ typedef struct Fighter{
     float skill2Time;
     float skill3Time;
     float ultimateTime;
-    SDL_Scancode skill1Keys[4];
-    SDL_Scancode skill2Keys[4];
-    SDL_Scancode skill3Keys[4];
+    PlayerInput skill1Keys[4];
+    PlayerInput skill2Keys[4];
+    PlayerInput skill3Keys[4];
     void(*skill1)();
     void(*skill2)();
     void(*skill3)();
