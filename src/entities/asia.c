@@ -1,17 +1,17 @@
 #include "asia.h"
 #include <SDL3/SDL_scancode.h>
-#include "flukeanim.h"
+#include "asiaanim.h"
 #include "playerinput.h"
 #include <stdio.h>
 
 Fighter asia;
 
-void fluke_skill1();
-void fluke_skill2();
-void fluke_skill3();
-void fluke_ultimate();
+void asia_skill1();
+void asia_skill2();
+void asia_skill3();
+void asia_ultimate();
 
-void fluke_init() {
+void asia_init() {
     asia.id = 0;
     asia.speed = 9.0f;
     
@@ -25,7 +25,7 @@ void fluke_init() {
     asia.skill3Time = 3.5;
     asia.ultimateTime = 6;
     
-    // Attack damage (Fluke - Balanced fighter)
+    // Attack damage (asia - Balanced fighter)
     asia.lightDamage = 5;
     asia.heavyDamage = 10;
     asia.crouchLightDamage = 4;
@@ -35,7 +35,7 @@ void fluke_init() {
     asia.skill3Damage = 20;      // มาตรฐาน
     asia.ultimateDamage = 35;    // มาตรฐาน
     
-    // Attack ranges (Fluke - Medium range)
+    // Attack ranges (asia - Medium range)
     asia.lightRange = 1.5f;
     asia.heavyRange = 1.8f;
     asia.crouchLightRange = 1.3f;
@@ -45,7 +45,7 @@ void fluke_init() {
     asia.skill3Range = 2.5f;     // มาตรฐาน
     asia.ultimateRange = 3.0f;   // มาตรฐาน
     
-    asia.fighterAnim = flukeAnim;
+    asia.fighterAnim = asiaAnim;
 
     asia.skill1 = &asia_skill1;
     asia.skill1Keys[0] = INPUT_LIGHT;
@@ -68,19 +68,19 @@ void fluke_init() {
     asia.ultimate = &asia_ultimate;
 }
 
-void fluke_skill1(){
+void asia_skill1(){
     
 }
 
-void fluke_skill2()
+void asia_skill2()
 {
 
 }
 
-void fluke_skill3()
+void asia_skill3()
 {
 }
 
-void fluke_ultimate()
+void asia_ultimate()
 {
 }
