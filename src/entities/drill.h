@@ -5,6 +5,6 @@ typedef struct Entity Entity;
 
 extern Entity* drill;
 void drill_init();
-void release_drill(float x, float y, int direction);
+void release_drill(Entity* fighter, int direction);
 
 #endif // DRILL_H

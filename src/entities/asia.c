@@ -1,6 +1,8 @@
 #include "asia.h"
 #include <SDL3/SDL_scancode.h>
 #include "../entity.h"
+#include "bottle.h"
+#include "../scene.h"
 
 Fighter asia;
 
@@ -38,7 +40,14 @@ void asia_init() {
     asia.ultimate = &asia_ultimate;
 }
 
+//drink
 void asia_skill1(Entity* fighter) {}
-void asia_skill2(Entity* fighter) {}
+//throw
+void asia_skill2(Entity* fighter) {
+    if(!bottle) bottle_init();
+    add_entity(fighter->scene, bottle);
+    release_bottle(fighter->x, fighter->y, 1);
+}
+// hit
 void asia_skill3(Entity* fighter, int direction) {}
 void asia_ultimate(Entity* fighter) {}

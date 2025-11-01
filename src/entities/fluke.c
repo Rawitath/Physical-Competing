@@ -68,7 +68,7 @@ void fluke_skill3(Entity* fighter, int direction)
 {
     if(!drill) drill_init();
     add_entity(fighter->scene, drill);
-    release_drill(fighter->x, fighter->y, direction);
+    release_drill(fighter, direction);
 }
 
 void fluke_ultimate(Entity* fighter)
