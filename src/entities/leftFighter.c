@@ -61,6 +61,7 @@ float leftFighter_currentFrameCounter = 0;
 int leftFighter_health = 100;
 int leftFighter_ultimateGauge = 0;
 int leftFighter_breakGauge = 100;
+int leftFighter_isFrozen = 0;
 
 // State timer
 float leftFighter_stateTimer = 0.0;
@@ -194,7 +195,11 @@ void leftFighter_setup_player(){
 }
 
 void leftFighter_start(){
+    leftFighter_health = 100;
+    leftFighter_ultimateGauge = 0;
+    leftFighter_breakGauge = 100;
     leftFighter->x = -5;
+
     leftFighter_reset_combo();
     // Initialize keybinds (example default for Player 1)
     leftFighter_keybind._left = SDL_SCANCODE_A;
@@ -208,8 +213,9 @@ void leftFighter_start(){
 
     // Assign a FighterAnim (e.g., Fluke's animations)
     // In a real game, this would be determined by player selection
+    leftFighter_currentState = STATE_IDLE;
+    leftFighter->y = leftFighter_groundLevel;
     leftFighter_setup_player();
-    leftFighter_currentState = STATE_JUMP;
 
     if (leftFighter_anim && leftFighter_anim->anims[block_stand]) {
         leftFighter_block_stand_hold_frame = leftFighter_anim->anims[block_stand]->imageCount / 2;
@@ -217,6 +223,10 @@ void leftFighter_start(){
     }
 
     // leftFighter_set_current_animation_state(idle);
+}
+
+void leftFighter_set_frozen(int frozen) {
+    leftFighter_isFrozen = frozen;
 }
 
 void leftFighter_poll(SDL_Event* event){
@@ -354,6 +364,15 @@ void leftFighter_loop(){
     lefthealthbar_set_health(leftFighter_health);
     leftultibar_set_health(leftFighter_ultimateGauge);
     // printf("%d, %d, %d, %d\n", leftFighter_comboBuffer[0], leftFighter_comboBuffer[1], leftFighter_comboBuffer[2], leftFighter_comboBuffer[3]);
+
+    if (leftFighter_isFrozen) {
+        if(leftFighter_health <= 0){
+            leftFighter_currentState = STATE_FALL;
+            goto animation_update;
+        }
+        leftFighter_currentState = STATE_IDLE;
+        goto animation_update;
+    }
     
     if (leftFighter_health <= 0) goto animation_update;
     //Fall logic

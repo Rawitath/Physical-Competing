@@ -5,6 +5,7 @@
 #include "../scenecontroller.h"
 #include <stdio.h>
 #include "../animation.h"
+#include "roundsystem.h"
 
 #include <SDL3/SDL.h>
 
@@ -28,6 +29,21 @@ void rightbanner_init(){
 }
 
 void rightbanner_start(){
+    switch (rs_rightfighter)
+    {
+        case 0:
+            set_image(rightbanner, "res/fighters/flukebanner.png");
+            break;
+        case 1:
+            set_image(rightbanner, "res/fighters/basbanner.png");
+            break;
+        case 2:
+            set_image(rightbanner, "res/fighters/asiabanner.png");
+            break;
+        case 3:
+            set_image(rightbanner, "res/fighters/golfbanner.png");
+            break;
+    }
     rightbanner->x = 85;
     rightbanner->y = 1;
     rightbanner->w = 6 * 0.8;

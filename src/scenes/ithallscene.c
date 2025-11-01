@@ -24,6 +24,8 @@
 #include "../entities/bas.h"
 #include "../entities/fluke.h"
 #include "../entities/golf.h"
+
+#include "../entities/selectionmenu/shadescreen.h"
 #include <stdio.h>
 
 void ithallscene_load();
@@ -57,8 +59,13 @@ void ithallscene_load(){
     leftFighter_init();
     rightFighter_init();
     fightcontroller_init();
+    shadescreen_init();
+
 
     add_entity(ithallscene, ithallstage);
+
+    add_entity(ithallscene, leftFighter);
+    add_entity(ithallscene, rightFighter);
 
     add_entity(ithallscene, rightbanner);
     add_entity(ithallscene, leftbanner);
@@ -71,9 +78,8 @@ void ithallscene_load(){
     add_entity(ithallscene, righthealthbar);
     add_entity(ithallscene, leftultibar);
     add_entity(ithallscene, rightultibar);
-    add_entity(ithallscene, leftFighter);
-    add_entity(ithallscene, rightFighter);
     add_entity(ithallscene, fightcontroller);
+    add_entity(ithallscene, shadescreen);
 
     allFighters[0] = &fluke;
     allFighters[1] = &bas;
@@ -85,6 +91,7 @@ void ithallscene_load(){
 }
 
 void ithallscene_unload(){
+    remove_entity(ithallscene, shadescreen);
     remove_entity(ithallscene, fightcontroller);
     remove_entity(ithallscene, stageui);
     remove_entity(ithallscene, rightbanner);
@@ -100,6 +107,7 @@ void ithallscene_unload(){
     remove_entity(ithallscene, rightFighter);
 
     fightcontroller->destroy();
+    shadescreen->destroy();
     leftultibar->destroy();
     rightultibar->destroy();
     stageui->destroy();

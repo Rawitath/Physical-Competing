@@ -6,7 +6,14 @@
 #include "characterstate.h"
 #include "roundsystem.h"
 #include "allfighterstruct.h"
+#include "timecounter.h"
+#include "selectionmenu/shadescreen.h"
+#include "../timesystem.h"
 #include <math.h>
+#include "fighterstruct.h"
+#include "../scenecontroller.h"
+#include <stdio.h>
+
 
 // External variables from fighters
 extern Entity* leftFighter;
@@ -17,6 +24,8 @@ extern int leftFighter_facingRight;
 extern int rightFighter_facingRight;
 extern float leftFighter_stateTimer;
 extern float rightFighter_stateTimer;
+extern int leftFighter_health;
+extern int rightFighter_health;
 
 // Forward declarations for entity functions
 void fightcontroller_start();
@@ -32,6 +41,17 @@ int is_in_attack_range(float attacker_x, float target_x, float attacker_facing, 
 int is_facing_target(float attacker_x, float target_x, int attacker_facing);
 int get_attack_damage(CharacterState attack_state, int fighter_index);
 float get_attack_range(CharacterState attack_state, int fighter_index);
+void freeze_fighters();
+void unfreeze_fighters();
+
+typedef enum {
+    FIGHT_STATE_STARTING,
+    FIGHT_STATE_FIGHTING,
+    FIGHT_STATE_ROUND_OVER,
+    FIGHT_STATE_FADEOUT
+} FightState;
+static FightState currentFightState;
+static float fightStateTimer;
 
 // Global entity pointer
 Entity* fightcontroller;
@@ -39,6 +59,10 @@ Entity* fightcontroller;
 // Track previous states to detect attack start
 CharacterState leftfighter_prev_state = STATE_IDLE;
 CharacterState rightfighter_prev_state = STATE_IDLE;
+
+int fightcontroller_initial_countdown = 4;
+int fightcontroller_round_time = 120;
+int fightcontroller_exit_times = 5;
 
 void fightcontroller_init() {
     fightcontroller = create_entity(
@@ -55,6 +79,10 @@ void fightcontroller_start() {
     // Initialization logic on scene start
     leftfighter_prev_state = STATE_IDLE;
     rightfighter_prev_state = STATE_IDLE;
+    currentFightState = FIGHT_STATE_STARTING;
+    fightStateTimer = 0.0f;
+    counter_set_time(fightcontroller_initial_countdown); // Initial countdown
+    shadescreen_set_instant(1);
 }
 
 void fightcontroller_poll(SDL_Event* event) {
@@ -82,9 +110,66 @@ void fightcontroller_poll(SDL_Event* event) {
 }
 
 void fightcontroller_loop() {
-    // Check for attacks every frame
-    check_leftfighter_attack();
-    check_rightfighter_attack();
+    float delta = get_delta();
+    fightStateTimer += delta;
+
+    switch (currentFightState) {
+        case FIGHT_STATE_STARTING:
+            freeze_fighters();
+            shadescreen_set(0);
+            // Countdown from 4 to 1, then "FIGHT"
+            if (fightStateTimer >= fightcontroller_initial_countdown) {
+                fightStateTimer = 0.0f;
+                counter_set_time(currentTime - 1);
+                if (currentTime <= 0) {
+                    // "FIGHT" would be displayed here, then we switch state
+                    // For now, let's just switch
+                    currentFightState = FIGHT_STATE_FIGHTING;
+                    unfreeze_fighters();
+                    counter_set_max_time(fightcontroller_round_time); // Set round timer
+                    counter_set_time(fightcontroller_round_time);
+                }
+            }
+            break;
+
+        case FIGHT_STATE_FIGHTING:
+            // Normal fight logic
+            check_leftfighter_attack();
+            check_rightfighter_attack();
+
+            // Check for round end
+            if (currentTime <= 0 || leftFighter_health <= 0 || rightFighter_health <= 0) {
+                currentFightState = FIGHT_STATE_ROUND_OVER;
+                fightStateTimer = 0.0f;
+                freeze_fighters();
+            }
+            break;
+
+        case FIGHT_STATE_ROUND_OVER:
+            freeze_fighters();
+            // Wait for 5 seconds
+            if (fightStateTimer >= fightcontroller_exit_times) {
+                currentFightState = FIGHT_STATE_FADEOUT;
+                shadescreen_set(1); // Start fade to black
+            }
+            break;
+
+        case FIGHT_STATE_FADEOUT:
+            sc_load_scene(3); //this scene
+            // Screen is fading. Nothing to do here for now.
+            // We could transition to another scene after the fade.
+            break;
+    }
+}
+
+void freeze_fighters() {
+    leftFighter_set_frozen(1);
+    rightFighter_set_frozen(1);
+}
+
+void unfreeze_fighters() {
+    leftFighter_set_frozen(0);
+    rightFighter_set_frozen(0);
 }
 
 void check_leftfighter_attack() {

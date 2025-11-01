@@ -36,9 +36,13 @@ void shadescreen_poll(SDL_Event* event){
 void shadescreen_set(int state){
     shadescreen_state = state;
 }
+void shadescreen_set_instant(int state){
+    shadescreen_state = state;
+    shadescreen_alpha = state ? 255 : 0;
+}
 
 void shadescreen_loop(){
-    if (shadescreen_state== 1) {
+    if (shadescreen_state == 1) {
         linear_tween_to_int(&shadescreen_alpha, 255, 255 * get_delta(), 1);
     } else {
         linear_tween_to_int(&shadescreen_alpha, 0, 255 * get_delta(), 0);
