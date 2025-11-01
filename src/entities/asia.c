@@ -47,25 +47,25 @@ void fluke_init() {
     
     asia.fighterAnim = flukeAnim;
 
-    asia.skill1 = &fluke_skill1;
-    asia.skill1Keys[0] = INPUT_JUMP;
-    asia.skill1Keys[1] = INPUT_JUMP;
-    asia.skill1Keys[2] = INPUT_LIGHT;
-    asia.skill1Keys[3] = INPUT_HEAVY;
+    asia.skill1 = &asia_skill1;
+    asia.skill1Keys[0] = INPUT_LIGHT;
+    asia.skill1Keys[1] = INPUT_LIGHT;
+    asia.skill1Keys[2] = INPUT_HEAVY;
+    asia.skill1Keys[3] = INPUT_JUMP;
 
-    asia.skill2 = &fluke_skill2;
-    asia.skill2Keys[0] = INPUT_LIGHT;
-    asia.skill2Keys[1] = INPUT_LIGHT;
+    asia.skill2 = &asia_skill2;
+    asia.skill2Keys[0] = INPUT_JUMP;
+    asia.skill2Keys[1] = INPUT_JUMP;
     asia.skill2Keys[2] = INPUT_LIGHT;
-    asia.skill2Keys[3] = INPUT_JUMP;
+    asia.skill2Keys[3] = INPUT_HEAVY;
 
-    asia.skill3 = &fluke_skill3;
+    asia.skill3 = &asia_skill3;
     asia.skill3Keys[0] = INPUT_LIGHT;
-    asia.skill3Keys[1] = INPUT_HEAVY;
-    asia.skill3Keys[2] = INPUT_HEAVY;
+    asia.skill3Keys[1] = INPUT_LIGHT;
+    asia.skill3Keys[2] = INPUT_LIGHT;
     asia.skill3Keys[3] = INPUT_LIGHT;
 
-    asia.ultimate = &fluke_ultimate;
+    asia.ultimate = &asia_ultimate;
 }
 
 void fluke_skill1(){
