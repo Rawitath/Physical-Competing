@@ -211,8 +211,8 @@ void rightFighter_start(){
     rightFighter_keybind._crouch = SDL_SCANCODE_DOWN;
     rightFighter_keybind._light_punch = SDL_SCANCODE_KP_1;
     rightFighter_keybind._heavy_punch = SDL_SCANCODE_KP_2;
-    rightFighter_keybind._ultimate = SDL_SCANCODE_KP_3;
-    rightFighter_keybind._block = SDL_SCANCODE_KP_0;
+    rightFighter_keybind._ultimate = SDL_SCANCODE_KP_0;
+    rightFighter_keybind._block = SDL_SCANCODE_KP_3;
 
     // Assign a FighterAnim (e.g., Fluke's animations)
     // In a real game, this would be determined by player selection

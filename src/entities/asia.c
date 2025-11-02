@@ -7,6 +7,7 @@
 #include "playerinput.h"
 #include <stdio.h>
 #include <math.h>
+#include "characterstate.h"
 
 Fighter asia;
 
