@@ -52,10 +52,10 @@ int bottle_check_collision(Entity* a, Entity* b) {
     bottomA = a->y - (a->h * a->anchorY);
 
     // Calculate the sides of rect B
-    leftB = b->x - (b->w * b->anchorX);
-    rightB = b->x + (b->w * (1.0f - b->anchorX));
-    topB = b->y + (b->h * (1.0f - b->anchorY));
-    bottomB = b->y - (b->h * b->anchorY);
+    leftB = b->x * 2 - (b->w * b->anchorX) * 2;
+    rightB = b->x * 2 + (b->w * (1.0f - b->anchorX)) * 2;
+    topB = b->y * 2 + (b->h * (1.0f - b->anchorY)) * 2;
+    bottomB = b->y * 2 - (b->h * b->anchorY) * 2;
 
     // If any of the sides from A are outside of B
     if (bottomA >= topB) return 0;

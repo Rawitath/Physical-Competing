@@ -24,7 +24,7 @@ void asia_init() {
     asia.crouchLightAttackTime = 0.4f;
     asia.crouchHeavyAttackTime = 0.7f;
     asia.skill1Time = 4;
-    asia.skill2Time = 5;
+    asia.skill2Time = 2.5;
     asia.skill3Time = 3.5;
     asia.ultimateTime = 6;
     

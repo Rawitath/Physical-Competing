@@ -242,7 +242,7 @@ void leftFighter_poll(SDL_Event* event){
                leftFighter_currentState != STATE_ULTIMATE &&
                leftFighter_currentState != STATE_CROUCH &&
                leftFighter_currentState != STATE_FALL &&
-               leftFighter_isFrozen && leftFighter_currentState != STATE_FLUKE_HORSE && leftFighter_currentState != STATE_FLUKE_HORSE_WALK){
+               !leftFighter_isFrozen && leftFighter_currentState != STATE_FLUKE_HORSE && leftFighter_currentState != STATE_FLUKE_HORSE_WALK){
             leftFighter_add_to_combo(INPUT_JUMP);
             if(!leftFighter_check_and_execute_skill()){
                 leftFighter_currentState = STATE_JUMP;
