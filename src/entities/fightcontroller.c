@@ -12,6 +12,7 @@
 #include <math.h>
 #include "fighterstruct.h"
 #include "../scenecontroller.h"
+#include "bas.h"
 #include <stdio.h>
 
 
@@ -143,6 +144,10 @@ void fightcontroller_loop() {
             // Normal fight logic
             check_leftfighter_attack();
             check_rightfighter_attack();
+            
+            // ===== BAS ULTIMATE MULTI-HIT UPDATE =====
+            bas_ultimate_update();
+            // ==========================================
 
             // Check for round end
             if (currentTime <= 0 || leftFighter_health <= 0 || rightFighter_health <= 0) {
@@ -151,6 +156,7 @@ void fightcontroller_loop() {
                 freeze_fighters();
             }
             break;
+            
         case FIGHT_STATE_ROUND_OVER:
             freeze_fighters();
             // Wait for 5 seconds
@@ -273,14 +279,17 @@ void check_leftfighter_attack() {
         
         if (hit_connects && !is_blocked) {
             // Deal damage from fighter stats
-            int damage = get_attack_damage(leftFighter_currentState, rs_leftfighter);
-            rightFighter_subtract_health(damage);
-            
-            // Add ultimate gauge for attacker
-            if (is_skill_or_ultimate) {
-                leftFighter_add_ultimate(damage / 3);
-            } else {
-                leftFighter_add_ultimate(damage / 2);
+            // Skip damage here if it's Bas's ultimate (ID 1), as it uses multi-hit system
+            if (!(leftFighter_currentState == STATE_ULTIMATE && rs_leftfighter == 1)) {
+                int damage = get_attack_damage(leftFighter_currentState, rs_leftfighter);
+                rightFighter_subtract_health(damage);
+                
+                // Add ultimate gauge for attacker
+                if (is_skill_or_ultimate) {
+                    leftFighter_add_ultimate(damage / 3);
+                } else {
+                    leftFighter_add_ultimate(damage / 2);
+                }
             }
         } else if (is_blocked) {
             // Reduce break gauge on successful block
@@ -368,14 +377,17 @@ void check_rightfighter_attack() {
         
         if (hit_connects && !is_blocked) {
             // Deal damage from fighter stats
-            int damage = get_attack_damage(rightFighter_currentState, rs_rightfighter);
-            leftFighter_subtract_health(damage);
-            
-            // Add ultimate gauge for attacker
-            if (is_skill_or_ultimate) {
-                rightFighter_add_ultimate(damage / 3);
-            } else {
-                rightFighter_add_ultimate(damage / 2);
+            // Skip damage here if it's Bas's ultimate (ID 1), as it uses multi-hit system
+            if (!(rightFighter_currentState == STATE_ULTIMATE && rs_rightfighter == 1)) {
+                int damage = get_attack_damage(rightFighter_currentState, rs_rightfighter);
+                leftFighter_subtract_health(damage);
+                
+                // Add ultimate gauge for attacker
+                if (is_skill_or_ultimate) {
+                    rightFighter_add_ultimate(damage / 3);
+                } else {
+                    rightFighter_add_ultimate(damage / 2);
+                }
             }
         } else if (is_blocked) {
             // Reduce break gauge on successful block
