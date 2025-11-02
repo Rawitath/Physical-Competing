@@ -13,6 +13,9 @@
 #include "fighterstruct.h"
 #include "../scenecontroller.h"
 #include <stdio.h>
+#include "mainmenu/menustate.h"
+#include "selectionmenu/p1select.h"
+#include "selectionmenu/p2select.h"
 
 
 // External variables from fighters
@@ -69,7 +72,7 @@ CharacterState rightfighter_prev_state = STATE_IDLE;
 
 int fightcontroller_initial_countdown = 4;
 int fightcontroller_round_time = 120;
-int fightcontroller_exit_times = 5;
+int fightcontroller_exit_times = 7;
 
 void fightcontroller_init() {
     fightcontroller = create_entity(
@@ -94,26 +97,26 @@ void fightcontroller_start() {
 
 void fightcontroller_poll(SDL_Event* event) {
     // Debug controls (optional - remove in production)
-    // if(event->type == SDL_EVENT_KEY_DOWN){
-    //     if(event->key.scancode == SDL_SCANCODE_1){
-    //         leftFighter_subtract_health(1);
-    //     }
-    //     if(event->key.scancode == SDL_SCANCODE_2){
-    //         leftFighter_add_health(1);
-    //     }
-    //     if(event->key.scancode == SDL_SCANCODE_3){
-    //         leftFighter_subtract_ultimate(1);
-    //     }
-    //     if(event->key.scancode == SDL_SCANCODE_4){
-    //         leftFighter_add_ultimate(1);
-    //     }
-    //     if(event->key.scancode == SDL_SCANCODE_5){
-    //         leftFighter_subtract_break(1);
-    //     }
-    //     if(event->key.scancode == SDL_SCANCODE_6){
-    //         leftFighter_add_break(1);
-    //     }
-    // }
+    if(event->type == SDL_EVENT_KEY_DOWN){
+        if(event->key.scancode == SDL_SCANCODE_1){
+            leftFighter_subtract_health(10);
+        }
+        if(event->key.scancode == SDL_SCANCODE_2){
+            leftFighter_add_health(10);
+        }
+        if(event->key.scancode == SDL_SCANCODE_3){
+            leftFighter_subtract_ultimate(10);
+        }
+        if(event->key.scancode == SDL_SCANCODE_4){
+            leftFighter_add_ultimate(10);
+        }
+        if(event->key.scancode == SDL_SCANCODE_5){
+            leftFighter_subtract_break(10);
+        }
+        if(event->key.scancode == SDL_SCANCODE_6){
+            leftFighter_add_break(10);
+        }
+    }
 }
 
 void fightcontroller_loop() {
@@ -153,14 +156,20 @@ void fightcontroller_loop() {
             break;
         case FIGHT_STATE_ROUND_OVER:
             freeze_fighters();
+            if(fightStateTimer >= fightcontroller_exit_times - 2){
+                shadescreen_set(1);// Start fade to black
+            }
             // Wait for 5 seconds
             if (fightStateTimer >= fightcontroller_exit_times) {
                 currentFightState = FIGHT_STATE_FADEOUT;
-                shadescreen_set(1); // Start fade to black
+                 
             }
             break;
 
         case FIGHT_STATE_FADEOUT:
+            menustate_state = 0;
+            p1select_confirmed = 0;
+            p2select_confirmed = 0;
             sc_load_scene(0); //this scene
             // Screen is fading. Nothing to do here for now.
             // We could transition to another scene after the fade.

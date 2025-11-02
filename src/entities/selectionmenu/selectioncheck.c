@@ -26,14 +26,14 @@ void selectioncheck_init(){
             &selectioncheck_destroy
         );
 }
-
+float selectioncheck_x = 0;
 void selectioncheck_start(){
+    selectioncheck->x = 0;
 
 }
 void selectioncheck_poll(SDL_Event* event){
 
 }
-float selectioncheck_x = 0;
 void selectioncheck_loop(){
     if(p1select_confirmed == 1 && p2select_confirmed == 1){
         if(selectioncheck_x < 0.05){
