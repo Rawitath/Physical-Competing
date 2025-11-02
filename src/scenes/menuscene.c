@@ -50,7 +50,7 @@ void menuscene_load(){
 
 
     startbutton_init();
-    optionbutton_init();
+    // optionbutton_init();
     exitbutton_init();
     menuselector_init();
     menubg_init();
@@ -69,7 +69,7 @@ void menuscene_load(){
 
     add_entity(menuscene, menubg);
     add_entity(menuscene, startbutton);
-    add_entity(menuscene, optionbutton);
+    // add_entity(menuscene, optionbutton);
     add_entity(menuscene, exitbutton);
     add_entity(menuscene, menuselector);
 
@@ -110,7 +110,7 @@ void menuscene_unload(){
 
     remove_entity(menuscene, menuselector);
     remove_entity(menuscene, exitbutton);
-    remove_entity(menuscene, optionbutton);
+    // remove_entity(menuscene, optionbutton);
     remove_entity(menuscene, startbutton);
     remove_entity(menuscene, menubg);
 
@@ -128,7 +128,7 @@ void menuscene_unload(){
 
     menuselector->destroy();
     exitbutton->destroy();
-    optionbutton->destroy();
+    // optionbutton->destroy();
     startbutton->destroy();
     menubg->destroy();
     free(menustate_state);

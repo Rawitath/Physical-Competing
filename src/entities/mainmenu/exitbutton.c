@@ -18,7 +18,7 @@ void exitbutton_destroy();
 
 void exitbutton_init(){
     exitbutton = ui_create_image(
-            "res/ui/tornpaper.png",
+            "res/ui/exitbutton.png",
             &exitbutton_start,
             &exitbutton_poll,
             &exitbutton_loop,
