@@ -18,6 +18,7 @@
 #include "mainmenu/menustate.h"
 #include "selectionmenu/p1select.h"
 #include "selectionmenu/p2select.h"
+#include "ithallstage.h"
 
 
 // External variables from fighters
@@ -96,28 +97,29 @@ void fightcontroller_start() {
     counter_set_time(fightcontroller_initial_countdown); // Initial countdown
     shadescreen_set_instant(1);
 }
-
+SDL_Event* fc_event;
 void fightcontroller_poll(SDL_Event* event) {
+    fc_event = event;
     // Debug controls (optional - remove in production)
     if(event->type == SDL_EVENT_KEY_DOWN){
-        if(event->key.scancode == SDL_SCANCODE_1){
-            leftFighter_subtract_health(10);
-        }
-        if(event->key.scancode == SDL_SCANCODE_2){
-            leftFighter_add_health(10);
-        }
-        if(event->key.scancode == SDL_SCANCODE_3){
-            leftFighter_subtract_ultimate(10);
-        }
-        if(event->key.scancode == SDL_SCANCODE_4){
-            leftFighter_add_ultimate(10);
-        }
-        if(event->key.scancode == SDL_SCANCODE_5){
-            leftFighter_subtract_break(10);
-        }
-        if(event->key.scancode == SDL_SCANCODE_6){
-            leftFighter_add_break(10);
-        }
+        // if(event->key.scancode == SDL_SCANCODE_1){
+        //     leftFighter_subtract_health(10);
+        // }
+        // if(event->key.scancode == SDL_SCANCODE_2){
+        //     leftFighter_add_health(10);
+        // }
+        // if(event->key.scancode == SDL_SCANCODE_3){
+        //     leftFighter_subtract_ultimate(10);
+        // }
+        // if(event->key.scancode == SDL_SCANCODE_4){
+        //     leftFighter_add_ultimate(10);
+        // }
+        // if(event->key.scancode == SDL_SCANCODE_5){
+        //     leftFighter_subtract_break(10);
+        // }
+        // if(event->key.scancode == SDL_SCANCODE_6){
+        //     leftFighter_add_break(10);
+        // }
     }
 }
 
@@ -167,6 +169,16 @@ void fightcontroller_loop() {
             
         case FIGHT_STATE_ROUND_OVER:
             freeze_fighters();
+            if(leftFighter_health > rightFighter_health){
+                leftFighter_currentState = STATE_WIN;
+                rightFighter_currentState = STATE_IDLE; // Or a losing state if you have one
+                ithallstage_trigger_win(allFighters[rs_leftfighter]->name);
+            }
+            else{
+                rightFighter_currentState = STATE_WIN;
+                leftFighter_currentState = STATE_IDLE; // Or a losing state
+                ithallstage_trigger_win(allFighters[rs_rightfighter]->name);
+            }
             if(fightStateTimer >= fightcontroller_exit_times - 2){
                 shadescreen_set(1);// Start fade to black
             }
@@ -181,7 +193,7 @@ void fightcontroller_loop() {
             menustate_state = 0;
             p1select_confirmed = 0;
             p2select_confirmed = 0;
-            sc_load_scene(0); //this scene
+            fc_event->type = SDL_EVENT_QUIT;
             // Screen is fading. Nothing to do here for now.
             // We could transition to another scene after the fade.
             break;
@@ -300,15 +312,15 @@ void check_leftfighter_attack() {
                 
                 // Add ultimate gauge for attacker
                 if (is_skill_or_ultimate) {
-                    leftFighter_add_ultimate(damage / 3);
+                    leftFighter_add_ultimate(damage / 1.5);
                 } else {
-                    leftFighter_add_ultimate(damage / 2);
+                    leftFighter_add_ultimate(damage);
                 }
             }
         } else if (is_blocked) {
             // Reduce break gauge on successful block
             int damage = get_attack_damage(leftFighter_currentState, rs_leftfighter);
-            rightFighter_subtract_break(damage / 3);
+            rightFighter_subtract_break(damage / 1.5);
             
             // Small ultimate gain for blocker
             rightFighter_add_ultimate(2);
@@ -398,15 +410,15 @@ void check_rightfighter_attack() {
                 
                 // Add ultimate gauge for attacker
                 if (is_skill_or_ultimate) {
-                    rightFighter_add_ultimate(damage / 3);
+                    rightFighter_add_ultimate(damage / 1.5);
                 } else {
-                    rightFighter_add_ultimate(damage / 2);
+                    rightFighter_add_ultimate(damage);
                 }
             }
         } else if (is_blocked) {
             // Reduce break gauge on successful block
             int damage = get_attack_damage(rightFighter_currentState, rs_rightfighter);
-            leftFighter_subtract_break(damage / 3);
+            leftFighter_subtract_break(damage / 1.5);
             
             // Small ultimate gain for blocker
             leftFighter_add_ultimate(2);

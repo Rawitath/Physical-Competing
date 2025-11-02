@@ -50,6 +50,7 @@ void leftfighterdisplay_start(){
     leftfighterdisplay->h = 80;
     leftfighterdisplay->anchorX = -leftfighterdisplay->w / 2;
     leftfighterdisplay->anchorY = -leftfighterdisplay->h / 2;
+    set_text_color(leftfighterdisplay, 253, 47, 6, SDL_ALPHA_OPAQUE);
 }
 void leftfighterdisplay_poll(SDL_Event* event){
     

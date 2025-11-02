@@ -8,6 +8,7 @@
 #include "../entities/mainmenu/exitbutton.h"
 #include "../entities/mainmenu/menuselector.h"
 #include "../entities/mainmenu/menustate.h"
+#include "../entities/mainmenu/phycompetlogo.h"
 
 #include "../entities/selectionmenu/allbanner.h"
 #include "../entities/selectionmenu/asiabanner.h"
@@ -56,6 +57,7 @@ void menuscene_load(){
     exitbutton_init();
     menuselector_init();
     menubg_init();
+    phycompetlogo_init();
 
     flukebanner_init();
     basbanner_init();
@@ -77,6 +79,7 @@ void menuscene_load(){
     // add_entity(menuscene, optionbutton);
     add_entity(menuscene, exitbutton);
     add_entity(menuscene, menuselector);
+    add_entity(menuscene, phycompetlogo);
 
     add_entity(menuscene, leftfighterdisplay);
     add_entity(menuscene, rightfighterdisplay);
@@ -121,6 +124,7 @@ void menuscene_unload(){
     remove_entity(menuscene, exitbutton);
     // remove_entity(menuscene, optionbutton);
     remove_entity(menuscene, startbutton);
+    remove_entity(menuscene, phycompetlogo);
     remove_entity(menuscene, menubg);
 
     rightnamedisplay->destroy();
@@ -142,6 +146,7 @@ void menuscene_unload(){
     exitbutton->destroy();
     // optionbutton->destroy();
     startbutton->destroy();
+    phycompetlogo->destroy();
     menubg->destroy();
     free(menustate_state);
 

@@ -12,8 +12,10 @@
 #include "scenes/ithallscene.h"
 #include "sc_process.h"
 #include "ss_process.h"
+#include "soundsystem.h"
 
 static SceneManager* sm;
+static Audio* music;
 
 void init(){
     sm = create_scene_manager();
@@ -30,6 +32,9 @@ void init(){
     add_scene(sm, anotherscene);
     add_scene(sm, ithallscene);
     load_scene(sm, 0);
+    music = create_audio("res/music/technosyndrome.wav");
+    music->loop = SET_LOOP_INFINITY;
+    play_audio(music, 1);
 }
 
 void start(){
@@ -79,6 +84,7 @@ void render(SDL_Renderer* renderer){
     }
 }
 void destroy(){
+    destroy_audio(music);
     // if(sm->activeScene != NULL){
     //     for(int i = 0; i < sm->activeScene->entityCount; i++){
     //         Entity* e = get_entity_by_index(sm->activeScene, i);

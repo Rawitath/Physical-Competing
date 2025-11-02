@@ -35,7 +35,7 @@ void menuselector_init(){
 
 void menuselector_start(){
     // printf("this will run once");
-    menuselector->anchorX = -5;
+    menuselector->anchorX = 0;
     menuselector->anchorY = -5;
     menuselector->img->imgSizeX = 100;
     menuselector->img->imgSizeX = 100;

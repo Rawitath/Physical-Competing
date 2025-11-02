@@ -47,6 +47,7 @@ void rightfighterdisplay_start(){
     rightfighterdisplay->h = 80;
     rightfighterdisplay->anchorX = -rightfighterdisplay->w / 2;
     rightfighterdisplay->anchorY = -rightfighterdisplay->h / 2;
+    set_text_color(rightfighterdisplay, 253, 47, 6, SDL_ALPHA_OPAQUE);
 }
 void rightfighterdisplay_poll(SDL_Event* event){
     

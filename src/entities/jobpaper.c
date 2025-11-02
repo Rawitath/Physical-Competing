@@ -15,10 +15,11 @@ void jobpaper_destroy();
 
 // Global entity pointer
 Entity* jobpaper;
-float jobpaper_speed = 7;
+float jobpaper_speed = 14;
 int jobpaper_direction = 1; // 1 for right, 0 for left
 float jobpaper_duration = 5;
 float jobpaper_timer = 0;
+float jobpaper_remX = 0;
 
 void jobpaper_init() {
     // Assuming a path for the image, you can change "res/props/jobpaper.png" to the correct one.
@@ -37,13 +38,14 @@ void release_jobpaper(Entity* fighter, int direction)
     jobpaper_timer = 0;
     jobpaper->x = fighter->x;
     jobpaper->y = fighter->y;
+    jobpaper_remX = fighter->x;
 
     jobpaper_direction = direction;
 }
 
 void jobpaper_start() {
-    jobpaper->img->imgSizeX *= 0.6;
-    jobpaper->img->imgSizeY *= 0.6;
+    jobpaper->img->imgSizeX *= 0.3;
+    jobpaper->img->imgSizeY *= 0.3;
     // Initialization logic on scene start
 }
 
@@ -87,7 +89,6 @@ int jobpaper_check_collision(Entity* a, Entity* b) {
 
 void jobpaper_loop() {
     if (!jobpaper) return;
-
     // Per-frame update logic for the jobpaper
     jobpaper_timer += get_delta();
     if (jobpaper_timer < jobpaper_duration) {

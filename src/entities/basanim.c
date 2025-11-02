@@ -13,10 +13,10 @@ void basAnim_init()
     basAnim->anims[walk + 1] = create_animation("res/fighters/bas/walk_right", fps);
     basAnim->anims[jump] = create_animation("res/fighters/bas/jump_left", fps);
     basAnim->anims[jump + 1] = create_animation("res/fighters/bas/jump_right", fps);
-    basAnim->anims[crouch] = create_animation("res/fighters/bas/crouch_left", fps);
-    basAnim->anims[crouch + 1] = create_animation("res/fighters/bas/crouch_right", fps);
-    basAnim->anims[crouching] = create_animation("res/fighters/bas/crouching_left", fps);
-    basAnim->anims[crouching + 1] = create_animation("res/fighters/bas/crouching_right", fps);
+    basAnim->anims[crouch] = create_animation("res/fighters/bas/crouching_left", fps);
+    basAnim->anims[crouch + 1] = create_animation("res/fighters/bas/crouching_right", fps);
+    basAnim->anims[crouching] = create_animation("res/fighters/bas/crouch_left", fps);
+    basAnim->anims[crouching + 1] = create_animation("res/fighters/bas/crouch_right", fps);
     basAnim->anims[light1] = create_animation("res/fighters/bas/light1_left", fps);
     basAnim->anims[light1 + 1] = create_animation("res/fighters/bas/light1_right", fps);
     basAnim->anims[light2] = create_animation("res/fighters/bas/light2_left", fps);

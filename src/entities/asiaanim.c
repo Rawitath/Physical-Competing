@@ -13,10 +13,10 @@ void asiaAnim_init()
     asiaAnim->anims[walk + 1] = create_animation("res/fighters/asia/walk_left", fps);
     asiaAnim->anims[jump] = create_animation("res/fighters/asia/jump_right", fps);
     asiaAnim->anims[jump + 1] = create_animation("res/fighters/asia/jump_left", fps);
-    asiaAnim->anims[crouch] = create_animation("res/fighters/asia/crouch_right", fps);
-    asiaAnim->anims[crouch + 1] = create_animation("res/fighters/asia/crouch_left", fps);
-    asiaAnim->anims[crouching] = create_animation("res/fighters/asia/crouching_right", fps);
-    asiaAnim->anims[crouching + 1] = create_animation("res/fighters/asia/crouching_left", fps);
+    asiaAnim->anims[crouch] = create_animation("res/fighters/asia/crouching_right", fps);
+    asiaAnim->anims[crouch + 1] = create_animation("res/fighters/asia/crouching_left", fps);
+    asiaAnim->anims[crouching] = create_animation("res/fighters/asia/crouch_right", fps);
+    asiaAnim->anims[crouching + 1] = create_animation("res/fighters/asia/crouch_left", fps);
     asiaAnim->anims[light1] = create_animation("res/fighters/asia/light1_right", fps);
     asiaAnim->anims[light1 + 1] = create_animation("res/fighters/asia/light1_left", fps);
     asiaAnim->anims[light2] = create_animation("res/fighters/asia/light2_right", fps);
