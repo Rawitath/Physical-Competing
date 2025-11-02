@@ -3,6 +3,9 @@
 #include "flukeanim.h"
 #include "playerinput.h"
 #include <stdio.h>
+#include "drill.h"
+#include "../entity.h"
+#include "../scene.h"
 
 Fighter fluke;
 
@@ -79,6 +82,9 @@ void fluke_skill2(Entity* fighter, int direction)
 
 void fluke_skill3(Entity* fighter, int direction)
 {
+    if(!drill) drill_init();
+    add_entity(fighter->scene, drill);
+    release_drill(fighter, direction);
 }
 
 void fluke_ultimate()

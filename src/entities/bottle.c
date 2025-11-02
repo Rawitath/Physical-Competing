@@ -15,7 +15,7 @@ void bottle_destroy();
 
 // Global entity pointer
 Entity* bottle;
-float bottle_speed = 5;
+float bottle_speed = 15;
 float bottle_velocityY = 0;
 int bottle_direction = 1; // 1 for right, 0 for left
 float bottle_duration = 5;
@@ -72,11 +72,15 @@ void release_bottle(float x, float y, int direction)
     bottle_timer = 0.0;
     bottle->x = x;
     bottle->y = y;
+    bottle_velocityY = 0.9f; // Give it a slight initial upward velocity
     bottle_direction = direction;
 }
 
 void bottle_start() {
     // Initialization logic on scene start
+    bottle->w = 0.3;
+    bottle->h = 0.3;
+
 }
 
 void bottle_poll(SDL_Event* event) {
@@ -87,29 +91,30 @@ void bottle_loop() {
     // Per-frame update logic for the bottle
     bottle_timer += get_delta();
     bottle->y += bottle_velocityY;
-    bottle_velocityY -= 9.8 * get_delta();
+    bottle_velocityY -= 4 * get_delta(); // Apply gravity
+
     if(bottle_timer >= bottle_duration){
-    if(bottle_direction == 1){
-        bottle->x += bottle_speed * get_delta();
-    }
-    else{
-        bottle->x -= bottle_speed * get_delta();
-    }
-}
-    else {
         remove_entity(bottle->scene, bottle);
         bottle->destroy();
         bottle = NULL;
         return;
     }
+    else {
+        if(bottle_direction == 1){
+            bottle->x += bottle_speed * get_delta();
+        }
+        else{
+            bottle->x -= bottle_speed * get_delta();
+        }
+    }
 
     // Check for collision with fighters
-    if (drill_check_collision(bottle, leftFighter)) {
+    if (bottle_check_collision(bottle, leftFighter)) {
         leftFighter_subtract_health(10); // Deal 10 damage
         remove_entity(bottle->scene, bottle);
         bottle->destroy();
         bottle = NULL;
-    } else if (drill_check_collision(bottle, rightFighter)) {
+    } else if (bottle_check_collision(bottle, rightFighter)) {
         rightFighter_subtract_health(10); // Deal 10 damage
         remove_entity(bottle->scene, bottle);
         bottle->destroy();

@@ -40,6 +40,7 @@ void ithallscene_load(){
     golfAnim_init();
     flukeAnim_init();
     basAnim_init();
+    asiaAnim_init();
 
     asia_init();
     bas_init();
