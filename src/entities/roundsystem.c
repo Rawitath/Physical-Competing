@@ -1,6 +1,6 @@
 #include "roundsystem.h"
 
-int rs_leftfighter = 2;
+int rs_leftfighter = 0;
 int rs_leftfighterpoint = 0;
 int rs_rightfighter = 0;
 int rs_rightfighterpoint = 0;

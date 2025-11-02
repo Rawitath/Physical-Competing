@@ -63,6 +63,12 @@ void flukeAnim_init()
     flukeAnim->anims[block_crouch] = create_animation("res/fighters/fluke/crouch_guard_left", fps * 2);
     flukeAnim->anims[block_crouch + 1] = create_animation("res/fighters/fluke/crouch_guard_right", fps * 2);
 
+    flukeAnim->anims[fluke_horse] = create_animation("res/fighters/fluke/fluke_horse_left", fps);
+    flukeAnim->anims[fluke_horse + 1] = create_animation("res/fighters/fluke/fluke_horse_right", fps);
+    flukeAnim->anims[fluke_horse_walk] = create_animation("res/fighters/fluke/fluke_horse_walk_left", fps);
+    flukeAnim->anims[fluke_horse_walk + 1] = create_animation("res/fighters/fluke/fluke_horse_walk_right", fps);
+    
+
     for(int i = 0; i < sizeof(flukeAnim->anims) / sizeof(flukeAnim->anims[0]); i+=2){ 
         switch(i){
             case jump:

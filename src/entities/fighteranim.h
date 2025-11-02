@@ -28,7 +28,9 @@ enum FighterAnimState {
     fall = 46,
     win = 48,
     block_stand = 50,
-    block_crouch = 52
+    block_crouch = 52,
+    fluke_horse = 54,
+    fluke_horse_walk = 56
 };
 
 #define left 0;
@@ -85,7 +87,7 @@ typedef struct FighterAnim{
     // Animation* fall_right;
     // Animation* win_left; // These comments are outdated, the array is used directly
     // Animation* win_right; // These comments are outdated, the array is used directly
-    Animation* anims[54]; // Increased size to accommodate new animation types
+    Animation* anims[58]; // Increased size to accommodate new animation types
     
 } FighterAnim;
 

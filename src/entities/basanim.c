@@ -64,6 +64,9 @@ void basAnim_init()
     basAnim->anims[block_crouch + 1] = create_animation("res/fighters/bas/crouch_guard_right", fps * 2);
 
     for(int i = 0; i < sizeof(basAnim->anims) / sizeof(basAnim->anims[0]); i++){ 
+        if(!basAnim->anims[i]){
+            continue;
+        }
         for(int j = 0; j < basAnim->anims[i]->imageCount; j++){
             if(i == walk || i == walk + 1 || 
                 i == crouch || i == crouch + 1 || 

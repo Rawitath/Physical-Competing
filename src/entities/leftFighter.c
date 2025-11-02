@@ -73,8 +73,9 @@ float leftFighter_fall_timeout = 5;
 float leftFighter_skill1_time = 6;
 float leftFighter_skill2_time = 6;
 float leftFighter_skill3_time = 6;
-float leftFighter_ultimate_time = 7;
+float leftFighter_ultimate_time = 4;
 float leftFighter_damaged_timeout = 2;
+float leftFighter_fluke_horse_timeout = 10;
 
 
 // Animation segment points
@@ -175,6 +176,8 @@ int leftFighter_get_anim_index_from_state(CharacterState state) {
         case STATE_ULTIMATE: return ultimate;
         case STATE_FALL: return fall;
         case STATE_DAMAGED: return damaged;
+        case STATE_FLUKE_HORSE: return fluke_horse;
+        case STATE_FLUKE_HORSE_WALK: return fluke_horse_walk;
         default: return idle; // Fallback to idle
     }
 }
@@ -238,7 +241,8 @@ void leftFighter_poll(SDL_Event* event){
                leftFighter_currentState != STATE_SKILL3 &&
                leftFighter_currentState != STATE_ULTIMATE &&
                leftFighter_currentState != STATE_CROUCH &&
-               leftFighter_currentState != STATE_FALL){
+               leftFighter_currentState != STATE_FALL &&
+               leftFighter_isFrozen && leftFighter_currentState != STATE_FLUKE_HORSE && leftFighter_currentState != STATE_FLUKE_HORSE_WALK){
             leftFighter_add_to_combo(INPUT_JUMP);
             if(!leftFighter_check_and_execute_skill()){
                 leftFighter_currentState = STATE_JUMP;
@@ -337,7 +341,7 @@ void leftFighter_poll(SDL_Event* event){
                 allFighters[rs_leftfighter]->ultimate(leftFighter);
             }
         
-                // printf("ULTIMATE ACTIVATED!\n");
+                // printf("ULTIMATE ACTIVATED!\n");e
             }
         
     }
@@ -453,10 +457,25 @@ void leftFighter_loop(){
     } else if (leftFighter_currentState == STATE_ULTIMATE) {
         leftFighter_stateTimer += delta;
         if (leftFighter_stateTimer >= leftFighter_ultimate_time) {
+            if(rs_leftfighter != 0){
+                leftFighter_currentState = STATE_IDLE;
+                leftFighter_stateTimer = 0.0f;
+            }
+            else{
+                leftFighter_currentState = STATE_FLUKE_HORSE;
+                leftFighter_stateTimer = 0.0f;
+            }
+            
+        }
+    }
+    else if (leftFighter_currentState == STATE_FLUKE_HORSE) {
+        leftFighter_stateTimer += delta;
+        if (leftFighter_stateTimer >= leftFighter_fluke_horse_timeout) {
             leftFighter_currentState = STATE_IDLE;
             leftFighter_stateTimer = 0.0f;
         }
-    } else {
+    }
+    else {
         // Reset timer if not in an attack state
         leftFighter_stateTimer = 0.0f;
     }
@@ -509,7 +528,12 @@ void leftFighter_loop(){
             leftFighter->x -= leftFighter_moveSpeed * delta;
             leftFighter_facingRight = 0;
             if(leftFighter_isGrounded && leftFighter_currentState != STATE_CROUCH){
-                leftFighter_currentState = STATE_WALK;
+                if(rs_leftfighter == 0 && (leftFighter_currentState == STATE_FLUKE_HORSE || leftFighter_currentState == STATE_FLUKE_HORSE_WALK)){
+                    leftFighter_currentState = STATE_FLUKE_HORSE_WALK;
+                }
+                else{
+                    leftFighter_currentState = STATE_WALK;
+                }
             }
             moving = 1;
         }
@@ -518,13 +542,23 @@ void leftFighter_loop(){
             leftFighter->x += leftFighter_moveSpeed * delta;
             leftFighter_facingRight = 1;
             if(leftFighter_isGrounded && leftFighter_currentState != STATE_CROUCH){
-                leftFighter_currentState = STATE_WALK;
+                if(rs_leftfighter == 0 && (leftFighter_currentState == STATE_FLUKE_HORSE || leftFighter_currentState == STATE_FLUKE_HORSE_WALK)){
+                    leftFighter_currentState = STATE_FLUKE_HORSE_WALK;
+                }
+                else{
+                    leftFighter_currentState = STATE_WALK;
+                }
             }
             moving = 1;
         }
         // ถ้าไม่กดปุ่มใดๆ และอยู่บนพื้น ให้ idle
         else if(!moving && leftFighter_isGrounded && leftFighter_currentState != STATE_JUMP){
-            leftFighter_currentState = STATE_IDLE;
+            if(rs_leftfighter == 0 && leftFighter_currentState == STATE_FLUKE_HORSE_WALK){
+                leftFighter_currentState = STATE_FLUKE_HORSE;
+            }
+            else if (leftFighter_currentState != STATE_FLUKE_HORSE){
+                leftFighter_currentState = STATE_IDLE;
+            }
         }
     }
     

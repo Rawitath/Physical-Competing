@@ -53,6 +53,13 @@ typedef enum {
 static FightState currentFightState;
 static float fightStateTimer;
 
+// Timers and constants for Fluke's horse collision damage
+static float left_horse_damage_timer = 0.0f;
+static float right_horse_damage_timer = 0.0f;
+const float HORSE_DAMAGE_COOLDOWN = 0.5f; // Time between damage ticks
+const int HORSE_COLLISION_DAMAGE = 5;     // Damage per tick
+
+
 // Global entity pointer
 Entity* fightcontroller;
 
@@ -144,7 +151,6 @@ void fightcontroller_loop() {
                 freeze_fighters();
             }
             break;
-
         case FIGHT_STATE_ROUND_OVER:
             freeze_fighters();
             // Wait for 5 seconds
@@ -160,7 +166,29 @@ void fightcontroller_loop() {
             // We could transition to another scene after the fade.
             break;
     }
+
+    // Horse collision damage logic, should run only when fighting
+    if (currentFightState == FIGHT_STATE_FIGHTING) {
+        left_horse_damage_timer += delta;
+        right_horse_damage_timer += delta;
+
+        // Check for collision between fighters
+        int colliding = fabsf(leftFighter->x - rightFighter->x) < (leftFighter->w + rightFighter->w) / 2 &&
+                        fabsf(leftFighter->y - rightFighter->y) < (leftFighter->h + rightFighter->h) / 2;
+
+        if (colliding) {
+            if (leftFighter_currentState == STATE_FLUKE_HORSE_WALK && left_horse_damage_timer >= HORSE_DAMAGE_COOLDOWN) {
+                rightFighter_subtract_health(HORSE_COLLISION_DAMAGE);
+                left_horse_damage_timer = 0.0f;
+            }
+            if (rightFighter_currentState == STATE_FLUKE_HORSE_WALK && right_horse_damage_timer >= HORSE_DAMAGE_COOLDOWN) {
+                leftFighter_subtract_health(HORSE_COLLISION_DAMAGE);
+                right_horse_damage_timer = 0.0f;
+            }
+        }
+    }
 }
+
 
 void freeze_fighters() {
     leftFighter_set_frozen(1);
