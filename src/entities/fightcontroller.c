@@ -12,6 +12,7 @@
 #include <math.h>
 #include "fighterstruct.h"
 #include "../scenecontroller.h"
+#include "asia.h"
 #include "bas.h"
 #include <stdio.h>
 
@@ -149,6 +150,10 @@ void fightcontroller_loop() {
             bas_ultimate_update();
             // ==========================================
 
+            // ===== ASIA ULTIMATE MULTI-HIT UPDATE =====
+            asia_ultimate_update();
+            // ==========================================
+            
             // Check for round end
             if (currentTime <= 0 || leftFighter_health <= 0 || rightFighter_health <= 0) {
                 currentFightState = FIGHT_STATE_ROUND_OVER;
