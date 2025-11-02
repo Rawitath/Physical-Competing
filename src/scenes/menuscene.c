@@ -88,10 +88,9 @@ void menuscene_load(){
     add_entity(menuscene, p1select);
     add_entity(menuscene, p2select);
     add_entity(menuscene, selectioncheck);
-    add_entity(menuscene, shadescreen);
-
     add_entity(menuscene, leftnamedisplay);
     add_entity(menuscene, rightnamedisplay);
+    add_entity(menuscene, shadescreen);
 
     allBanners_size = 4;
     allBanners[0] = flukebanner;

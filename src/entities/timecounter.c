@@ -33,8 +33,8 @@ void counter_set_time(int time)
 
 void timecounter_init(){
     timecounter = ui_create_text(
-            "res/UPCDL.TTF",
-            72,
+            "res/Bangers-Regular.ttf",
+            56,
             &timecounter_start,
             &timecounter_poll,
             &timecounter_loop,
