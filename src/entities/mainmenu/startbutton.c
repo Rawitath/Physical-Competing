@@ -19,7 +19,7 @@ void startbutton_destroy();
 
 void startbutton_init(){
     startbutton = ui_create_image(
-            "res/ui/tornpaper.png",
+            "res/ui/startbutton.png",
             &startbutton_start,
             &startbutton_poll,
             &startbutton_loop,

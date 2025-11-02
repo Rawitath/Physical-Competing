@@ -46,6 +46,27 @@
         "functional": "c",
         "allbanner.h": "c",
         "asiabanner.h": "c",
-        "animation.h": "c"
+        "animation.h": "c",
+        "bit": "c",
+        "charconv": "c",
+        "compare": "c",
+        "cstddef": "c",
+        "iterator": "c",
+        "limits": "c",
+        "sstream": "c",
+        "system_error": "c",
+        "type_traits": "c",
+        "xhash": "c",
+        "xiosbase": "c",
+        "xlocbuf": "c",
+        "playerinput.h": "c",
+        "fighterstruct.h": "c",
+        "sdl_scancode.h": "c",
+        "playerkeybind.h": "c",
+        "roundsystem.h": "c",
+        "leftfighter.h": "c",
+        "rightnamedisplay.h": "c",
+        "allfighterstruct.h": "c",
+        "basbanner.h": "c"
     }
 }

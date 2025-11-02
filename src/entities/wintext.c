@@ -13,8 +13,8 @@ void wintext_destroy();
 
 void wintext_init(){    
     wintext = ui_create_text(
-            "res/UPCDL.TTF",
-            240,
+            "res/Bangers-Regular.ttf",
+            150,
             &wintext_start,
             &wintext_poll,
             &wintext_loop,
@@ -26,6 +26,7 @@ void wintext_init(){
 void wintext_start(){
     wintext->x = 50;
     wintext->y = 50;
+    set_text_color(wintext, 253, 47, 6, SDL_ALPHA_OPAQUE);
 }
 void wintext_poll(SDL_Event* event){
     

@@ -15,7 +15,7 @@ void rightfighterdisplay_render(SDL_Renderer* renderer);
 void rightfighterdisplay_destroy();
 
 void rightfighterdisplay_init(){
-    rightfighterdisplay = ui_create_image(
+    rightfighterdisplay = create_entity(
             NULL,
             &rightfighterdisplay_start,
             &rightfighterdisplay_poll,
@@ -41,12 +41,13 @@ void rightfighterdisplay_select(int select)
 }
 
 void rightfighterdisplay_start(){
-    rightfighterdisplay->x = 50;
-    rightfighterdisplay->y = 0;
-    rightfighterdisplay->w = 7;
-    rightfighterdisplay->h = 9;
+    rightfighterdisplay->x = 500;
+    rightfighterdisplay->y = -200;
+    rightfighterdisplay->w = 80;
+    rightfighterdisplay->h = 80;
     rightfighterdisplay->anchorX = -rightfighterdisplay->w / 2;
     rightfighterdisplay->anchorY = -rightfighterdisplay->h / 2;
+    set_text_color(rightfighterdisplay, 253, 47, 6, SDL_ALPHA_OPAQUE);
 }
 void rightfighterdisplay_poll(SDL_Event* event){
     

@@ -1,31 +1,37 @@
 typedef struct Animation Animation;
 typedef struct Entity Entity;
 
-#define idle 0
-#define walk 2
-#define jump 4
-#define crouch 6
-#define crouching 8
-#define light1 10
-#define light2 12
-#define light3 14
-#define heavy1 16
-#define heavy2 18
-#define heavy3 20
-#define crouch_light1 22
-#define crouch_light2 24
-#define crouch_light3 26
-#define crouch_heavy1 28
-#define crouch_heavy2 30
-#define crouch_heavy3 32
-#define skill1 34
-#define skill2 36
-#define skill3 38
-#define ultimate 40
-#define damaged 42
-#define startle 44
-#define fall 46
-#define win 48
+enum FighterAnimState {
+    idle = 0,
+    walk = 2,
+    jump = 4,
+    crouch = 6,
+    crouching = 8,
+    light1 = 10,
+    light2 = 12,
+    light3 = 14,
+    heavy1 = 16,
+    heavy2 = 18,
+    heavy3 = 20,
+    crouch_light1 = 22,
+    crouch_light2 = 24,
+    crouch_light3 = 26,
+    crouch_heavy1 = 28,
+    crouch_heavy2 = 30,
+    crouch_heavy3 = 32,
+    skill1 = 34,
+    skill2 = 36,
+    skill3 = 38,
+    ultimate = 40,
+    damaged = 42,
+    startle = 44,
+    fall = 46,
+    win = 48,
+    block_stand = 50,
+    block_crouch = 52,
+    fluke_horse = 54,
+    fluke_horse_walk = 56
+};
 
 #define left 0;
 #define right 1;
@@ -79,12 +85,15 @@ typedef struct FighterAnim{
     // Animation* startle_right;
     // Animation* fall_left;
     // Animation* fall_right;
-    // Animation* win_left;
-    // Animation* win_right;
-    Animation* anims[50];
+    // Animation* win_left; // These comments are outdated, the array is used directly
+    // Animation* win_right; // These comments are outdated, the array is used directly
+    Animation* anims[58]; // Increased size to accommodate new animation types
+    
 } FighterAnim;
 
 FighterAnim* create_fighteranim();
 void destroy_fighteranim(FighterAnim* a);
 void assign_anim(FighterAnim* a, int index, Animation* animation);
 void play_animation(Entity* entity, FighterAnim* a, float* framecounter, int index, int side);
+void play_animation_once(Entity* entity, FighterAnim* a, float* framecounter, int index, int side, int start, int stop, void (*on_complete)(void));
+void reset_animation_frame(FighterAnim* a, int index);

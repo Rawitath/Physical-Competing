@@ -56,8 +56,7 @@ void ithallstage_set_bg(int type)
 }
 
 void ithallstage_start(){
-    counter_set_max_time(30);
-    counter_set_time(30);
+    
 }
 void ithallstage_poll(SDL_Event* event){
     // if(event->type == SDL_EVENT_KEY_DOWN){

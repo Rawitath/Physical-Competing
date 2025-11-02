@@ -1,4 +1,4 @@
-typedef struct Entity Entity;
+// typedef struct Entity Entity;
 
-Entity* myentity;
-void myentity_init();
+// Entity* myentity;
+// void myentity_init();

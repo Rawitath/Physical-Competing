@@ -1,3 +1,4 @@
+#pragma once
 typedef struct FighterAnim FighterAnim;
 
 FighterAnim* golfAnim;

@@ -1,436 +1,202 @@
-#include "../entity.h"
 #include "asia.h"
-#include "../timesystem.h"
+#include <SDL3/SDL_scancode.h>
+#include "../entity.h"
+#include "bottle.h"
 #include "../scene.h"
-#include "../scenecontroller.h"
+#include "asiaanim.h"
+#include "playerinput.h"
 #include <stdio.h>
-#include "../animation.h"
+#include <math.h>
+#include "characterstate.h"
 
-#include <SDL3/SDL.h>
+Fighter asia;
 
-void asia_start();
-void asia_poll(SDL_Event* event);
-void asia_loop();
-void asia_render(SDL_Renderer* renderer);
-void asia_destroy();
+void asia_skill1(Entity* fighter, int direction);
+void asia_skill2(Entity* fighter, int direction);
+void asia_skill3(Entity* fighter, int direction);
+void asia_ultimate(Entity* fighter);
 
-void set_animation(Animation* anim);
+// Ultimate hit tracking
+typedef struct {
+    int active;
+    int hitCount;
+    float hitTimer;
+    float hitInterval;
+    int totalHits;
+    int damagePerHit;
+    float range;
+} UltimateState;
 
-void asia_init(){
-    asia = create_entity(
-            "res/lucystar.png",
-            &asia_start,
-            &asia_poll,
-            &asia_loop,
-            &asia_render,
-            &asia_destroy
-        );
+static UltimateState leftAsia_ultimate = {0};
+static UltimateState rightAsia_ultimate = {0};
+
+void asia_init() {
+    asia.id = 0;
+    asia.speed = 9.0f;
+    asia.name = "Drunken Homeless";
+    
+    // Attack times
+    asia.lightAttackTime = 0.3f;
+    asia.heavyAttackTime = 0.6f;
+    asia.crouchLightAttackTime = 0.4f;
+    asia.crouchHeavyAttackTime = 0.7f;
+    asia.skill1Time = 4;
+    asia.skill2Time = 2.5;
+    asia.skill3Time = 3.5;
+    asia.ultimateTime = 6;
+    
+    // Attack damage (asia - Balanced fighter)
+    asia.lightDamage = 5;
+    asia.heavyDamage = 10;
+    asia.crouchLightDamage = 4;
+    asia.crouchHeavyDamage = 8;
+    asia.skill1Damage = 15;      // มาตรฐาน
+    asia.skill2Damage = 18;      // มาตรฐาน
+    asia.skill3Damage = 20;      // มาตรฐาน
+    asia.ultimateDamage = 30;    // 10 damage per hit × 3 hits
+    
+    // Attack ranges (asia - Medium range)
+    asia.lightRange = 1.5f;
+    asia.heavyRange = 1.8f;
+    asia.crouchLightRange = 1.3f;
+    asia.crouchHeavyRange = 1.5f;
+    asia.skill1Range = 2.5f;     // มาตรฐาน
+    asia.skill2Range = 2.5f;     // มาตรฐาน
+    asia.skill3Range = 2.5f;     // มาตรฐาน
+    asia.ultimateRange = 3.0f;   // มาตรฐาน
+    
+    asia.fighterAnim = asiaAnim;
+
+    asia.skill1 = &asia_skill1;
+    asia.skill1Time = 4;
+    asia.skill1Keys[0] = INPUT_LIGHT;
+    asia.skill1Keys[1] = INPUT_LIGHT;
+    asia.skill1Keys[2] = INPUT_HEAVY;
+    asia.skill1Keys[3] = INPUT_JUMP;
+
+    asia.skill2 = &asia_skill2;
+    asia.skill2Time = 5;
+    asia.skill2Keys[0] = INPUT_JUMP;
+    asia.skill2Keys[1] = INPUT_JUMP;
+    asia.skill2Keys[2] = INPUT_LIGHT;
+    asia.skill2Keys[3] = INPUT_HEAVY;
+
+    asia.skill3 = &asia_skill3;
+    asia.skill3Time = 3.5;
+    asia.skill3Keys[0] = INPUT_LIGHT;
+    asia.skill3Keys[1] = INPUT_LIGHT;
+    asia.skill3Keys[2] = INPUT_LIGHT;
+    asia.skill3Keys[3] = INPUT_LIGHT;
+
+    asia.ultimate = &asia_ultimate;
+    asia.ultimateTime = 6;
 }
 
-// Animation pointers
-Animation* idleLeft = NULL;
-Animation* idleRight = NULL;
-Animation* walkLeft = NULL;
-Animation* walkRight = NULL;
-Animation* crouchLeft = NULL;
-Animation* crouchRight = NULL;
-Animation* jumpLeft = NULL;
-Animation* jumpRight = NULL;
-Animation* lightPunchLeft = NULL;
-Animation* lightPunchRight = NULL;
-Animation* heavyPunchLeft = NULL;
-Animation* heavyPunchRight = NULL;
-Animation* blockStandLeft = NULL;
-Animation* blockStandRight = NULL;
-Animation* blockCrouchLeft = NULL;
-Animation* blockCrouchRight = NULL;
-Animation* lowPunchLeft = NULL;
-Animation* lowPunchRight = NULL;
-Animation* skill1Left = NULL;
-Animation* skill1Right = NULL;
-Animation* skill2Left = NULL;
-Animation* skill2Right = NULL;
-Animation* skill3Left = NULL;
-Animation* skill3Right = NULL;
-Animation* ultimateLeft = NULL;
-Animation* ultimateRight = NULL;
+//drink
+void asia_skill1(Entity* fighter, int direction) {}
+//throw
+void asia_skill2(Entity* fighter, int direction) {
+    if(!bottle) bottle_init();
+    add_entity(fighter->scene, bottle);
+    release_bottle(fighter->x, fighter->y, direction);
+}
+// hit
+void asia_skill3(Entity* fighter, int direction) {}
 
-// State variables
-typedef enum {
-    STATE_IDLE,
-    STATE_WALK,
-    STATE_CROUCH,
-    STATE_JUMP,
-    STATE_LIGHT_PUNCH,
-    STATE_HEAVY_PUNCH,
-    STATE_BLOCK_STAND,
-    STATE_BLOCK_CROUCH,
-    STATE_LOW_PUNCH,
-    STATE_SKILL1,
-    STATE_SKILL2,
-    STATE_SKILL3,
-    STATE_ULTIMATE
-} CharacterState;
+// Check if target is in range
+int asia_is_in_ultimate_range(float attacker_x, float target_x, float range) {
+    return fabsf(target_x - attacker_x) <= range;
+}
 
-CharacterState currentState = STATE_IDLE;
-int facingRight = 0; // 0 = left, 1 = right
-float velocityY = 0;
-float gravity = 800.0f;
-float jumpForce = 300.0f;
-int isGrounded = 1;
-float moveSpeed = 200.0f;
-
-Animation* currentAnim = NULL;
-
-// Combo system
-#define MAX_COMBO_LENGTH 4
-#define COMBO_TIMEOUT 2.0f
-
-typedef enum {
-    INPUT_NONE,
-    INPUT_LIGHT,  // J or 2
-    INPUT_HEAVY   // K or 3
-} ComboInput;
-
-ComboInput comboBuffer[MAX_COMBO_LENGTH];
-int comboCount = 0;
-float comboTimer = 0.0f;
-
-void reset_combo() {
-    comboCount = 0;
-    comboTimer = 0.0f;
-    for(int i = 0; i < MAX_COMBO_LENGTH; i++) {
-        comboBuffer[i] = INPUT_NONE;
+void asia_ultimate(Entity* fighter) {
+    // Determine which fighter this is (left or right)
+    extern Entity* leftFighter;
+    extern Entity* rightFighter;
+    
+    UltimateState* state = NULL;
+    
+    if (fighter == leftFighter) {
+        state = &leftAsia_ultimate;
+    } else if (fighter == rightFighter) {
+        state = &rightAsia_ultimate;
+    }
+    
+    if (state) {
+        // Initialize ultimate state
+        state->active = 1;
+        state->hitCount = 0;
+        state->hitTimer = 0.0f;
+        state->hitInterval = 0.4f;  // 0.4 seconds between each hit
+        state->totalHits = 3;        // 3 hits total
+        state->damagePerHit = 11;    // 10 damage per hit (30 total)
+        state->range = asia.ultimateRange;
     }
 }
 
-void add_to_combo(ComboInput input) {
-    if(comboCount < MAX_COMBO_LENGTH) {
-        comboBuffer[comboCount] = input;
-        comboCount++;
-        comboTimer = 0.0f;
-    }
-}
-
-int check_combo_pattern(ComboInput p1, ComboInput p2, ComboInput p3, ComboInput p4) {
-    if(comboCount != 4) return 0;
-    return (comboBuffer[0] == p1 && 
-            comboBuffer[1] == p2 && 
-            comboBuffer[2] == p3 && 
-            comboBuffer[3] == p4);
-}
-
-int check_and_execute_skill() {
-    // TODO: เพิ่มคอมโบสำหรับ asia ที่นี่
-    // Skill 1: ???
+// This function should be called in the main game loop (fightcontroller)
+void asia_ultimate_update() {
+    extern Entity* leftFighter;
+    extern Entity* rightFighter;
+    extern CharacterState leftFighter_currentState;
+    extern CharacterState rightFighter_currentState;
     
-    // Skill 2: ???
-    
-    // Skill 3: ???
-    
-    return 0;
-}
-
-void set_animation(Animation* anim) {
-    if (currentAnim != anim) {
-        currentAnim = anim;
-        if (anim) {
-            anim->currentFrame = 0;
-        }
-    }
-}
-
-void asia_start(){
-    idleLeft = create_animation("res/fighters/asia/idle_left", 15);
-    idleRight = create_animation("res/fighters/asia/idle_right", 15);
-    walkLeft = create_animation("res/fighters/asia/walk_left", 15);
-    walkRight = create_animation("res/fighters/asia/walk_right", 15);
-    crouchLeft = create_animation("res/fighters/asia/crouch_left", 15);
-    crouchRight = create_animation("res/fighters/asia/crouch_right", 15);
-    jumpLeft = create_animation("res/fighters/asia/jump_left", 15);
-    jumpRight = create_animation("res/fighters/asia/jump_right", 15);
-    lightPunchLeft = create_animation("res/fighters/asia/light_punch_left", 20);
-    lightPunchRight = create_animation("res/fighters/asia/light_punch_right", 20);
-    heavyPunchLeft = create_animation("res/fighters/asia/heavy_punch_left", 20);
-    heavyPunchRight = create_animation("res/fighters/asia/heavy_punch_right", 20);
-    blockStandLeft = create_animation("res/fighters/asia/block_stand_left", 10);
-    blockStandRight = create_animation("res/fighters/asia/block_stand_right", 10);
-    blockCrouchLeft = create_animation("res/fighters/asia/block_crouch_left", 10);
-    blockCrouchRight = create_animation("res/fighters/asia/block_crouch_right", 10);
-    lowPunchLeft = create_animation("res/fighters/asia/low_punch_left", 20);
-    lowPunchRight = create_animation("res/fighters/asia/low_punch_right", 20);
-    skill1Left = create_animation("res/fighters/asia/skill1_left", 25);
-    skill1Right = create_animation("res/fighters/asia/skill1_right", 25);
-    skill2Left = create_animation("res/fighters/asia/skill2_left", 25);
-    skill2Right = create_animation("res/fighters/asia/skill2_right", 25);
-    skill3Left = create_animation("res/fighters/asia/skill3_left", 25);
-    skill3Right = create_animation("res/fighters/asia/skill3_right", 25);
-    ultimateLeft = create_animation("res/fighters/asia/ultimate_left", 30);
-    ultimateRight = create_animation("res/fighters/asia/ultimate_right", 30);
-    
-    currentAnim = idleLeft;
-    set_image(asia, currentAnim->paths[currentAnim->currentFrame]);
-    reset_combo();
-}
-
-void asia_poll(SDL_Event* event){
-    if(event->type == SDL_EVENT_KEY_DOWN){
-        if((event->key.scancode == SDL_SCANCODE_W || 
-            event->key.scancode == SDL_SCANCODE_UP) && isGrounded){
-            currentState = STATE_JUMP;
-            velocityY = jumpForce;
-            isGrounded = 0;
-        }
-        
-        if(event->key.scancode == SDL_SCANCODE_J || 
-           event->key.scancode == SDL_SCANCODE_2){
-            if(currentState != STATE_LIGHT_PUNCH && 
-               currentState != STATE_HEAVY_PUNCH &&
-               currentState != STATE_LOW_PUNCH &&
-               currentState != STATE_SKILL1 &&
-               currentState != STATE_SKILL2 &&
-               currentState != STATE_SKILL3 &&
-               currentState != STATE_ULTIMATE &&
-               currentState != STATE_CROUCH &&
-               currentState != STATE_BLOCK_CROUCH){
-                
-                add_to_combo(INPUT_LIGHT);
-                
-                if(!check_and_execute_skill()) {
-                    currentState = STATE_LIGHT_PUNCH;
-                    if(facingRight){
-                        set_animation(lightPunchRight);
-                    } else {
-                        set_animation(lightPunchLeft);
-                    }
-                }
-                
-                printf("Combo: ");
-                for(int i = 0; i < comboCount; i++) {
-                    printf("%d ", comboBuffer[i]);
-                }
-                printf("\n");
-            }
-        }
-        
-        if(event->key.scancode == SDL_SCANCODE_K || 
-           event->key.scancode == SDL_SCANCODE_3){
-            if(currentState != STATE_LIGHT_PUNCH && 
-               currentState != STATE_HEAVY_PUNCH &&
-               currentState != STATE_LOW_PUNCH &&
-               currentState != STATE_SKILL1 &&
-               currentState != STATE_SKILL2 &&
-               currentState != STATE_SKILL3 &&
-               currentState != STATE_ULTIMATE &&
-               currentState != STATE_CROUCH &&
-               currentState != STATE_BLOCK_CROUCH){
-                
-                add_to_combo(INPUT_HEAVY);
-                
-                if(!check_and_execute_skill()) {
-                    currentState = STATE_HEAVY_PUNCH;
-                    if(facingRight){
-                        set_animation(heavyPunchRight);
-                    } else {
-                        set_animation(heavyPunchLeft);
-                    }
-                }
-                
-                printf("Combo: ");
-                for(int i = 0; i < comboCount; i++) {
-                    printf("%d ", comboBuffer[i]);
-                }
-                printf("\n");
-            }
-        }
-        
-        if(event->key.scancode == SDL_SCANCODE_I || 
-           event->key.scancode == SDL_SCANCODE_5){
-            if(currentState != STATE_LIGHT_PUNCH && 
-               currentState != STATE_HEAVY_PUNCH &&
-               currentState != STATE_LOW_PUNCH &&
-               currentState != STATE_SKILL1 &&
-               currentState != STATE_SKILL2 &&
-               currentState != STATE_SKILL3 &&
-               currentState != STATE_ULTIMATE &&
-               currentState != STATE_CROUCH &&
-               currentState != STATE_BLOCK_CROUCH &&
-               currentState != STATE_BLOCK_STAND){
-                
-                currentState = STATE_ULTIMATE;
-                if(facingRight){
-                    set_animation(ultimateRight);
-                } else {
-                    set_animation(ultimateLeft);
-                }
-                printf("ULTIMATE ACTIVATED!\n");
-            }
-        }
-    }
-}
-
-float animTimer = 0;
-
-void asia_loop(){
     float delta = get_delta();
     
-    if(comboCount > 0) {
-        comboTimer += delta;
-        if(comboTimer >= COMBO_TIMEOUT) {
-            printf("Combo timeout! Resetting...\n");
-            reset_combo();
-        }
-    }
-    
-    if(animTimer < 1.0f / currentAnim->fps){
-        animTimer += delta;
-    } else {
-        if(currentAnim->currentFrame < currentAnim->imageCount - 1){
-            currentAnim->currentFrame++;
-        } else {
-            currentAnim->currentFrame = 0;
+    // Update left fighter's ultimate
+    if (leftAsia_ultimate.active) {
+        leftAsia_ultimate.hitTimer += delta;
+        
+        // Check if it's time for the next hit
+        if (leftAsia_ultimate.hitTimer >= leftAsia_ultimate.hitInterval) {
+            leftAsia_ultimate.hitTimer = 0.0f;
             
-            if(currentState == STATE_LIGHT_PUNCH || 
-               currentState == STATE_HEAVY_PUNCH ||
-               currentState == STATE_SKILL1 ||
-               currentState == STATE_SKILL2 ||
-               currentState == STATE_SKILL3 ||
-               currentState == STATE_ULTIMATE){
-                currentState = STATE_IDLE;
-            }
-            if(currentState == STATE_LOW_PUNCH){
-                currentState = STATE_CROUCH;
-            }
-        }
-        set_image(asia, currentAnim->paths[currentAnim->currentFrame]);
-        animTimer = 0;
-    }
-    
-    const bool* keyState = SDL_GetKeyboardState(NULL);
-    
-    int isBlocking = keyState[SDL_SCANCODE_L] || keyState[SDL_SCANCODE_1];
-    int isCrouching = keyState[SDL_SCANCODE_S] || keyState[SDL_SCANCODE_DOWN];
-    
-    if(currentState != STATE_LIGHT_PUNCH && 
-       currentState != STATE_HEAVY_PUNCH && 
-       currentState != STATE_LOW_PUNCH &&
-       currentState != STATE_SKILL1 &&
-       currentState != STATE_SKILL2 &&
-       currentState != STATE_SKILL3 &&
-       currentState != STATE_ULTIMATE){
-        
-        int moving = 0;
-        
-        if(isBlocking && isCrouching && isGrounded){
-            currentState = STATE_BLOCK_CROUCH;
-            if(facingRight){
-                set_animation(blockCrouchRight);
-            } else {
-                set_animation(blockCrouchLeft);
-            }
-        }
-        else if(isBlocking && isGrounded && currentState != STATE_JUMP){
-            currentState = STATE_BLOCK_STAND;
-            if(facingRight){
-                set_animation(blockStandRight);
-            } else {
-                set_animation(blockStandLeft);
-            }
-        }
-        else if(isCrouching && isGrounded){
-            currentState = STATE_CROUCH;
-            if(facingRight){
-                set_animation(crouchRight);
-            } else {
-                set_animation(crouchLeft);
+            // Check if target is in range
+            if (asia_is_in_ultimate_range(leftFighter->x, rightFighter->x, leftAsia_ultimate.range)) {
+                // Deal damage
+                rightFighter_subtract_health(leftAsia_ultimate.damagePerHit);
+                leftFighter_add_ultimate(leftAsia_ultimate.damagePerHit / 3);
             }
             
-            if(keyState[SDL_SCANCODE_J] || keyState[SDL_SCANCODE_2]){
-                currentState = STATE_LOW_PUNCH;
-                if(facingRight){
-                    set_animation(lowPunchRight);
-                } else {
-                    set_animation(lowPunchLeft);
-                }
+            leftAsia_ultimate.hitCount++;
+            
+            // Check if we've done all hits
+            if (leftAsia_ultimate.hitCount >= leftAsia_ultimate.totalHits) {
+                leftAsia_ultimate.active = 0;
             }
         }
-        else if((keyState[SDL_SCANCODE_A] || keyState[SDL_SCANCODE_LEFT]) && !isCrouching){
-            asia->x -= moveSpeed * delta;
-            facingRight = 0;
-            if(isGrounded && currentState != STATE_CROUCH){
-                currentState = STATE_WALK;
-                set_animation(walkLeft);
-            }
-            moving = 1;
-        }
-        else if((keyState[SDL_SCANCODE_D] || keyState[SDL_SCANCODE_RIGHT]) && !isCrouching){
-            asia->x += moveSpeed * delta;
-            facingRight = 1;
-            if(isGrounded && currentState != STATE_CROUCH){
-                currentState = STATE_WALK;
-                set_animation(walkRight);
-            }
-            moving = 1;
-        }
-        else if(!moving && isGrounded && currentState != STATE_JUMP){
-            currentState = STATE_IDLE;
-            if(facingRight){
-                set_animation(idleRight);
-            } else {
-                set_animation(idleLeft);
-            }
+        
+        // Deactivate if no longer in ultimate state
+        if (leftFighter_currentState != STATE_ULTIMATE) {
+            leftAsia_ultimate.active = 0;
         }
     }
     
-    if(!isGrounded){
-        velocityY -= gravity * delta;
-        asia->y += velocityY * delta;
+    // Update right fighter's ultimate
+    if (rightAsia_ultimate.active) {
+        rightAsia_ultimate.hitTimer += delta;
         
-        if(facingRight){
-            set_animation(jumpRight);
-        } else {
-            set_animation(jumpLeft);
+        // Check if it's time for the next hit
+        if (rightAsia_ultimate.hitTimer >= rightAsia_ultimate.hitInterval) {
+            rightAsia_ultimate.hitTimer = 0.0f;
+            
+            // Check if target is in range
+            if (asia_is_in_ultimate_range(rightFighter->x, leftFighter->x, rightAsia_ultimate.range)) {
+                // Deal damage
+                leftFighter_subtract_health(rightAsia_ultimate.damagePerHit);
+                rightFighter_add_ultimate(rightAsia_ultimate.damagePerHit / 3);
+            }
+            
+            rightAsia_ultimate.hitCount++;
+            
+            // Check if we've done all hits
+            if (rightAsia_ultimate.hitCount >= rightAsia_ultimate.totalHits) {
+                rightAsia_ultimate.active = 0;
+            }
         }
         
-        if(asia->y <= 0){
-            asia->y = 0;
-            velocityY = 0;
-            isGrounded = 1;
-            currentState = STATE_IDLE;
+        // Deactivate if no longer in ultimate state
+        if (rightFighter_currentState != STATE_ULTIMATE) {
+            rightAsia_ultimate.active = 0;
         }
     }
-}
-
-void asia_render(SDL_Renderer* renderer){
-    render_entity(asia, renderer, NULL);
-}
-
-void asia_destroy(){
-    destroy_animation(idleLeft);
-    destroy_animation(idleRight);
-    destroy_animation(walkLeft);
-    destroy_animation(walkRight);
-    destroy_animation(crouchLeft);
-    destroy_animation(crouchRight);
-    destroy_animation(jumpLeft);
-    destroy_animation(jumpRight);
-    destroy_animation(lightPunchLeft);
-    destroy_animation(lightPunchRight);
-    destroy_animation(heavyPunchLeft);
-    destroy_animation(heavyPunchRight);
-    destroy_animation(blockStandLeft);
-    destroy_animation(blockStandRight);
-    destroy_animation(blockCrouchLeft);
-    destroy_animation(blockCrouchRight);
-    destroy_animation(lowPunchLeft);
-    destroy_animation(lowPunchRight);
-    destroy_animation(skill1Left);
-    destroy_animation(skill1Right);
-    destroy_animation(skill2Left);
-    destroy_animation(skill2Right);
-    destroy_animation(skill3Left);
-    destroy_animation(skill3Right);
-    destroy_animation(ultimateLeft);
-    destroy_animation(ultimateRight);
-    destroy_entity(asia);
 }

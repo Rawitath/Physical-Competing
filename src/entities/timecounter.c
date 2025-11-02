@@ -14,7 +14,7 @@ void timecounter_loop();
 void timecounter_render(SDL_Renderer* renderer);
 void timecounter_destroy();
 
-int maxTime = 10;
+int maxTime = 120;
 int currentTime;
 
 void counter_set_max_time(int time)
@@ -24,6 +24,7 @@ void counter_set_max_time(int time)
 
 void counter_set_time(int time)
 {
+    if (time < 0) time = 0;
     currentTime = time;
     char buffer[7];
     sprintf(buffer, "%d", currentTime);
@@ -32,8 +33,8 @@ void counter_set_time(int time)
 
 void timecounter_init(){
     timecounter = ui_create_text(
-            "res/UPCDL.TTF",
-            72,
+            "res/Bangers-Regular.ttf",
+            56,
             &timecounter_start,
             &timecounter_poll,
             &timecounter_loop,
@@ -60,6 +61,7 @@ void decrease_time(float* x){
         *x += get_delta();
     }
     else{
+        if (currentTime <= 0) return;
         currentTime--;
 
         char buffer[7];

@@ -14,11 +14,11 @@ void myscene_init()
 }
 
 void myscene_load(){
-    myentity_init();
+    // myentity_init();
     mytext_init();
     soundtester_init();
     
-    add_entity(myscene, myentity);
+    // add_entity(myscene, myentity);
     add_entity(myscene, mytext);
     add_entity(myscene, soundtester);
     myscene->viewportZoom = 70;
@@ -26,9 +26,9 @@ void myscene_load(){
 
 void myscene_unload(){
     remove_entity(myscene, soundtester);
-    remove_entity(myscene, myentity);
+    // remove_entity(myscene, myentity);
     remove_entity(myscene, mytext);
     soundtester->destroy();
-    myentity->destroy();
+    // myentity->destroy();
     mytext->destroy();
 }

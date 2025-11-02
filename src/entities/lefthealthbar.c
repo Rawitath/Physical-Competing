@@ -64,14 +64,7 @@ void lefthealthbar_start(){
     lefthealthbar->h = 10 * 1.285;
 }
 void lefthealthbar_poll(SDL_Event* event){
-    if(event->type == SDL_EVENT_KEY_DOWN){
-        if(event->key.scancode == SDL_SCANCODE_1){
-            lefthealthbar_subtract_health(1);
-        }
-        if(event->key.scancode == SDL_SCANCODE_2){
-            lefthealthbar_add_health(1);
-        }
-    }
+    
 }
 
 void lefthealthbar_loop(){

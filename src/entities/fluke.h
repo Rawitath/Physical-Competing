@@ -1,4 +1,9 @@
-typedef struct Entity Entity;
+#ifndef FLUKE_H
+#define FLUKE_H
 
-Entity* fluke;
+#include "fighterstruct.h"
+
+extern Fighter fluke;
 void fluke_init();
+
+#endif // FLUKE_H

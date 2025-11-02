@@ -57,8 +57,31 @@ void golfAnim_init()
     golfAnim->anims[fall + 1] = create_animation("res/fighters/golf/fall_right", fps);
     golfAnim->anims[win] = create_animation("res/fighters/golf/win_left", fps);
     golfAnim->anims[win + 1] = create_animation("res/fighters/golf/win_right", fps);
+    // Add block animations
+    golfAnim->anims[block_stand] = create_animation("res/fighters/golf/block_stand_left", fps);
+    golfAnim->anims[block_stand + 1] = create_animation("res/fighters/golf/block_stand_right", fps);
+    golfAnim->anims[block_crouch] = create_animation("res/fighters/golf/block_crouch_left", fps);
+    golfAnim->anims[block_crouch + 1] = create_animation("res/fighters/golf/block_crouch_right", fps);
 
-    for(int i = 0; i < 50; i++){
+    for(int i = 0; i < sizeof(golfAnim->anims) / sizeof(golfAnim->anims[0]); i++){
+        if(!golfAnim->anims[i]){
+            continue;
+        }
+        for(int j = 0; j < golfAnim->anims[i]->imageCount; j++){
+            if(i == idle || i == idle + 1){
+                golfAnim->anims[i]->offsets[j].x = 0;
+            golfAnim->anims[i]->offsets[j].y = -2.7;
+            golfAnim->anims[i]->offsets[j].w = 0.75;
+            golfAnim->anims[i]->offsets[j].h = 0.75;
+            }
+            else{
+                golfAnim->anims[i]->offsets[j].x = 0;
+            golfAnim->anims[i]->offsets[j].y = -2.7;
+            golfAnim->anims[i]->offsets[j].w = 0.95;
+            golfAnim->anims[i]->offsets[j].h = 0.95;
+            }
+            
+        }
         golfAnim->anims[i]->frameSkip = 1;
     }
 }

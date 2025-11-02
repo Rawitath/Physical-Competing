@@ -37,6 +37,11 @@ Animation* create_animation(const char* animDir, float fps){
             // Handle malloc failure if necessary
             anim->paths[i] = NULL; 
         }
+        anim->offsets[i].index = i;
+        anim->offsets[i].x = 0;
+        anim->offsets[i].y = 0;
+        anim->offsets[i].w = 1;
+        anim->offsets[i].h = 1;
     }
 
     return anim;

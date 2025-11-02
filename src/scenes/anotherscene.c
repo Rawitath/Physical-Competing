@@ -14,12 +14,12 @@ void anotherscene_init()
 }
 
 void anotherscene_load(){
-    myentity_init();    
-    add_entity(anotherscene, myentity);
+    // myentity_init();    
+    // add_entity(anotherscene, myentity);
     anotherscene->viewportZoom = 30.7;
 }
 
 void anotherscene_unload(){
-    remove_entity(anotherscene, myentity);
-    myentity->destroy();
+    // remove_entity(anotherscene, myentity);
+    // myentity->destroy();
 }

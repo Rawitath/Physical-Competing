@@ -1,4 +1,9 @@
-typedef struct Entity Entity;
+#ifndef BAS_H
+#define BAS_H
 
-Entity* bas;
+#include "fighterstruct.h"
+
+extern Fighter bas;
 void bas_init();
+
+#endif // BAS_H

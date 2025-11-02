@@ -27,6 +27,8 @@ void p1select_destroy();
 int p1select_selectedIndex = 0;
 int p1select_confirmed = 0;
 
+float p1select_timer = 0;
+
 void p1select_init(){
     p1select = ui_create_image(
             "res/ui/selector1.png",
@@ -45,7 +47,7 @@ void p1select_start(){
 void p1select_poll(SDL_Event* event){
     if(*menustate_state == 1){
         if(event->type == SDL_EVENT_KEY_DOWN){
-            if(event->key.scancode == SDL_SCANCODE_J){
+            if(event->key.scancode == SDL_SCANCODE_J && p1select_timer >= 1){
                 p1select_confirmed = !p1select_confirmed;
                 leftfighterdisplay_select(p1select_confirmed);
             }
@@ -69,6 +71,9 @@ void p1select_poll(SDL_Event* event){
 }
 
 void p1select_loop(){
+    if(p1select_timer < 5 && *menustate_state == 1){
+        p1select_timer += get_delta();
+    }
     leftfighterdisplay_set_fighter(allFighters[p1select_selectedIndex]);
     p1select->x = allBanners[p1select_selectedIndex]->x;
     p1select->y = allBanners[p1select_selectedIndex]->y;

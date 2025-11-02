@@ -11,7 +11,21 @@
 #include "../entities/rightbanner.h"
 #include "../entities/leftbanner.h"
 #include "../entities/stageui.h"
+#include "../entities/leftFighter.h"
+#include "../entities/rightFighter.h"
+#include "../entities/flukeanim.h";
+#include "../entities/fightcontroller.h"
+#include "../entities/golfanim.h";
+#include "../entities/basanim.h";
+#include "../entities/fighteranim.h";
 
+#include "../entities/allfighterstruct.h"
+#include "../entities/asia.h"
+#include "../entities/bas.h"
+#include "../entities/fluke.h"
+#include "../entities/golf.h"
+
+#include "../entities/selectionmenu/shadescreen.h"
 #include <stdio.h>
 
 void ithallscene_load();
@@ -23,6 +37,16 @@ void ithallscene_init()
 }
 
 void ithallscene_load(){
+    golfAnim_init();
+    flukeAnim_init();
+    basAnim_init();
+    asiaAnim_init();
+
+    asia_init();
+    bas_init();
+    fluke_init();
+    golf_init();
+
     ithallstage_init();
     timecounter_init();
     wintext_init();
@@ -33,8 +57,16 @@ void ithallscene_load(){
     stageui_init();
     leftultibar_init();
     rightultibar_init();
+    leftFighter_init();
+    rightFighter_init();
+    fightcontroller_init();
+    shadescreen_init();
+
 
     add_entity(ithallscene, ithallstage);
+
+    add_entity(ithallscene, leftFighter);
+    add_entity(ithallscene, rightFighter);
 
     add_entity(ithallscene, rightbanner);
     add_entity(ithallscene, leftbanner);
@@ -47,24 +79,36 @@ void ithallscene_load(){
     add_entity(ithallscene, righthealthbar);
     add_entity(ithallscene, leftultibar);
     add_entity(ithallscene, rightultibar);
+    add_entity(ithallscene, fightcontroller);
+    add_entity(ithallscene, shadescreen);
 
-    
+    allFighters[0] = &fluke;
+    allFighters[1] = &bas;
+    allFighters[2] = &asia;
+    allFighters[3] = &golf;
 
     ithallscene->viewportY = -2;
     ithallscene->viewportZoom = 60;
 }
 
 void ithallscene_unload(){
+    remove_entity(ithallscene, shadescreen);
+    remove_entity(ithallscene, fightcontroller);
     remove_entity(ithallscene, stageui);
     remove_entity(ithallscene, rightbanner);
     remove_entity(ithallscene, leftbanner);
-    add_entity(ithallscene, leftultibar);
-    add_entity(ithallscene, rightultibar);
+    remove_entity(ithallscene, leftultibar);
+    remove_entity(ithallscene, rightultibar);
     remove_entity(ithallscene, lefthealthbar);
     remove_entity(ithallscene, righthealthbar);
     remove_entity(ithallscene, wintext);
     remove_entity(ithallscene, timecounter);
     remove_entity(ithallscene, ithallstage);
+    remove_entity(ithallscene, leftFighter);
+    remove_entity(ithallscene, rightFighter);
+
+    fightcontroller->destroy();
+    shadescreen->destroy();
     leftultibar->destroy();
     rightultibar->destroy();
     stageui->destroy();
@@ -75,4 +119,10 @@ void ithallscene_unload(){
     wintext->destroy();
     timecounter->destroy();
     ithallstage->destroy();
+    leftFighter->destroy();
+    rightFighter->destroy();
+    
+    destroy_fighteranim(flukeAnim);
+    destroy_fighteranim(golfAnim);
+    destroy_fighteranim(basAnim);
 }
