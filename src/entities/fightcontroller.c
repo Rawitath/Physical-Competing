@@ -312,18 +312,18 @@ void check_leftfighter_attack() {
                 
                 // Add ultimate gauge for attacker
                 if (is_skill_or_ultimate) {
-                    leftFighter_add_ultimate(damage / 1.5);
+                    leftFighter_add_ultimate(damage * 1.5);
                 } else {
-                    leftFighter_add_ultimate(damage);
+                    leftFighter_add_ultimate(damage * 2.5);
                 }
             }
         } else if (is_blocked) {
             // Reduce break gauge on successful block
             int damage = get_attack_damage(leftFighter_currentState, rs_leftfighter);
-            rightFighter_subtract_break(damage / 1.5);
+            rightFighter_subtract_break(damage);
             
             // Small ultimate gain for blocker
-            rightFighter_add_ultimate(2);
+            rightFighter_add_ultimate(2 * 4);
         }
     }
     
@@ -410,18 +410,18 @@ void check_rightfighter_attack() {
                 
                 // Add ultimate gauge for attacker
                 if (is_skill_or_ultimate) {
-                    rightFighter_add_ultimate(damage / 1.5);
+                    rightFighter_add_ultimate(damage * 1.5);
                 } else {
-                    rightFighter_add_ultimate(damage);
+                    rightFighter_add_ultimate(damage * 2.5);
                 }
             }
         } else if (is_blocked) {
             // Reduce break gauge on successful block
             int damage = get_attack_damage(rightFighter_currentState, rs_rightfighter);
-            leftFighter_subtract_break(damage / 1.5);
+            leftFighter_subtract_break(damage);
             
             // Small ultimate gain for blocker
-            leftFighter_add_ultimate(2);
+            leftFighter_add_ultimate(2 * 4);
         }
     }
     
