@@ -63,14 +63,15 @@ void asiaAnim_init()
     asiaAnim->anims[block_crouch] = create_animation("res/fighters/asia/crouch_guard_right", fps * 2);
     asiaAnim->anims[block_crouch + 1] = create_animation("res/fighters/asia/crouch_guard_left", fps * 2);
 
-    // for(int i = 0; i < sizeof(asiaAnim->anims) / sizeof(asiaAnim->anims[0]); i+=2){ 
-    //     switch(i){
-    //         case jump:
-    //             asiaAnim->anims[i]->frameSkip = 1;
-    //             break;
-    //         case light1:
-    //             asiaAnim->anims[i]->frameSkip = 1;
-    //             break;
-    //     }
-    // }
+    for(int i = 0; i < sizeof(asiaAnim->anims) / sizeof(asiaAnim->anims[0]); i++){ 
+        if(!asiaAnim->anims[i]){
+            continue;
+        }
+        for(int j = 0; j < asiaAnim->anims[i]->imageCount; j++){
+            asiaAnim->anims[i]->offsets[j].x = 0;
+            asiaAnim->anims[i]->offsets[j].y = 0;
+            asiaAnim->anims[i]->offsets[j].w = 1.15;
+            asiaAnim->anims[i]->offsets[j].h = 1.15;
+        }
+    }
 }

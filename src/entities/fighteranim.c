@@ -51,6 +51,7 @@ void play_start_stop(Entity* entity, FighterAnim* a, float* framecounter, int in
     else{
         while(*framecounter > 0){
             a->anims[index + side]->currentFrame += 1 + a->anims[index + side]->frameSkip;
+            a->anims[index + side]->currentFrame %= a->anims[index + side]->imageCount - 1;
             if(a->anims[index + side]->currentFrame >= a->anims[index + side]->imageCount - 1){
                 a->anims[index + side]->currentFrame = 0;
             }
@@ -72,6 +73,7 @@ void play_animation(Entity* entity, FighterAnim* a, float* framecounter, int ind
     else{
         while(*framecounter > 0){
             a->anims[index + side]->currentFrame += 1 + a->anims[index + side]->frameSkip;
+            a->anims[index + side]->currentFrame %= a->anims[index + side]->imageCount - 1;
             if(a->anims[index + side]->currentFrame >= a->anims[index + side]->imageCount - 1){
                 a->anims[index + side]->currentFrame = 0;
             }
@@ -100,6 +102,7 @@ void play_animation_once(Entity* entity, FighterAnim* a, float* framecounter, in
     if (*framecounter >= 1.0f / anim->fps) {
         while (*framecounter >= 1.0f / anim->fps) {
             anim->currentFrame += 1 + anim->frameSkip;
+            anim->currentFrame %= anim->imageCount - 1;
             *framecounter -= 1.0f / anim->fps;
             if (anim->currentFrame >= stop) {
                 anim->currentFrame = stop - 1; // Clamp to last frame

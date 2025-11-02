@@ -94,26 +94,26 @@ void fightcontroller_start() {
 
 void fightcontroller_poll(SDL_Event* event) {
     // Debug controls (optional - remove in production)
-    if(event->type == SDL_EVENT_KEY_DOWN){
-        if(event->key.scancode == SDL_SCANCODE_1){
-            leftFighter_subtract_health(1);
-        }
-        if(event->key.scancode == SDL_SCANCODE_2){
-            leftFighter_add_health(1);
-        }
-        if(event->key.scancode == SDL_SCANCODE_3){
-            leftFighter_subtract_ultimate(1);
-        }
-        if(event->key.scancode == SDL_SCANCODE_4){
-            leftFighter_add_ultimate(1);
-        }
-        if(event->key.scancode == SDL_SCANCODE_5){
-            leftFighter_subtract_break(1);
-        }
-        if(event->key.scancode == SDL_SCANCODE_6){
-            leftFighter_add_break(1);
-        }
-    }
+    // if(event->type == SDL_EVENT_KEY_DOWN){
+    //     if(event->key.scancode == SDL_SCANCODE_1){
+    //         leftFighter_subtract_health(1);
+    //     }
+    //     if(event->key.scancode == SDL_SCANCODE_2){
+    //         leftFighter_add_health(1);
+    //     }
+    //     if(event->key.scancode == SDL_SCANCODE_3){
+    //         leftFighter_subtract_ultimate(1);
+    //     }
+    //     if(event->key.scancode == SDL_SCANCODE_4){
+    //         leftFighter_add_ultimate(1);
+    //     }
+    //     if(event->key.scancode == SDL_SCANCODE_5){
+    //         leftFighter_subtract_break(1);
+    //     }
+    //     if(event->key.scancode == SDL_SCANCODE_6){
+    //         leftFighter_add_break(1);
+    //     }
+    // }
 }
 
 void fightcontroller_loop() {
