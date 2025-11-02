@@ -346,6 +346,10 @@ int set_image(Entity* entity, const char* imgPath){
         return ENTITY_INVALID_TYPE;
     }
     SDL_DestroySurface(entity->img->surface);
+    if(imgPath == NULL){
+        entity->img->surface = NULL;
+        return SET_SUCCESS;
+    }
     entity->img->surface = IMG_Load(imgPath);
     if(entity->img->surface != NULL){
         entity->img->imgSizeX = entity->img->surface->w;

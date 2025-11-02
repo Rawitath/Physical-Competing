@@ -17,6 +17,7 @@ void fluke_ultimate();
 void fluke_init() {
     fluke.id = 0;
     fluke.speed = 9.0f;
+    fluke.name = "Nerd";
     
     // Attack times
     fluke.lightAttackTime = 1.5f;

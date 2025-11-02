@@ -79,13 +79,22 @@ void basAnim_init()
                  i == block_crouch || i == block_crouch + 1 ||
                 i == jump || i == jump + 1){
                 basAnim->anims[i]->offsets[j].x = 0;
-                basAnim->anims[i]->offsets[j].y = 0;
+                basAnim->anims[i]->offsets[j].y = -1;
                 basAnim->anims[i]->offsets[j].w = 1.8;
                 basAnim->anims[i]->offsets[j].h = 1.8;
-            }
+                }
+                else if(i == light1 || i == light1 + 1 || 
+                i == light2 || i == light2 + 1 || 
+                i == light3 || i == light3 + 1 ||
+                 i == jump || i == jump + 1){
+                    basAnim->anims[i]->offsets[j].x = 0;
+                    basAnim->anims[i]->offsets[j].y = -1;
+                    basAnim->anims[i]->offsets[j].w = 1.95;
+                    basAnim->anims[i]->offsets[j].h = 1.95;
+                }
             else{
                 basAnim->anims[i]->offsets[j].x = 0;
-                basAnim->anims[i]->offsets[j].y = 0;
+                basAnim->anims[i]->offsets[j].y = -1;
                 basAnim->anims[i]->offsets[j].w = 1.45;
                 basAnim->anims[i]->offsets[j].h = 1.45;
                 

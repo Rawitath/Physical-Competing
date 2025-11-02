@@ -67,7 +67,21 @@ void golfAnim_init()
         if(!golfAnim->anims[i]){
             continue;
         }
-        
+        for(int j = 0; j < golfAnim->anims[i]->imageCount; j++){
+            if(i == idle || i == idle + 1){
+                golfAnim->anims[i]->offsets[j].x = 0;
+            golfAnim->anims[i]->offsets[j].y = -2.7;
+            golfAnim->anims[i]->offsets[j].w = 0.75;
+            golfAnim->anims[i]->offsets[j].h = 0.75;
+            }
+            else{
+                golfAnim->anims[i]->offsets[j].x = 0;
+            golfAnim->anims[i]->offsets[j].y = -2.7;
+            golfAnim->anims[i]->offsets[j].w = 0.95;
+            golfAnim->anims[i]->offsets[j].h = 0.95;
+            }
+            
+        }
         golfAnim->anims[i]->frameSkip = 1;
     }
 }

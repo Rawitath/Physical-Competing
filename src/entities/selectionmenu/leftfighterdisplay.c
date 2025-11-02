@@ -17,7 +17,7 @@ void leftfighterdisplay_render(SDL_Renderer* renderer);
 void leftfighterdisplay_destroy();
 
 void leftfighterdisplay_init(){
-    leftfighterdisplay = ui_create_image(
+    leftfighterdisplay = create_entity(
             NULL,
             &leftfighterdisplay_start,
             &leftfighterdisplay_poll,
@@ -44,10 +44,10 @@ void leftfighterdisplay_select(int select)
 }
 
 void leftfighterdisplay_start(){
-    leftfighterdisplay->x = -20;
-    leftfighterdisplay->y = 0;
-    leftfighterdisplay->w = 7;
-    leftfighterdisplay->h = 9;
+    leftfighterdisplay->x = -460;
+    leftfighterdisplay->y = -200;
+    leftfighterdisplay->w = 80;
+    leftfighterdisplay->h = 80;
     leftfighterdisplay->anchorX = -leftfighterdisplay->w / 2;
     leftfighterdisplay->anchorY = -leftfighterdisplay->h / 2;
 }

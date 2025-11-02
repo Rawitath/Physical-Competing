@@ -33,6 +33,7 @@ static UltimateState rightAsia_ultimate = {0};
 void asia_init() {
     asia.id = 0;
     asia.speed = 9.0f;
+    asia.name = "Drunken Homeless";
     
     // Attack times
     asia.lightAttackTime = 0.3f;

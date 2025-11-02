@@ -19,7 +19,7 @@ void menuselector_loop();
 void menuselector_render(SDL_Renderer* renderer);
 void menuselector_destroy();
 
-Entity* menuselector_buttons[3];
+Entity* menuselector_buttons[2];
 int menuselector_selectedIndex = 0;
 
 void menuselector_init(){
@@ -41,20 +41,20 @@ void menuselector_start(){
     menuselector->img->imgSizeX = 100;
     menuselector->w = 10;
     menuselector_buttons[0] = startbutton;
-    menuselector_buttons[1] = optionbutton;
-    menuselector_buttons[2] = exitbutton;
+    // menuselector_buttons[1] = optionbutton;
+    menuselector_buttons[1] = exitbutton;
 }
 void menuselector_poll(SDL_Event* event){
     if(*menustate_state == 0){
     if(event->type == SDL_EVENT_KEY_DOWN){
         if(event->key.scancode == SDL_SCANCODE_A){
             if(menuselector_selectedIndex - 1 < 0){
-                menuselector_selectedIndex = 3;
+                menuselector_selectedIndex = 2;
             }
             menuselector_selectedIndex--;
         }
         else if(event->key.scancode == SDL_SCANCODE_D){
-            if(menuselector_selectedIndex + 1 > 2){
+            if(menuselector_selectedIndex + 1 > 1){
                 menuselector_selectedIndex = -1;
             }
             menuselector_selectedIndex++;
@@ -65,7 +65,7 @@ void menuselector_poll(SDL_Event* event){
                     startbutton_interact();
                     break;
                 case 1:
-                    optionbutton_interact();
+                    exitbutton_interact();
                     break;
                 case 2:
                     exitbutton_interact();
