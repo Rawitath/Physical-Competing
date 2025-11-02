@@ -64,6 +64,9 @@
         "sdl_scancode.h": "c",
         "playerkeybind.h": "c",
         "roundsystem.h": "c",
-        "leftfighter.h": "c"
+        "leftfighter.h": "c",
+        "rightnamedisplay.h": "c",
+        "allfighterstruct.h": "c",
+        "basbanner.h": "c"
     }
 }

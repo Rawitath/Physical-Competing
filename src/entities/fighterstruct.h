@@ -7,6 +7,7 @@ typedef struct Entity Entity;
 
 typedef struct Fighter{
     int id;
+    const char* name;
     FighterAnim* fighterAnim;
     float speed;
     

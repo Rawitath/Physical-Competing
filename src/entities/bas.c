@@ -17,6 +17,7 @@ void bas_ultimate(Entity* fighter);
 void bas_init() {
     bas.id = 0;
     bas.speed = 9.0f;
+    bas.name = "Crybaby";
     
     // Attack times
     bas.lightAttackTime = 0.3f;

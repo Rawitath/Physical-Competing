@@ -15,6 +15,7 @@ void golf_ultimate(Entity* fighter);
 void golf_init() {
     golf.id = 3;
     golf.speed = 8.5f;
+    golf.name = "Chuunibyou";
     
     // Attack times
     golf.lightAttackTime = 0.35f;
