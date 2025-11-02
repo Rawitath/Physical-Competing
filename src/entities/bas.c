@@ -38,7 +38,7 @@ void bas_init() {
     bas.speed = 9.0f;
     
     // Attack times
-    bas.lightAttackTime = 0.3f;
+    bas.lightAttackTime = 0.6f;
     bas.heavyAttackTime = 0.6f;
     bas.crouchLightAttackTime = 0.4f;
     bas.crouchHeavyAttackTime = 0.7f;
@@ -58,13 +58,13 @@ void bas_init() {
     bas.ultimateDamage = 35;    // Total damage (7 per hit × 5 hits)
     
     // Attack ranges (bas - Medium range)
-    bas.lightRange = 1.5f;
-    bas.heavyRange = 1.8f;
-    bas.crouchLightRange = 1.3f;
-    bas.crouchHeavyRange = 1.5f;
-    bas.skill1Range = 2.5f;
-    bas.skill2Range = 2.5f;
-    bas.skill3Range = 2.5f;
+    bas.lightRange = 2.0f;
+    bas.heavyRange = 2.5f;
+    bas.crouchLightRange = 1.8f;
+    bas.crouchHeavyRange = 2.0f;
+    bas.skill1Range = 3.0f;
+    bas.skill2Range = 6.0f;
+    bas.skill3Range = 4.0f;
     bas.ultimateRange = 3.0f;
     
     bas.fighterAnim = basAnim;

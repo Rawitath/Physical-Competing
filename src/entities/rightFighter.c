@@ -85,11 +85,11 @@ int rightFighter_block_crouch_hold_frame = 0;
 
 // Combo system
 #define MAX_COMBO_LENGTH 4
-#define COMBO_TIMEOUT 1.0f
+#define COMBO_TIMEOUT 5.0f
 
 PlayerInput rightFighter_comboBuffer[MAX_COMBO_LENGTH];
 int rightFighter_comboCount = 0;
-float rightFighter_comboTimer = 0.0f;
+float rightFighter_comboTimer = 5.0f;
 
 void rightFighter_reset_combo() {
     rightFighter_comboCount = 0;

@@ -19,10 +19,10 @@ void fluke_init() {
     fluke.speed = 9.0f;
     
     // Attack times
-    fluke.lightAttackTime = 0.3f;
-    fluke.heavyAttackTime = 0.6f;
-    fluke.crouchLightAttackTime = 0.4f;
-    fluke.crouchHeavyAttackTime = 0.7f;
+    fluke.lightAttackTime = 1.5f;
+    fluke.heavyAttackTime = 1.8f;
+    fluke.crouchLightAttackTime = 1.5f;
+    fluke.crouchHeavyAttackTime = 1.8f;
     fluke.skill1Time = 4;
     fluke.skill2Time = 5;
     fluke.skill3Time = 3.5;
@@ -39,13 +39,13 @@ void fluke_init() {
     fluke.ultimateDamage = 35;    // มาตรฐาน
     
     // Attack ranges (Fluke - Medium range)
-    fluke.lightRange = 1.5f;
-    fluke.heavyRange = 1.8f;
-    fluke.crouchLightRange = 1.3f;
-    fluke.crouchHeavyRange = 1.5f;
-    fluke.skill1Range = 2.5f;     // มาตรฐาน
+    fluke.lightRange = 4.2f;
+    fluke.heavyRange = 3.8f;
+    fluke.crouchLightRange = 3.0f;
+    fluke.crouchHeavyRange = 3.5f;
+    fluke.skill1Range = 4.0f;     // มาตรฐาน
     fluke.skill2Range = 2.5f;     // มาตรฐาน
-    fluke.skill3Range = 2.5f;     // มาตรฐาน
+    fluke.skill3Range = 2.0f;     // มาตรฐาน
     fluke.ultimateRange = 3.0f;   // มาตรฐาน
     
     fluke.fighterAnim = flukeAnim;
