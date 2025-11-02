@@ -49,8 +49,8 @@ void flukeAnim_init()
     flukeAnim->anims[skill3 + 1] = create_animation("res/fighters/fluke/skill3_right", fps);
     flukeAnim->anims[ultimate] = create_animation("res/fighters/fluke/ultimate_left", fps);
     flukeAnim->anims[ultimate + 1] = create_animation("res/fighters/fluke/ultimate_right", fps);
-    flukeAnim->anims[damaged] = create_animation("res/fighters/fluke/damaged_left", fps);
-    flukeAnim->anims[damaged + 1] = create_animation("res/fighters/fluke/damaged_right", fps);
+    flukeAnim->anims[damaged] = create_animation("res/fighters/fluke/damaged_left", fps * 2.5);
+    flukeAnim->anims[damaged + 1] = create_animation("res/fighters/fluke/damaged_right", fps * 2.5);
     flukeAnim->anims[startle] = create_animation("res/fighters/fluke/startle_left", fps);
     flukeAnim->anims[startle + 1] = create_animation("res/fighters/fluke/startle_right", fps);
     flukeAnim->anims[fall] = create_animation("res/fighters/fluke/fall_left", fps);

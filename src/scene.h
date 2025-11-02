@@ -1,3 +1,4 @@
+#pragma once
 #define ADD_ENTITY_SUCCESS 0
 #define ADD_SCENE_SUCCESS 0
 #define REMOVE_ENTITY_SUCCESS 0

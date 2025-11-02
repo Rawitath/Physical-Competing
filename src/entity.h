@@ -1,3 +1,4 @@
+#pragma once
 typedef union SDL_Event SDL_Event;
 typedef struct SDL_Renderer SDL_Renderer;
 typedef struct SDL_Surface SDL_Surface;

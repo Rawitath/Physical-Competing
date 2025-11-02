@@ -161,7 +161,7 @@ void fightcontroller_loop() {
             break;
 
         case FIGHT_STATE_FADEOUT:
-            sc_load_scene(3); //this scene
+            sc_load_scene(0); //this scene
             // Screen is fading. Nothing to do here for now.
             // We could transition to another scene after the fade.
             break;

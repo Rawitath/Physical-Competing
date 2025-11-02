@@ -63,6 +63,7 @@
         "fighterstruct.h": "c",
         "sdl_scancode.h": "c",
         "playerkeybind.h": "c",
-        "roundsystem.h": "c"
+        "roundsystem.h": "c",
+        "leftfighter.h": "c"
     }
 }

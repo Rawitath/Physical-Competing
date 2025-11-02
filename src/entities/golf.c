@@ -3,6 +3,7 @@
 #include "golfanim.h"
 #include "../entity.h"
 #include "playerinput.h"
+#include "smog.h"
 
 Fighter golf;
 
@@ -75,4 +76,9 @@ void golf_init() {
 void golf_skill1(Entity* fighter, int direction) {}
 void golf_skill2(Entity* fighter, int direction) {}
 void golf_skill3(Entity* fighter, int direction) {}
-void golf_ultimate(Entity* fighter) {}
+void golf_ultimate(Entity* fighter) {
+    // If smog doesn't exist, initialize it. Then add it to the scene.
+    if(!smog) smog_init();
+    add_entity(fighter->scene, smog);
+    release_smog(fighter);
+}
